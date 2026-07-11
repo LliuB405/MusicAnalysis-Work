@@ -111,3 +111,152 @@
 2026-07-12 03:45:27,581 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:45:27] "GET /api/scheduler/status HTTP/1.1" 200 -
 2026-07-12 03:46:27,585 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:46:27] "GET /api/scheduler/status HTTP/1.1" 200 -
 2026-07-12 03:47:27,588 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:47:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:48:27,581 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:48:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:49:13,578 [INFO] music_analytics.scheduler: [调度器] 开始执行定时爬取任务...
+2026-07-12 03:49:13,578 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3778678
+2026-07-12 03:49:15,431 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3778678 的 200 首歌曲
+2026-07-12 03:49:18,710 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 19723756
+2026-07-12 03:49:20,043 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 19723756 的 100 首歌曲
+2026-07-12 03:49:23,306 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3779629
+2026-07-12 03:49:24,935 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3779629 的 100 首歌曲
+2026-07-12 03:49:27,578 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:49:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:49:28,706 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2884035
+2026-07-12 03:49:30,351 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2884035 的 99 首歌曲
+2026-07-12 03:49:34,213 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2250011882
+2026-07-12 03:49:36,165 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2250011882 的 81 首歌曲
+2026-07-12 03:49:39,284 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 745956260
+2026-07-12 03:49:41,111 [INFO] music_analytics.scraper: [多榜单] HTML 方式获取榜单 745956260 的 100 首歌曲
+2026-07-12 03:49:43,350 [INFO] music_analytics.history: [历史] 保存榜单 热歌榜 快照，包含 200 首歌曲
+2026-07-12 03:49:43,370 [INFO] music_analytics.history: [历史] 保存榜单 飙升榜 快照，包含 100 首歌曲
+2026-07-12 03:49:43,395 [INFO] music_analytics.history: [历史] 保存榜单 新歌榜 快照，包含 100 首歌曲
+2026-07-12 03:49:43,414 [INFO] music_analytics.history: [历史] 保存榜单 原创榜 快照，包含 99 首歌曲
+2026-07-12 03:49:43,434 [INFO] music_analytics.history: [历史] 保存榜单 抖音榜 快照，包含 81 首歌曲
+2026-07-12 03:49:43,457 [INFO] music_analytics.history: [历史] 保存榜单 韩国榜 快照，包含 100 首歌曲
+2026-07-12 03:49:43,457 [INFO] music_analytics.scheduler: [调度器] 定时爬取完成，保存了 6 个榜单
+2026-07-12 03:49:43,457 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3778678
+2026-07-12 03:49:45,309 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3778678 的 200 首歌曲
+2026-07-12 03:49:48,349 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 19723756
+2026-07-12 03:49:50,741 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 19723756 的 100 首歌曲
+2026-07-12 03:49:53,504 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3779629
+2026-07-12 03:49:54,974 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3779629 的 100 首歌曲
+2026-07-12 03:49:57,692 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2884035
+2026-07-12 03:49:59,952 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2884035 的 99 首歌曲
+2026-07-12 03:50:02,434 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2250011882
+2026-07-12 03:50:04,215 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2250011882 的 81 首歌曲
+2026-07-12 03:50:06,404 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 745956260
+2026-07-12 03:50:08,225 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 745956260 的 100 首歌曲
+2026-07-12 03:50:10,525 [INFO] music_analytics.history: [历史] 保存榜单 热歌榜 快照，包含 200 首歌曲
+2026-07-12 03:50:10,556 [INFO] music_analytics.history: [历史] 保存榜单 飙升榜 快照，包含 100 首歌曲
+2026-07-12 03:50:10,618 [INFO] music_analytics.history: [历史] 保存榜单 新歌榜 快照，包含 100 首歌曲
+2026-07-12 03:50:10,643 [INFO] music_analytics.history: [历史] 保存榜单 原创榜 快照，包含 99 首歌曲
+2026-07-12 03:50:10,668 [INFO] music_analytics.history: [历史] 保存榜单 抖音榜 快照，包含 81 首歌曲
+2026-07-12 03:50:10,700 [INFO] music_analytics.history: [历史] 保存榜单 韩国榜 快照，包含 100 首歌曲
+2026-07-12 03:50:10,700 [INFO] __main__: 调度器自动爬取完成，保存 6 个榜单
+2026-07-12 03:50:27,576 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:50:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:51:27,581 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:51:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:52:27,587 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:52:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:53:27,579 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:53:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:54:27,587 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:54:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:55:27,575 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:55:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:56:27,589 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:56:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:57:27,577 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:57:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:58:27,578 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:58:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:59:27,578 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:59:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:00:10,714 [INFO] music_analytics.scheduler: [调度器] 开始执行定时爬取任务...
+2026-07-12 04:00:10,715 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3778678
+2026-07-12 04:00:12,481 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3778678 的 200 首歌曲
+2026-07-12 04:00:15,700 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 19723756
+2026-07-12 04:00:17,673 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 19723756 的 100 首歌曲
+2026-07-12 04:00:20,137 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3779629
+2026-07-12 04:00:21,927 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3779629 的 100 首歌曲
+2026-07-12 04:00:24,624 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2884035
+2026-07-12 04:00:25,685 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2884035 的 99 首歌曲
+2026-07-12 04:00:27,581 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:00:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:00:29,237 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2250011882
+2026-07-12 04:00:30,771 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2250011882 的 81 首歌曲
+2026-07-12 04:00:34,567 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 745956260
+2026-07-12 04:00:36,306 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 745956260 的 100 首歌曲
+2026-07-12 04:00:40,233 [INFO] music_analytics.history: [历史] 保存榜单 热歌榜 快照，包含 200 首歌曲
+2026-07-12 04:00:40,257 [INFO] music_analytics.history: [历史] 保存榜单 飙升榜 快照，包含 100 首歌曲
+2026-07-12 04:00:40,285 [INFO] music_analytics.history: [历史] 保存榜单 新歌榜 快照，包含 100 首歌曲
+2026-07-12 04:00:40,308 [INFO] music_analytics.history: [历史] 保存榜单 原创榜 快照，包含 99 首歌曲
+2026-07-12 04:00:40,330 [INFO] music_analytics.history: [历史] 保存榜单 抖音榜 快照，包含 81 首歌曲
+2026-07-12 04:00:40,356 [INFO] music_analytics.history: [历史] 保存榜单 韩国榜 快照，包含 100 首歌曲
+2026-07-12 04:00:40,356 [INFO] music_analytics.scheduler: [调度器] 定时爬取完成，保存了 6 个榜单
+2026-07-12 04:00:40,356 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3778678
+2026-07-12 04:00:42,494 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3778678 的 200 首歌曲
+2026-07-12 04:00:46,446 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 19723756
+2026-07-12 04:00:48,325 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 19723756 的 100 首歌曲
+2026-07-12 04:00:51,359 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3779629
+2026-07-12 04:00:52,902 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3779629 的 100 首歌曲
+2026-07-12 04:00:56,162 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2884035
+2026-07-12 04:00:57,931 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2884035 的 99 首歌曲
+2026-07-12 04:01:01,922 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2250011882
+2026-07-12 04:01:03,473 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2250011882 的 81 首歌曲
+2026-07-12 04:01:05,927 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 745956260
+2026-07-12 04:01:07,086 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 745956260 的 100 首歌曲
+2026-07-12 04:01:09,674 [INFO] music_analytics.history: [历史] 保存榜单 热歌榜 快照，包含 200 首歌曲
+2026-07-12 04:01:09,695 [INFO] music_analytics.history: [历史] 保存榜单 飙升榜 快照，包含 100 首歌曲
+2026-07-12 04:01:09,719 [INFO] music_analytics.history: [历史] 保存榜单 新歌榜 快照，包含 100 首歌曲
+2026-07-12 04:01:09,750 [INFO] music_analytics.history: [历史] 保存榜单 原创榜 快照，包含 99 首歌曲
+2026-07-12 04:01:09,772 [INFO] music_analytics.history: [历史] 保存榜单 抖音榜 快照，包含 81 首歌曲
+2026-07-12 04:01:09,795 [INFO] music_analytics.history: [历史] 保存榜单 韩国榜 快照，包含 100 首歌曲
+2026-07-12 04:01:09,795 [INFO] __main__: 调度器自动爬取完成，保存 6 个榜单
+2026-07-12 04:01:27,588 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:01:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:02:27,583 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:02:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:03:27,581 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:03:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:04:27,577 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:04:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:05:27,577 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:05:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:06:27,588 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:06:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:07:27,587 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:07:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:08:27,588 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:08:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:09:27,591 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:09:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:10:27,580 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:10:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:11:09,794 [INFO] music_analytics.scheduler: [调度器] 开始执行定时爬取任务...
+2026-07-12 04:11:09,794 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3778678
+2026-07-12 04:11:11,784 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3778678 的 200 首歌曲
+2026-07-12 04:11:14,165 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 19723756
+2026-07-12 04:11:15,918 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 19723756 的 100 首歌曲
+2026-07-12 04:11:19,066 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3779629
+2026-07-12 04:11:21,147 [INFO] music_analytics.scraper: [多榜单] HTML 方式获取榜单 3779629 的 100 首歌曲
+2026-07-12 04:11:24,394 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2884035
+2026-07-12 04:11:25,754 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2884035 的 99 首歌曲
+2026-07-12 04:11:27,584 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:11:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:11:28,149 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2250011882
+2026-07-12 04:11:30,177 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2250011882 的 81 首歌曲
+2026-07-12 04:11:33,396 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 745956260
+2026-07-12 04:11:35,098 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 745956260 的 100 首歌曲
+2026-07-12 04:11:37,214 [INFO] music_analytics.history: [历史] 保存榜单 热歌榜 快照，包含 200 首歌曲
+2026-07-12 04:11:37,241 [INFO] music_analytics.history: [历史] 保存榜单 飙升榜 快照，包含 100 首歌曲
+2026-07-12 04:11:37,263 [INFO] music_analytics.history: [历史] 保存榜单 新歌榜 快照，包含 100 首歌曲
+2026-07-12 04:11:37,286 [INFO] music_analytics.history: [历史] 保存榜单 原创榜 快照，包含 99 首歌曲
+2026-07-12 04:11:37,312 [INFO] music_analytics.history: [历史] 保存榜单 抖音榜 快照，包含 81 首歌曲
+2026-07-12 04:11:37,335 [INFO] music_analytics.history: [历史] 保存榜单 韩国榜 快照，包含 100 首歌曲
+2026-07-12 04:11:37,335 [INFO] music_analytics.scheduler: [调度器] 定时爬取完成，保存了 6 个榜单
+2026-07-12 04:11:37,335 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3778678
+2026-07-12 04:11:39,200 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3778678 的 200 首歌曲
+2026-07-12 04:11:41,984 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 19723756
+2026-07-12 04:11:43,421 [INFO] music_analytics.scraper: [多榜单] HTML 方式获取榜单 19723756 的 100 首歌曲
+2026-07-12 04:11:46,572 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 3779629
+2026-07-12 04:11:49,026 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 3779629 的 100 首歌曲
+2026-07-12 04:11:52,320 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2884035
+2026-07-12 04:11:53,339 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2884035 的 99 首歌曲
+2026-07-12 04:11:56,774 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 2250011882
+2026-07-12 04:11:58,214 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 2250011882 的 81 首歌曲
+2026-07-12 04:12:00,626 [INFO] music_analytics.scraper: [多榜单] 正在爬取榜单 ID: 745956260
+2026-07-12 04:12:02,192 [INFO] music_analytics.scraper: [多榜单] 成功获取榜单 745956260 的 100 首歌曲
+2026-07-12 04:12:05,327 [INFO] music_analytics.history: [历史] 保存榜单 热歌榜 快照，包含 200 首歌曲
+2026-07-12 04:12:05,347 [INFO] music_analytics.history: [历史] 保存榜单 飙升榜 快照，包含 100 首歌曲
+2026-07-12 04:12:05,374 [INFO] music_analytics.history: [历史] 保存榜单 新歌榜 快照，包含 100 首歌曲
+2026-07-12 04:12:05,399 [INFO] music_analytics.history: [历史] 保存榜单 原创榜 快照，包含 99 首歌曲
+2026-07-12 04:12:05,420 [INFO] music_analytics.history: [历史] 保存榜单 抖音榜 快照，包含 81 首歌曲
+2026-07-12 04:12:05,444 [INFO] music_analytics.history: [历史] 保存榜单 韩国榜 快照，包含 100 首歌曲
+2026-07-12 04:12:05,444 [INFO] __main__: 调度器自动爬取完成，保存 6 个榜单
+2026-07-12 04:12:27,584 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:12:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:13:27,589 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:13:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:14:27,587 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:14:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:15:27,585 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:15:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:16:27,579 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:16:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:17:27,581 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:17:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:18:27,580 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:18:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 04:19:27,581 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 04:19:27] "GET /api/scheduler/status HTTP/1.1" 200 -
