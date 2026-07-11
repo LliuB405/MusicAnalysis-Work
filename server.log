@@ -1,0 +1,962 @@
+2026-06-16 15:40:34,723 [INFO] __main__: ============================================================
+2026-06-16 15:40:34,724 [INFO] __main__:   Music Analytics Dashboard
+2026-06-16 15:40:34,724 [INFO] __main__:   NetEase Cloud Music Hot Songs
+2026-06-16 15:40:34,724 [INFO] __main__: ============================================================
+2026-06-16 15:40:34,724 [INFO] __main__:   Server: http://127.0.0.1:5000
+2026-06-16 15:40:34,724 [INFO] __main__:   Stop:   Ctrl+C
+2026-06-16 15:40:34,724 [INFO] __main__: ============================================================
+ * Serving Flask app 'app'
+ * Debug mode: off
+2026-06-16 15:40:34,749 [INFO] werkzeug: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-06-16 15:40:34,749 [INFO] werkzeug: [33mPress CTRL+C to quit[0m
+2026-06-16 15:40:36,136 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:40:36] "GET /api/chart/pie HTTP/1.1" 200 -
+2026-06-16 15:40:42,757 [INFO] music_analytics.scraper: [策略一] 尝试通过 API 接口获取数据...
+2026-06-16 15:40:46,040 [INFO] music_analytics.scraper: [策略一] 成功获取 200 首歌曲
+2026-06-16 15:40:46,047 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:40:46] "POST /api/scrape HTTP/1.1" 200 -
+2026-06-16 15:40:52,676 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:40:52] "GET /api/chart/pie HTTP/1.1" 200 -
+2026-06-16 15:40:58,712 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:40:58] "GET /api/chart/line HTTP/1.1" 200 -
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+2026-06-16 15:41:08,768 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:41:08] "GET /api/chart/heatmap HTTP/1.1" 200 -
+2026-06-16 15:48:55,616 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:48:55] "GET / HTTP/1.1" 200 -
+2026-06-16 15:48:55,984 [INFO] music_analytics.scraper: [策略一] 尝试通过 API 接口获取数据...
+2026-06-16 15:48:56,194 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:48:56] "[33mGET /hybridaction/zybTrackerStatisticsAction?data={}&__callback__=__cb__zybTrackerStatisticsAction__e871181d_12f7_4792_9bad_b1f2037daa13__0 HTTP/1.1[0m" 404 -
+2026-06-16 15:48:56,213 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:48:56] "[33mGET /hybridaction/zybTrackerStatisticsAction?data={}&__callback__=__cb__zybTrackerStatisticsAction__192389fb_e4ee_4a84_907e_7b62ac24b872__1 HTTP/1.1[0m" 404 -
+2026-06-16 15:48:58,933 [INFO] music_analytics.scraper: [策略一] 成功获取 200 首歌曲
+2026-06-16 15:48:58,941 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:48:58] "POST /api/scrape HTTP/1.1" 200 -
+2026-06-16 15:48:58,951 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:48:58] "GET /api/analyze HTTP/1.1" 200 -
+2026-06-16 15:48:58,957 [INFO] music_analytics.visualizer: 找到中文字体: C:/Windows/Fonts/simhei.ttf
+2026-06-16 15:48:59,909 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:48:59] "GET /api/chart/bar HTTP/1.1" 200 -
+2026-06-16 15:49:01,242 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:49:01] "GET /api/chart/wordcloud HTTP/1.1" 200 -
+2026-06-16 15:49:02,376 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:49:02] "GET /api/chart/pie HTTP/1.1" 200 -
+2026-06-16 15:49:03,392 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:49:03] "GET /api/chart/line HTTP/1.1" 200 -
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+2026-06-16 15:49:06,082 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:49:06] "GET /api/chart/heatmap HTTP/1.1" 200 -
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+2026-06-16 15:52:08,508 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:52:08] "GET /api/chart/heatmap HTTP/1.1" 200 -
+2026-06-16 15:52:25,477 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:52:25] "GET /api/chart/pie HTTP/1.1" 200 -
+2026-06-16 15:52:32,835 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:52:32] "GET /api/chart/line HTTP/1.1" 200 -
+2026-06-16 15:52:37,991 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:52:37] "GET /api/chart/bar HTTP/1.1" 200 -
+2026-06-16 15:57:03,874 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:03] "GET / HTTP/1.1" 200 -
+2026-06-16 15:57:04,301 [INFO] music_analytics.scraper: [策略一] 尝试通过 API 接口获取数据...
+2026-06-16 15:57:04,557 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:04] "[33mGET /hybridaction/zybTrackerStatisticsAction?data={}&__callback__=__cb__zybTrackerStatisticsAction__11ffb0db_ce28_4cc2_8bce_ac43c6c88ed2__0 HTTP/1.1[0m" 404 -
+2026-06-16 15:57:04,891 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:04] "[33mGET /hybridaction/zybTrackerStatisticsAction?data={}&__callback__=__cb__zybTrackerStatisticsAction__2de548b6_41c3_4910_8a9e_3257bddf4623__1 HTTP/1.1[0m" 404 -
+2026-06-16 15:57:06,381 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-06-16 15:57:07,657 [INFO] music_analytics.scraper: [策略一] 成功获取 200 首歌曲
+2026-06-16 15:57:07,668 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:07] "POST /api/scrape HTTP/1.1" 200 -
+2026-06-16 15:57:07,987 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:07] "GET /api/analyze HTTP/1.1" 200 -
+2026-06-16 15:57:08,875 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:08] "GET /api/chart/bar HTTP/1.1" 200 -
+2026-06-16 15:57:10,153 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:10] "GET /api/chart/wordcloud HTTP/1.1" 200 -
+2026-06-16 15:57:11,694 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:11] "GET /api/chart/pie HTTP/1.1" 200 -
+2026-06-16 15:57:12,722 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:12] "GET /api/chart/line HTTP/1.1" 200 -
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+2026-06-16 15:57:15,537 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:57:15] "GET /api/chart/heatmap HTTP/1.1" 200 -
+2026-06-16 15:58:28,426 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:28] "GET / HTTP/1.1" 200 -
+2026-06-16 15:58:28,469 [INFO] music_analytics.scraper: [策略一] 尝试通过 API 接口获取数据...
+2026-06-16 15:58:28,688 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:28] "[33mGET /hybridaction/zybTrackerStatisticsAction?data={}&__callback__=__cb__zybTrackerStatisticsAction__0cd19921_3a16_436d_86f8_ac655df7b2bd__0 HTTP/1.1[0m" 404 -
+2026-06-16 15:58:28,878 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:28] "[33mGET /hybridaction/zybTrackerStatisticsAction?data={}&__callback__=__cb__zybTrackerStatisticsAction__58537469_0571_4fa1_936c_bd88bb6548da__1 HTTP/1.1[0m" 404 -
+2026-06-16 15:58:31,357 [INFO] music_analytics.scraper: [策略一] 成功获取 200 首歌曲
+2026-06-16 15:58:31,363 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:31] "POST /api/scrape HTTP/1.1" 200 -
+2026-06-16 15:58:31,678 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:31] "GET /api/analyze HTTP/1.1" 200 -
+2026-06-16 15:58:32,644 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:32] "GET /api/chart/bar HTTP/1.1" 200 -
+2026-06-16 15:58:33,982 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:33] "GET /api/chart/wordcloud HTTP/1.1" 200 -
+2026-06-16 15:58:35,458 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:35] "GET /api/chart/pie HTTP/1.1" 200 -
+2026-06-16 15:58:36,365 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:36] "GET /api/chart/line HTTP/1.1" 200 -
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+2026-06-16 15:58:39,312 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 15:58:39] "GET /api/chart/heatmap HTTP/1.1" 200 -
+2026-06-16 16:06:50,849 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:50] "GET / HTTP/1.1" 200 -
+2026-06-16 16:06:50,903 [INFO] music_analytics.scraper: [策略一] 尝试通过 API 接口获取数据...
+2026-06-16 16:06:51,113 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:51] "[33mGET /hybridaction/zybTrackerStatisticsAction?data={}&__callback__=__cb__zybTrackerStatisticsAction__4f21fb75_b263_4b3b_ade5_70d55fc8de0b__0 HTTP/1.1[0m" 404 -
+2026-06-16 16:06:51,301 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:51] "[33mGET /hybridaction/zybTrackerStatisticsAction?data={}&__callback__=__cb__zybTrackerStatisticsAction__ebe5c6f8_3dfd_4979_984f_3b5730c3aa5c__1 HTTP/1.1[0m" 404 -
+2026-06-16 16:06:54,146 [INFO] music_analytics.scraper: [策略一] 成功获取 200 首歌曲
+2026-06-16 16:06:54,153 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:54] "POST /api/scrape HTTP/1.1" 200 -
+2026-06-16 16:06:54,469 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:54] "GET /api/analyze HTTP/1.1" 200 -
+2026-06-16 16:06:55,316 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:55] "GET /api/chart/bar HTTP/1.1" 200 -
+2026-06-16 16:06:56,631 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:56] "GET /api/chart/wordcloud HTTP/1.1" 200 -
+2026-06-16 16:06:58,139 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:58] "GET /api/chart/pie HTTP/1.1" 200 -
+2026-06-16 16:06:59,079 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:06:59] "GET /api/chart/line HTTP/1.1" 200 -
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:435: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37073 (\N{CJK UNIFIED IDEOGRAPH-90D1}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28070 (\N{CJK UNIFIED IDEOGRAPH-6DA6}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 27901 (\N{CJK UNIFIED IDEOGRAPH-6CFD}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 39068 (\N{CJK UNIFIED IDEOGRAPH-989C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20154 (\N{CJK UNIFIED IDEOGRAPH-4EBA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26519 (\N{CJK UNIFIED IDEOGRAPH-6797}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20426 (\N{CJK UNIFIED IDEOGRAPH-4FCA}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26480 (\N{CJK UNIFIED IDEOGRAPH-6770}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26446 (\N{CJK UNIFIED IDEOGRAPH-674E}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33635 (\N{CJK UNIFIED IDEOGRAPH-8363}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 28009 (\N{CJK UNIFIED IDEOGRAPH-6D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23385 (\N{CJK UNIFIED IDEOGRAPH-5B59}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 29141 (\N{CJK UNIFIED IDEOGRAPH-71D5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23039 (\N{CJK UNIFIED IDEOGRAPH-59FF}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38472 (\N{CJK UNIFIED IDEOGRAPH-9648}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22869 (\N{CJK UNIFIED IDEOGRAPH-5955}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 36805 (\N{CJK UNIFIED IDEOGRAPH-8FC5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38431 (\N{CJK UNIFIED IDEOGRAPH-961F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38271 (\N{CJK UNIFIED IDEOGRAPH-957F}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 37011 (\N{CJK UNIFIED IDEOGRAPH-9093}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 32043 (\N{CJK UNIFIED IDEOGRAPH-7D2B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26827 (\N{CJK UNIFIED IDEOGRAPH-68CB}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26041 (\N{CJK UNIFIED IDEOGRAPH-65B9}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 22823 (\N{CJK UNIFIED IDEOGRAPH-5927}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 21516 (\N{CJK UNIFIED IDEOGRAPH-540C}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34081 (\N{CJK UNIFIED IDEOGRAPH-8521}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20581 (\N{CJK UNIFIED IDEOGRAPH-5065}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38597 (\N{CJK UNIFIED IDEOGRAPH-96C5}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 34203 (\N{CJK UNIFIED IDEOGRAPH-859B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 20043 (\N{CJK UNIFIED IDEOGRAPH-4E4B}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35878 (\N{CJK UNIFIED IDEOGRAPH-8C26}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 35768 (\N{CJK UNIFIED IDEOGRAPH-8BB8}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 23913 (\N{CJK UNIFIED IDEOGRAPH-5D69}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 26753 (\N{CJK UNIFIED IDEOGRAPH-6881}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 38745 (\N{CJK UNIFIED IDEOGRAPH-9759}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+E:\Music Analysis Work\src\music_analytics\visualizer.py:439: UserWarning: Glyph 33593 (\N{CJK UNIFIED IDEOGRAPH-8339}) missing from font(s) DejaVu Sans.
+  plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', facecolor='white')
+2026-06-16 16:07:02,008 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:07:02] "GET /api/chart/heatmap HTTP/1.1" 200 -
+2026-06-16 16:07:25,677 [INFO] werkzeug: 127.0.0.1 - - [16/Jun/2026 16:07:25] "GET /api/export_csv HTTP/1.1" 200 -

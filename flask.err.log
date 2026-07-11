@@ -1,0 +1,113 @@
+2026-07-12 03:38:15,327 [INFO] __main__: ============================================================
+2026-07-12 03:38:15,327 [INFO] __main__:   Music Analytics Dashboard
+2026-07-12 03:38:15,327 [INFO] __main__:   NetEase Cloud Music Hot Songs
+2026-07-12 03:38:15,327 [INFO] __main__: ============================================================
+2026-07-12 03:38:15,327 [INFO] __main__:   Server: http://127.0.0.1:5000
+2026-07-12 03:38:15,327 [INFO] __main__:   Stop:   Ctrl+C
+2026-07-12 03:38:15,327 [INFO] __main__: ============================================================
+2026-07-12 03:38:15,329 [INFO] music_analytics.scheduler: [µ÷¶ÈÆ÷] Æô¶¯¶¨Ê±ÈÎÎñ£¬Ë¢ÐÂ¼ä¸ô: 600 Ãë
+2026-07-12 03:38:15,329 [INFO] music_analytics.scheduler: [µ÷¶ÈÆ÷] Æô¶¯Ê±Á¢¼´Ö´ÐÐÊ×´ÎÅÀÈ¡...
+2026-07-12 03:38:15,329 [INFO] music_analytics.scheduler: [µ÷¶ÈÆ÷] ¿ªÊ¼Ö´ÐÐ¶¨Ê±ÅÀÈ¡ÈÎÎñ...
+2026-07-12 03:38:15,329 [INFO] music_analytics.scheduler: [µ÷¶ÈÆ÷] µ÷¶ÈÆ÷ÒÑÆô¶¯
+2026-07-12 03:38:15,329 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 3778678
+2026-07-12 03:38:15,329 [INFO] __main__: ¶¨Ê±µ÷¶ÈÆ÷ÒÑ×Ô¶¯Æô¶¯£¨¼ä¸ô 600 Ãë£©
+2026-07-12 03:38:15,353 [INFO] werkzeug: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-07-12 03:38:15,353 [INFO] werkzeug: [33mPress CTRL+C to quit[0m
+2026-07-12 03:38:17,329 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 3778678 µÄ 200 Ê×¸èÇú
+2026-07-12 03:38:18,010 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:38:18] "GET /player?ui=apple-music-v3 HTTP/1.1" 200 -
+2026-07-12 03:38:19,859 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 19723756
+2026-07-12 03:38:21,670 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 19723756 µÄ 100 Ê×¸èÇú
+2026-07-12 03:38:25,657 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 3779629
+2026-07-12 03:38:27,383 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 3779629 µÄ 100 Ê×¸èÇú
+2026-07-12 03:38:29,582 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 2884035
+2026-07-12 03:38:31,224 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 2884035 µÄ 99 Ê×¸èÇú
+2026-07-12 03:38:33,664 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 2250011882
+2026-07-12 03:38:35,246 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 2250011882 µÄ 81 Ê×¸èÇú
+2026-07-12 03:38:39,052 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:38:39] "GET /player?ui=apple-music-v3 HTTP/1.1" 200 -
+2026-07-12 03:38:39,111 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 745956260
+2026-07-12 03:38:41,273 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 745956260 µÄ 100 Ê×¸èÇú
+2026-07-12 03:38:43,644 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ÈÈ¸è°ñ ¿ìÕÕ£¬°üº¬ 200 Ê×¸èÇú
+2026-07-12 03:38:43,665 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ì­Éý°ñ ¿ìÕÕ£¬°üº¬ 100 Ê×¸èÇú
+2026-07-12 03:38:43,686 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ÐÂ¸è°ñ ¿ìÕÕ£¬°üº¬ 100 Ê×¸èÇú
+2026-07-12 03:38:43,711 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ Ô­´´°ñ ¿ìÕÕ£¬°üº¬ 99 Ê×¸èÇú
+2026-07-12 03:38:43,741 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ¶¶Òô°ñ ¿ìÕÕ£¬°üº¬ 81 Ê×¸èÇú
+2026-07-12 03:38:43,769 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ º«¹ú°ñ ¿ìÕÕ£¬°üº¬ 100 Ê×¸èÇú
+2026-07-12 03:38:43,769 [INFO] music_analytics.scheduler: [µ÷¶ÈÆ÷] ¶¨Ê±ÅÀÈ¡Íê³É£¬±£´æÁË 6 ¸ö°ñµ¥
+2026-07-12 03:38:43,769 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 3778678
+2026-07-12 03:38:45,382 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 3778678 µÄ 200 Ê×¸èÇú
+2026-07-12 03:38:48,866 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 19723756
+2026-07-12 03:38:50,421 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 19723756 µÄ 100 Ê×¸èÇú
+2026-07-12 03:38:54,094 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 3779629
+2026-07-12 03:38:56,646 [INFO] music_analytics.scraper: [¶à°ñµ¥] HTML ·½Ê½»ñÈ¡°ñµ¥ 3779629 µÄ 100 Ê×¸èÇú
+2026-07-12 03:38:59,725 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 2884035
+2026-07-12 03:39:01,321 [INFO] music_analytics.scraper: [¶à°ñµ¥] HTML ·½Ê½»ñÈ¡°ñµ¥ 2884035 µÄ 99 Ê×¸èÇú
+2026-07-12 03:39:04,053 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 2250011882
+2026-07-12 03:39:06,072 [INFO] music_analytics.scraper: [¶à°ñµ¥] ³É¹¦»ñÈ¡°ñµ¥ 2250011882 µÄ 81 Ê×¸èÇú
+2026-07-12 03:39:09,250 [INFO] music_analytics.scraper: [¶à°ñµ¥] ÕýÔÚÅÀÈ¡°ñµ¥ ID: 745956260
+2026-07-12 03:39:11,218 [INFO] music_analytics.scraper: [¶à°ñµ¥] HTML ·½Ê½»ñÈ¡°ñµ¥ 745956260 µÄ 100 Ê×¸èÇú
+2026-07-12 03:39:13,463 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ÈÈ¸è°ñ ¿ìÕÕ£¬°üº¬ 200 Ê×¸èÇú
+2026-07-12 03:39:13,484 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ì­Éý°ñ ¿ìÕÕ£¬°üº¬ 100 Ê×¸èÇú
+2026-07-12 03:39:13,505 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ÐÂ¸è°ñ ¿ìÕÕ£¬°üº¬ 100 Ê×¸èÇú
+2026-07-12 03:39:13,523 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ Ô­´´°ñ ¿ìÕÕ£¬°üº¬ 99 Ê×¸èÇú
+2026-07-12 03:39:13,544 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ¶¶Òô°ñ ¿ìÕÕ£¬°üº¬ 81 Ê×¸èÇú
+2026-07-12 03:39:13,566 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ º«¹ú°ñ ¿ìÕÕ£¬°üº¬ 100 Ê×¸èÇú
+2026-07-12 03:39:13,566 [INFO] __main__: µ÷¶ÈÆ÷×Ô¶¯ÅÀÈ¡Íê³É£¬±£´æ 6 ¸ö°ñµ¥
+2026-07-12 03:41:00,446 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:00] "GET /player?ui=apple-music-v2&v=12027955 HTTP/1.1" 200 -
+2026-07-12 03:41:00,685 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:00] "GET /static/song-detail-modal.js HTTP/1.1" 200 -
+2026-07-12 03:41:00,690 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:00] "GET /static/theme-manager.js HTTP/1.1" 200 -
+2026-07-12 03:41:00,691 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:00] "GET /static/player-core.js HTTP/1.1" 200 -
+2026-07-12 03:41:00,885 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:00] "GET /api/history/snapshot/ÈÈ¸è°ñ HTTP/1.1" 200 -
+2026-07-12 03:41:05,181 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:05] "GET /api/history/snapshot/ÐÂ¸è°ñ HTTP/1.1" 200 -
+2026-07-12 03:41:05,226 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:05] "GET /api/history/snapshot/Ô­´´°ñ HTTP/1.1" 200 -
+2026-07-12 03:41:05,272 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:05] "GET /api/history/snapshot/ì­Éý°ñ HTTP/1.1" 200 -
+2026-07-12 03:41:21,279 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:21] "GET / HTTP/1.1" 200 -
+2026-07-12 03:41:21,292 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:21] "GET /static/theme-manager.js HTTP/1.1" 200 -
+2026-07-12 03:41:21,292 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:21] "GET /static/player-core.js HTTP/1.1" 200 -
+2026-07-12 03:41:21,383 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:21] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:41:21,384 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:21] "GET /api/history/charts HTTP/1.1" 200 -
+2026-07-12 03:41:21,789 [INFO] music_analytics.scraper: [²ßÂÔÒ»] ³¢ÊÔÍ¨¹ý API ½Ó¿Ú»ñÈ¡Êý¾Ý...
+2026-07-12 03:41:21,923 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:21] "GET /api/analysis/cross-chart HTTP/1.1" 200 -
+2026-07-12 03:41:23,388 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:23] "GET /api/history/charts HTTP/1.1" 200 -
+2026-07-12 03:41:25,001 [INFO] music_analytics.scraper: [²ßÂÔÒ»] ³É¹¦»ñÈ¡ 200 Ê×¸èÇú
+2026-07-12 03:41:25,062 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ÈÈ¸è°ñ ¿ìÕÕ£¬°üº¬ 200 Ê×¸èÇú
+2026-07-12 03:41:25,063 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:25] "POST /api/scrape HTTP/1.1" 200 -
+2026-07-12 03:41:25,273 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:25] "GET /api/analyze HTTP/1.1" 200 -
+2026-07-12 03:41:25,508 [INFO] music_analytics.visualizer: ÕÒµ½ÖÐÎÄ×ÖÌå: C:/Windows/Fonts/simhei.ttf
+2026-07-12 03:41:26,351 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:26] "GET /api/chart/wordcloud HTTP/1.1" 200 -
+2026-07-12 03:41:26,373 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:26] "GET /api/history/charts HTTP/1.1" 200 -
+2026-07-12 03:41:26,374 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:26] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:41:26,378 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:26] "GET /api/history/rank_changes/ÈÈ¸è°ñ HTTP/1.1" 200 -
+2026-07-12 03:41:26,503 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:26] "GET /api/chart/topn_trend?chart_name=ÈÈ¸è°ñ&top_n=10&days=7 HTTP/1.1" 200 -
+2026-07-12 03:41:26,970 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:26] "GET /api/analysis/cross-chart HTTP/1.1" 200 -
+2026-07-12 03:41:28,702 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:28] "GET /player HTTP/1.1" 200 -
+2026-07-12 03:41:28,722 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:28] "GET /static/player-core.js HTTP/1.1" 200 -
+2026-07-12 03:41:28,722 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:28] "GET /static/theme-manager.js HTTP/1.1" 200 -
+2026-07-12 03:41:28,722 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:28] "GET /static/song-detail-modal.js HTTP/1.1" 200 -
+2026-07-12 03:41:28,893 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:28] "GET /api/history/snapshot/ÈÈ¸è°ñ HTTP/1.1" 200 -
+2026-07-12 03:41:31,110 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:31] "GET / HTTP/1.1" 200 -
+2026-07-12 03:41:31,123 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:31] "GET /static/player-core.js HTTP/1.1" 200 -
+2026-07-12 03:41:31,124 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:31] "GET /static/theme-manager.js HTTP/1.1" 200 -
+2026-07-12 03:41:31,220 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:31] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:41:31,221 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:31] "GET /api/history/charts HTTP/1.1" 200 -
+2026-07-12 03:41:31,627 [INFO] music_analytics.scraper: [²ßÂÔÒ»] ³¢ÊÔÍ¨¹ý API ½Ó¿Ú»ñÈ¡Êý¾Ý...
+2026-07-12 03:41:31,793 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:31] "GET /api/analysis/cross-chart HTTP/1.1" 200 -
+2026-07-12 03:41:34,466 [INFO] music_analytics.scraper: [²ßÂÔÒ»] ³É¹¦»ñÈ¡ 200 Ê×¸èÇú
+2026-07-12 03:41:34,536 [INFO] music_analytics.history: [ÀúÊ·] ±£´æ°ñµ¥ ÈÈ¸è°ñ ¿ìÕÕ£¬°üº¬ 200 Ê×¸èÇú
+2026-07-12 03:41:34,538 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:34] "POST /api/scrape HTTP/1.1" 200 -
+2026-07-12 03:41:34,545 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:34] "GET /api/analyze HTTP/1.1" 200 -
+2026-07-12 03:41:35,466 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:35] "GET /api/chart/wordcloud HTTP/1.1" 200 -
+2026-07-12 03:41:35,482 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:35] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:41:35,482 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:35] "GET /api/history/charts HTTP/1.1" 200 -
+2026-07-12 03:41:35,490 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:35] "GET /api/history/rank_changes/ÈÈ¸è°ñ HTTP/1.1" 200 -
+2026-07-12 03:41:35,561 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:35] "GET /api/chart/topn_trend?chart_name=ÈÈ¸è°ñ&top_n=10&days=7 HTTP/1.1" 200 -
+2026-07-12 03:41:36,061 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:41:36] "GET /api/analysis/cross-chart HTTP/1.1" 200 -
+2026-07-12 03:42:01,231 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:42:01] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:42:31,235 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:42:31] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:43:01,236 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:43:01] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:43:31,228 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:43:31] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:44:01,238 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:44:01] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:44:31,589 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:44:31] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:45:27,581 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:45:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:46:27,585 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:46:27] "GET /api/scheduler/status HTTP/1.1" 200 -
+2026-07-12 03:47:27,588 [INFO] werkzeug: 127.0.0.1 - - [12/Jul/2026 03:47:27] "GET /api/scheduler/status HTTP/1.1" 200 -

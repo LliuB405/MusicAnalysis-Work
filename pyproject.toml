@@ -1,0 +1,122 @@
+[project]
+name = "music-analytics"
+version = "1.1.0"
+description = "网易云音乐热歌榜数据分析平台 - 重构版"
+requires-python = ">=3.8"
+dependencies = [
+    "flask>=2.0.0",
+    "requests>=2.28.0",
+    "beautifulsoup4>=4.11.0",
+    "matplotlib>=3.5.0",
+    "wordcloud>=1.8.0",
+    "pandas>=1.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "mypy>=0.950",
+    "ruff>=0.1.0",
+    "pre-commit>=3.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# ==================== Black ====================
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311"]
+include = '\.pyi?$'
+
+# ==================== Ruff (替代 flake8 + isort + pyupgrade) ====================
+[tool.ruff]
+line-length = 88
+target-version = "py38"
+extend-exclude = ["htmlcov", ".pytest_cache", "build", "dist"]
+
+[tool.ruff.lint]
+# 选择启用的规则集
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff specific
+]
+ignore = [
+    "E501",  # line too long (black 处理)
+    "B008",  # function call in default argument (Flask 路由常用)
+    "RUF012",  # mutable class attributes
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["N802", "N803"]  # 测试中允许驼峰和简写
+
+[tool.ruff.lint.isort]
+known-first-party = ["music_analytics"]
+
+# ==================== Mypy ====================
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false  # 渐进式：允许未注解的 def 存在
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+exclude = [
+    "htmlcov",
+    "build",
+    "dist",
+    "\\.venv",
+]
+
+# ==================== Pytest ====================
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--cov=src/music_analytics",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-fail-under=50",
+]
+
+# ==================== Coverage ====================
+[tool.coverage.run]
+source = ["src/music_analytics"]
+omit = [
+    "*/tests/*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]
+show_missing = true
+precision = 1
