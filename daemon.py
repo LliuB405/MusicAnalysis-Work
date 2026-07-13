@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Optional
 
 PROJECT_DIR = Path(__file__).resolve().parent
-PYTHON_EXE = r"C:\Users\22283\.workbuddy\binaries\python\versions\3.13.12\python.exe"
+PYTHON_EXE = Path(sys.executable).resolve()
 APP_SCRIPT = PROJECT_DIR / "app.py"
 LOG_FILE = PROJECT_DIR / "flask.log"
 ERR_FILE = PROJECT_DIR / "flask.err.log"

@@ -5,10 +5,16 @@ REM   Pure ASCII bat to avoid GBK/UTF-8 encoding issues
 REM ============================================================
 
 title Music Analysis Work - Starting
-cd /d "E:\Music Analysis Work"
+cd /d "%~dp0"
 
-REM Use absolute Python path so this works even if PATH is not inherited
-set PYTHON_EXE=C:\Users\22283\.workbuddy\binaries\python\versions\3.13.12\python.exe
+REM Resolve Python from PATH so the project remains portable after cloning.
+set "PYTHON_EXE=python"
+where python > nul 2>&1
+if errorlevel 1 (
+    echo    [ERROR] Python was not found in PATH.
+    pause
+    exit /b 1
+)
 
 REM Inherit system PATH (needed for netstat, tasklist, etc inside Python scripts)
 set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\system32\Wbem;%PATH%
@@ -37,11 +43,11 @@ echo    [OK] Both services started
 echo ============================================================
 echo.
 echo    [Local URL]   http://127.0.0.1:5000
-echo    [Music UI]    http://127.0.0.1:5000/player?ui=apple-music-v2
+echo    [Music UI]    http://127.0.0.1:5000/player?ui=apple-music-v8
 echo.
 
 REM Open a cache-busted URL so the browser cannot reuse the old page.
-start "" "http://127.0.0.1:5000/player?ui=apple-music-v2&v=%RANDOM%%RANDOM%"
+start "" "http://127.0.0.1:5000/player?ui=apple-music-v8&v=%RANDOM%%RANDOM%"
 
 if exist "public_url.txt" (
     echo    [Public URL - copy this to your friend]

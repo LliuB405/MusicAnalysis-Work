@@ -4,14 +4,15 @@
 #
 # 注意：不要用 -WindowStyle Hidden 启动，会看不到输出！
 # 推荐：右键桌面 → 新建快捷方式 → 位置填：
-#   powershell.exe -NoProfile -ExecutionPolicy Bypass -File "E:\Music Analysis Work\MusicAnalysis-Start.ps1"
+#   powershell.exe -NoProfile -ExecutionPolicy Bypass -File "<项目目录>\MusicAnalysis-Start.ps1"
 
 $ErrorActionPreference = "Continue"
 $OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$ProjectDir = "E:\Music Analysis Work"
-$Cloudflared = "C:\Users\22283\.workbuddy\binaries\cloudflared.exe"
+$ProjectDir = $PSScriptRoot
+$CloudflaredDir = Join-Path $ProjectDir "scripts\bin"
+$Cloudflared = Join-Path $CloudflaredDir "cloudflared.exe"
 $LogFile = Join-Path $ProjectDir "cloudflared.log"
 $FlaskLog = Join-Path $ProjectDir "flask.log"
 $OutputLog = Join-Path $ProjectDir "start_output.log"   # 本脚本输出也留一份
@@ -43,6 +44,7 @@ Write-Host "[OK] Python found: $($py.Source)" -ForegroundColor Green
 if (-not (Test-Path $Cloudflared)) {
     Write-Host "[INFO] cloudflared not found, downloading..." -ForegroundColor Yellow
     try {
+        New-Item -ItemType Directory -Path $CloudflaredDir -Force | Out-Null
         Invoke-WebRequest -Uri "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe" -OutFile $Cloudflared -UseBasicParsing
         Write-Host "[OK] cloudflared downloaded" -ForegroundColor Green
     } catch {
@@ -74,20 +76,18 @@ if ($restart.ExitCode -eq 0 -and $port5000) {
 }
 
 # ---------- Step 4: Start cloudflared ----------
-$cfProc = Get-Process cloudflared -ErrorAction SilentlyContinue
-if ($cfProc) {
-    Write-Host "[OK] cloudflared already running (PID: $($cfProc.Id))" -ForegroundColor Green
-} else {
-    Write-Host "[2/2] Starting cloudflared tunnel..." -ForegroundColor Cyan
-    # 启动 detached 进程（DETACHED_PROCESS 标志，父脚本退出不影响）
-    Start-Process -FilePath "python" `
-        -ArgumentList "scripts\start_cloudflared_detached.py" `
-        -WorkingDirectory $ProjectDir `
-        -RedirectStandardOutput (Join-Path $ProjectDir "cloudflared_start.out") `
-        -RedirectStandardError (Join-Path $ProjectDir "cloudflared_start.err") `
-        -WindowStyle Hidden
-    Write-Host "      Waiting 12s for Cloudflare to assign URL..." -ForegroundColor Gray
-    Start-Sleep -Seconds 12
+Write-Host "[2/2] Starting a fresh project cloudflared tunnel..." -ForegroundColor Cyan
+$tunnelStart = Start-Process -FilePath "python" `
+    -ArgumentList "scripts\start_cloudflared_detached.py" `
+    -WorkingDirectory $ProjectDir `
+    -RedirectStandardOutput (Join-Path $ProjectDir "cloudflared_start.out") `
+    -RedirectStandardError (Join-Path $ProjectDir "cloudflared_start.err") `
+    -WindowStyle Hidden -Wait -PassThru
+if ($tunnelStart.ExitCode -ne 0) {
+    Write-Host "[ERROR] cloudflared failed to start. Check cloudflared_start.err" -ForegroundColor Red
+    Stop-Transcript | Out-Null
+    Read-Host "Press Enter to close"
+    exit 1
 }
 
 # ---------- Step 5: Show new public URL ----------
@@ -97,7 +97,7 @@ Write-Host "   [Ready]" -ForegroundColor Green
 Write-Host "============================================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "[Local]   http://127.0.0.1:5000" -ForegroundColor Cyan
-Write-Host "[Player]  http://127.0.0.1:5000/player?ui=apple-music-v2" -ForegroundColor Magenta
+Write-Host "[Player]  http://127.0.0.1:5000/player?ui=apple-music-v8" -ForegroundColor Magenta
 Write-Host ""
 Write-Host "[Public URL]" -ForegroundColor Yellow
 
@@ -121,7 +121,7 @@ Write-Host "------------------------------------------------------------" -Foreg
 
 # Open the updated player with a cache-busting query parameter.
 $uiVersion = [DateTimeOffset]::Now.ToUnixTimeSeconds()
-Start-Process "http://127.0.0.1:5000/player?ui=apple-music-v2&v=$uiVersion"
+Start-Process "http://127.0.0.1:5000/player?ui=apple-music-v8&v=$uiVersion"
 Write-Host "[Tips]" -ForegroundColor Gray
 Write-Host "  - Friend first visit: click 'Visit Site' on Cloudflare warning page"
 Write-Host "  - Use browser (not WeChat built-in) on mobile"

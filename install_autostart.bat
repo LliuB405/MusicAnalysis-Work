@@ -7,9 +7,10 @@ REM   开机后自动运行 Flask + cloudflared
 REM   卸载：删除 "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\MusicAnalysis-启动.lnk"
 REM ============================================================
 
-set STARTUP_DIR=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup
-set TARGET="E:\Music Analysis Work\start.bat"
-set SHORTCUT="%STARTUP_DIR%\MusicAnalysis-启动.lnk"
+set "STARTUP_DIR=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
+set "PROJECT_DIR=%~dp0"
+set "TARGET=%PROJECT_DIR%start.bat"
+set "SHORTCUT=%STARTUP_DIR%\MusicAnalysis-启动.lnk"
 
 echo.
 echo ============================================================
@@ -23,8 +24,8 @@ REM 用 PowerShell 创建快捷方式
 powershell -NoProfile -Command ^
     "$ws = New-Object -ComObject WScript.Shell; ^
      $s = $ws.CreateShortcut('%SHORTCUT%'); ^
-     $s.TargetPath = 'E:\Music Analysis Work\start.bat'; ^
-     $s.WorkingDirectory = 'E:\Music Analysis Work'; ^
+     $s.TargetPath = '%TARGET%'; ^
+     $s.WorkingDirectory = '%PROJECT_DIR%'; ^
      $s.WindowStyle = 7; ^
      $s.Description = 'Music Analysis Work - 启动 Flask + Cloudflared'; ^
      $s.Save(); ^

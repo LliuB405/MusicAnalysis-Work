@@ -67,6 +67,16 @@ def disable_ui_cache(response):
         response.headers["Expires"] = "0"
     return response
 
+
+@app.route("/api/health", methods=["GET"])
+def api_health():
+    """轻量健康检查，供启动脚本、隧道与外部监控验证服务。"""
+    return jsonify({
+        "success": True,
+        "service": "MusicAnalysis-Work",
+        "charts": len(config.chart_ids),
+    })
+
 # Make sure the static directory exists (for any files we may write)
 os.makedirs(config.static_dir, exist_ok=True)
 
@@ -308,10 +318,20 @@ def api_data():
 # ============================================================
 @app.route("/api/history/charts", methods=["GET"])
 def api_history_charts():
-    """获取所有已保存的榜单名称列表"""
+    """返回当前支持的官方榜单目录，并标记本地是否已有快照。"""
     try:
-        charts = _history_mgr.get_all_charts()
-        return jsonify({"success": True, "charts": charts})
+        stored_charts = _history_mgr.get_all_charts()
+        stored_set = set(stored_charts)
+        configured = list(config.chart_ids.items())
+        return jsonify({
+            "success": True,
+            "charts": [name for name, _ in configured],
+            "chart_meta": [
+                {"name": name, "id": chart_id, "available": name in stored_set}
+                for name, chart_id in configured
+            ],
+            "archived_charts": [name for name in stored_charts if name not in config.chart_ids],
+        })
     except Exception as e:
         logger.error("获取历史榜单列表失败: %s", e, exc_info=True)
         return jsonify({"success": False, "error": str(e)})
@@ -479,7 +499,7 @@ def api_chart_topn_trend():
 # ============================================================
 @app.route("/api/scrape_all", methods=["POST"])
 def api_scrape_all():
-    """一次性爬取全部 6 个榜单，并存到历史记录"""
+    """一次性爬取全部已配置榜单，并存到历史记录"""
     try:
         results = _scraper.scrape_all_charts()
         saved = {}
@@ -759,6 +779,20 @@ import json as _json
 _VIP_FILE = os.path.join(_PROJECT_ROOT, ".vip_session.json")
 
 
+def _is_local_admin_request(request) -> bool:
+    """账号 Cookie 管理只允许本机访问，防止公网访客覆盖服务器凭据。"""
+    import ipaddress
+    forwarded = (
+        request.headers.get("CF-Connecting-IP")
+        or (request.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+    )
+    address = forwarded or request.remote_addr or ""
+    try:
+        return ipaddress.ip_address(address).is_loopback
+    except ValueError:
+        return False
+
+
 def _load_vip_from_disk() -> None:
     """启动时从 .vip_session.json 加载 cookie（如果存在）"""
     if not os.path.exists(_VIP_FILE):
@@ -809,6 +843,8 @@ def api_vip_login():
     """
     try:
         from flask import request
+        if not _is_local_admin_request(request):
+            return jsonify({"success": False, "error": "账号设置仅允许在服务器本机操作"}), 403
         body = request.get_json(silent=True) or {}
         music_u = (body.get("music_u") or "").strip()
         csrf = (body.get("csrf") or "").strip()
@@ -823,6 +859,8 @@ def api_vip_login():
         # 关键：VIP 账号变更时清空旧缓存（旧的 mp3 url 是按未登录账号签发的，新账号拉会 403）
         cleared = len(_play_url_cache)
         _play_url_cache.clear()
+        _play_url_sessions.clear()
+        _playability_cache.clear()
 
         # 持久化到磁盘（重启不丢）
         _save_vip_to_disk()
@@ -837,10 +875,15 @@ def api_vip_login():
 @app.route("/api/vip/logout", methods=["POST"])
 def api_vip_logout():
     """退出 VIP 登录"""
+    from flask import request
+    if not _is_local_admin_request(request):
+        return jsonify({"success": False, "error": "账号设置仅允许在服务器本机操作"}), 403
     config.vip_music_u = ""
     config.vip_csrf = ""
     # 同步清空缓存（退出后旧 url 不可用）
     _play_url_cache.clear()
+    _play_url_sessions.clear()
+    _playability_cache.clear()
     # 同步删除持久化文件
     try:
         if os.path.exists(_VIP_FILE):
@@ -860,20 +903,103 @@ _play_url_cache: dict = {}
 # 让 stream 代理能用同一个 session 拉 mp3，避免 403
 _play_url_sessions: dict = {}
 _PLAY_URL_CACHE_TTL = 3600  # 1 小时
+# 播放状态只缓存短时间；版权、地区和登录状态都可能变化。
+_playability_cache: dict = {}
+_PLAYABILITY_CACHE_TTL = 600
 
 
 def _get_cached_play_url(title: str, artist: str):
-    """查播放链接缓存，过期或不存在返回 None"""
+    """兼容旧接口：查播放链接缓存，过期或不存在返回 None。"""
+    info = _get_cached_play_info(title, artist)
+    return info.get("mp3_url") if info else None
+
+
+def _play_cache_key(title: str, artist: str, song_id=None):
+    try:
+        normalized_id = int(song_id or 0)
+    except (TypeError, ValueError):
+        normalized_id = 0
+    return (title.strip(), artist.strip(), normalized_id)
+
+
+def _get_cached_play_info(title: str, artist: str, song_id=None):
+    """返回包含 URL、song_id 与试听状态的完整缓存信息。"""
     import time
-    key = (title.strip(), artist.strip())
+    key = _play_cache_key(title, artist, song_id)
     entry = _play_url_cache.get(key)
+    # 兼容更新前进程里可能存在的二元 key / (timestamp, url) 值。
+    if not entry:
+        entry = _play_url_cache.get((title.strip(), artist.strip()))
     if not entry:
         return None
-    ts, url = entry
+    if isinstance(entry, dict):
+        ts = entry.get("timestamp", 0)
+        info = dict(entry)
+    else:
+        try:
+            ts, url = entry
+        except (TypeError, ValueError):
+            return None
+        info = {"timestamp": ts, "mp3_url": url, "song_id": song_id or ""}
     if time.time() - ts > _PLAY_URL_CACHE_TTL:
         _play_url_cache.pop(key, None)
         return None
-    return url
+    return info
+
+
+@app.route("/api/songs/playability", methods=["POST"])
+def api_songs_playability():
+    """批量预检榜单歌曲当前是否可播，供前端准确筛选和标记。"""
+    try:
+        from flask import request
+        import time
+        body = request.get_json(silent=True) or {}
+        songs = body.get("songs") or []
+        if not isinstance(songs, list):
+            return jsonify({"success": False, "error": "songs 必须是数组"}), 400
+
+        entries = []
+        seen = set()
+        for song in songs[:250]:
+            if not isinstance(song, dict):
+                continue
+            try:
+                song_id = int(song.get("song_id") or song.get("id"))
+            except (TypeError, ValueError):
+                continue
+            if song_id <= 0 or song_id in seen:
+                continue
+            seen.add(song_id)
+            entries.append({"song_id": song_id, "fee": song.get("fee")})
+
+        now = time.time()
+        statuses = {}
+        missing = []
+        for entry in entries:
+            cached = _playability_cache.get(entry["song_id"])
+            if cached and now - cached[0] <= _PLAYABILITY_CACHE_TTL:
+                statuses[entry["song_id"]] = dict(cached[1])
+            else:
+                _playability_cache.pop(entry["song_id"], None)
+                missing.append(entry)
+
+        if missing:
+            checked = _scraper.check_song_playability(missing)
+            for status in checked:
+                song_id = status.get("song_id")
+                if not song_id:
+                    continue
+                statuses[song_id] = status
+                if status.get("reason") != "service_unavailable":
+                    _playability_cache[song_id] = (now, dict(status))
+
+        return jsonify({
+            "success": True,
+            "results": [statuses[entry["song_id"]] for entry in entries if entry["song_id"] in statuses],
+        })
+    except Exception as e:
+        logger.error("批量检查播放状态失败: %s", e, exc_info=True)
+        return jsonify({"success": False, "error": "播放状态检查失败"}), 500
 
 
 @app.route("/api/song/lyric", methods=["POST"])
@@ -890,26 +1016,14 @@ def api_song_lyric():
         if not title or not artist:
             return jsonify({"success": False, "error": "缺少 title 或 artist"}), 400
 
-        # 用现有 scraper session 拉取（自动带 cookie）
+        # 用现有 scraper session 拉取。
         try:
             session = _scraper._build_session()
         except Exception:
             session = requests.Session()
 
-        # 1) 搜歌拿到 song_id
-        info = _scraper.resolve_play_url_streamable(title, artist) if hasattr(_scraper, "resolve_play_url_streamable") else None
-        # resolve_play_url_streamable 可能会重新签发 mp3 url，对我们来说有点重；
-        # 这里只想要 song_id，所以用一个轻量搜索
-        song_id = (info or {}).get("song_id")
-
-        if not song_id:
-            # 备用：直接用 search 接口
-            try:
-                search = _scraper.search_song(title, artist) if hasattr(_scraper, "search_song") else None
-                if search:
-                    song_id = search
-            except Exception:
-                pass
+        # 1) 搜歌拿到 song_id。歌词不要求歌曲本身可完整播放，避免先请求播放权限。
+        song_id = _scraper.search_song_id(title, artist)
 
         if not song_id:
             return jsonify({"success": False, "error": "未找到该歌曲 song_id"}), 404
@@ -966,29 +1080,61 @@ def api_song_play_url():
         body = request.get_json(silent=True) or {}
         title = (body.get("title") or "").strip()
         artist = (body.get("artist") or "").strip()
+        requested_song_id = body.get("song_id")
+        requested_fee = body.get("fee")
         if not title or not artist:
             return jsonify({"success": False, "error": "缺少 title 或 artist"})
 
         # 命中缓存直接返回
-        cached = _get_cached_play_url(title, artist)
+        cached = _get_cached_play_info(title, artist, requested_song_id)
         if cached:
-            return jsonify({"success": True, "mp3_url": cached, "cached": True})
+            return jsonify({
+                "success": True,
+                "mp3_url": cached["mp3_url"],
+                "song_id": cached.get("song_id") or requested_song_id or "",
+                "bitrate": cached.get("bitrate"),
+                "is_trial": cached.get("is_trial", False),
+                "cached": True,
+            })
 
-        # 关键：用 streamable 版本，让 search + get_url 共享同一个 session
-        info = _scraper.resolve_play_url_streamable(title, artist)
-        if not info:
-            return jsonify({"success": False, "error": "未找到该歌曲或无版权"})
+        # 详细解析会优先使用榜单自带 song_id，并明确区分 VIP、付费与版权限制。
+        if hasattr(_scraper, "resolve_play_url_detailed"):
+            info = _scraper.resolve_play_url_detailed(
+                title,
+                artist,
+                song_id=requested_song_id,
+                fee=requested_fee,
+            )
+        else:
+            legacy = _scraper.resolve_play_url_streamable(title, artist)
+            info = {"success": bool(legacy), **(legacy or {})}
+        if not info.get("success"):
+            return jsonify({key: value for key, value in info.items() if key != "_session"})
 
         import time
         mp3_url = info["mp3_url"]
         # 把 session 暂存到全局，让 stream 接口复用
         # 用 song_id 作 key（同一首歌后续 stream 都用这个 session）
-        _play_url_sessions[info["song_id"]] = info["_session"]
-        _play_url_cache[(title, artist)] = (time.time(), mp3_url)
+        if info.get("_session") is not None:
+            _play_url_sessions[info["song_id"]] = info["_session"]
+        cache_info = {
+            "timestamp": time.time(),
+            "mp3_url": mp3_url,
+            "song_id": info["song_id"],
+            "bitrate": info.get("bitrate"),
+            "is_trial": info.get("is_trial", False),
+        }
+        _play_url_cache[_play_cache_key(title, artist, requested_song_id)] = cache_info
+        _play_url_cache[_play_cache_key(title, artist, info["song_id"])] = cache_info
+        _play_url_cache[_play_cache_key(title, artist)] = cache_info
         return jsonify({
             "success": True,
             "mp3_url": mp3_url,
             "song_id": info["song_id"],
+            "bitrate": info.get("bitrate"),
+            "is_trial": info.get("is_trial", False),
+            "matched_title": info.get("matched_title", title),
+            "matched_artist": info.get("matched_artist", artist),
             "cached": False,
         })
     except Exception as e:
@@ -1008,10 +1154,17 @@ def api_song_stream():
     """
     try:
         from flask import request
-        from urllib.parse import unquote
+        from urllib.parse import unquote, urlparse
         mp3_url = unquote(request.args.get("url", ""))
         song_id_param = request.args.get("song_id", "")
-        if not mp3_url or not mp3_url.startswith("http"):
+        parsed_url = urlparse(mp3_url)
+        hostname = (parsed_url.hostname or "").lower()
+        trusted_host = (
+            hostname in {"music.163.com", "music.126.net"}
+            or hostname.endswith(".music.163.com")
+            or hostname.endswith(".music.126.net")
+        )
+        if parsed_url.scheme not in {"http", "https"} or not trusted_host:
             return jsonify({"success": False, "error": "无效 URL"}), 400
 
         # 优先用 play_url 接口暂存的 session（带 cookie + 正确的 authSecret 上下文）
@@ -1043,6 +1196,7 @@ def api_song_stream():
             headers=forward_headers,
             stream=True,
             timeout=20,
+            allow_redirects=False,
         )
 
         if upstream.status_code not in (200, 206):
@@ -1104,18 +1258,23 @@ def api_song_stream():
 # Entry point
 # ============================================================
 def _on_scheduler_run(result) -> None:
-    """调度器回调：每次自动爬取后更新内存缓存 + 保存历史"""
+    """调度器回调：爬取与保存已由 Scheduler 完成，这里只刷新内存热榜。"""
     global _scraped_data
     try:
-        # 多榜单爬取
-        all_results = _scraper.scrape_all_charts()
-        for chart_name, songs in all_results.items():
-            chart_id = config.chart_ids.get(chart_name, "0")
-            _history_mgr.save_snapshot(chart_name, chart_id, songs)
-        # 用热歌榜数据更新内存缓存（供前端展示）
-        if "热歌榜" in all_results:
-            _scraped_data = all_results["热歌榜"]
-        logger.info("调度器自动爬取完成，保存 %d 个榜单", len(all_results))
+        if not getattr(result, "success", False):
+            return
+        latest = _history_mgr.get_chart_snapshot("热歌榜") or []
+        _scraped_data = [
+            SongData(
+                rank=item["rank"],
+                title=item["title"],
+                artist=item["artist"],
+                song_id=item.get("song_id"),
+                fee=item.get("fee"),
+            )
+            for item in latest
+        ]
+        logger.info("调度器自动爬取完成，内存热榜已刷新（%d 首）", len(_scraped_data))
     except Exception as e:
         logger.error("调度器回调异常: %s", e, exc_info=True)
 
@@ -1139,4 +1298,16 @@ if __name__ == "__main__":
         except Exception as e:
             logger.warning("调度器启动失败（手动模式）: %s", e)
 
-    app.run(host=config.host, port=config.port, debug=config.debug)
+    pid_file = os.path.join(_PROJECT_ROOT, "flask.pid")
+    try:
+        with open(pid_file, "w", encoding="utf-8") as handle:
+            handle.write(str(os.getpid()))
+        app.run(host=config.host, port=config.port, debug=config.debug)
+    finally:
+        try:
+            if os.path.exists(pid_file):
+                with open(pid_file, "r", encoding="utf-8") as handle:
+                    if handle.read().strip() == str(os.getpid()):
+                        os.remove(pid_file)
+        except OSError:
+            pass

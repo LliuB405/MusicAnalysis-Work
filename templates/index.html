@@ -1,0 +1,2942 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+    <meta name="theme-color" content="#06070a">
+    <title>Pulse · 网易云音乐数据洞察平台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5cff'/%3E%3Cstop offset='1' stop-color='%2300d4ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='Inter' font-weight='800' font-size='58' fill='white'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+/* ============================================================
+   Design Tokens
+   ============================================================ */
+:root {
+  /* Base */
+  --bg-0: #06070a;
+  --bg-1: #0b0d13;
+  --bg-2: #11141c;
+  --bg-3: #181b25;
+
+  /* Glass */
+  --glass-1: rgba(255,255,255,0.025);
+  --glass-2: rgba(255,255,255,0.04);
+  --glass-3: rgba(255,255,255,0.06);
+  --glass-border: rgba(255,255,255,0.08);
+  --glass-border-hi: rgba(255,255,255,0.14);
+
+  /* Text */
+  --text-1: #f5f6fa;
+  --text-2: #c2c5d0;
+  --text-3: #8b8f9b;
+  --text-4: #565a66;
+
+  /* Brand */
+  --brand-1: #7c5cff;     /* violet */
+  --brand-2: #00d4ff;     /* cyan */
+  --brand-3: #ff5cae;     /* pink */
+  --brand-4: #f0b400;     /* gold */
+  --brand-5: #2ee6a6;     /* mint */
+
+  /* Status */
+  --success: #2ee6a6;
+  --warning: #f0b400;
+  --error:   #ff5470;
+  --info:    #4aa3ff;
+
+  /* Gradients */
+  --grad-primary:   linear-gradient(135deg,#7c5cff 0%,#00d4ff 100%);
+  --grad-warm:      linear-gradient(135deg,#ff5cae 0%,#f0b400 100%);
+  --grad-cool:      linear-gradient(135deg,#00d4ff 0%,#2ee6a6 100%);
+  --grad-aurora:    conic-gradient(from 180deg at 50% 50%, #7c5cff 0deg,#00d4ff 90deg,#2ee6a6 180deg,#f0b400 270deg,#ff5cae 360deg);
+
+  /* Shadow */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.45);
+  --shadow-glow: 0 0 32px rgba(124,92,255,0.25);
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-2xl: 28px;
+  --r-full: 999px;
+
+  /* Type */
+  --font-sans: 'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  --font-mono: 'JetBrains Mono','SF Mono',Consolas,monospace;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16,1,0.3,1);
+  --ease-spring: cubic-bezier(0.34,1.56,0.64,1);
+  --t-fast: 180ms;
+  --t-med: 320ms;
+  --t-slow: 600ms;
+}
+
+/* ============================================================
+   Light Theme Overrides
+   ============================================================ */
+[data-theme="light"] {
+  --bg-0: #f4f5f7;
+  --bg-1: #ffffff;
+  --bg-2: #f8f9fb;
+  --bg-3: #eef0f4;
+  --glass-1: rgba(0,0,0,0.015);
+  --glass-2: rgba(0,0,0,0.03);
+  --glass-3: rgba(0,0,0,0.05);
+  --glass-border: rgba(0,0,0,0.08);
+  --glass-border-hi: rgba(0,0,0,0.16);
+  --text-1: #1a1d24;
+  --text-2: #4a4f5a;
+  --text-3: #6b7080;
+  --text-4: #8b8f9b;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 32px rgba(124,92,255,0.18);
+}
+[data-theme="light"] body {
+  background-image: none;
+}
+[data-theme="light"] .aurora { display: none; }
+[data-theme="light"] .aurora-pink { display: none; }
+[data-theme="light"] .grid-overlay {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+  mask-image: none; -webkit-mask-image: none;
+}
+[data-theme="light"] .noise { opacity: 0.04; }
+[data-theme="light"] .cursor-glow { display: none; }
+[data-theme="light"] .card {
+  background: var(--bg-1);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.6) inset,
+    0 -1px 0 0 rgba(0,0,0,0.04) inset,
+    0 4px 16px -4px rgba(0,0,0,0.08),
+    0 12px 32px -16px rgba(0,0,0,0.1);
+}
+[data-theme="light"] .card::before {
+  background: linear-gradient(135deg, rgba(124,92,255,0.04) 0%, transparent 40%, transparent 60%, rgba(0,212,255,0.03) 100%);
+  opacity: 0.4;
+}
+[data-theme="light"] .sidebar {
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
+  border-right-color: var(--glass-border);
+}
+[data-theme="light"] .kpi-value {
+  background: linear-gradient(180deg, #1a1d24 0%, #4a4f5a 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+[data-theme="light"] .song-rank { background: var(--bg-2); }
+[data-theme="light"] .btn { background: var(--bg-1); }
+[data-theme="light"] .btn:hover { background: var(--bg-2); }
+[data-theme="light"] .nav-item:hover { background: var(--glass-2); }
+[data-theme="light"] .nav-item.active { background: var(--glass-3); }
+[data-theme="light"] .top-bar,
+[data-theme="light"] .player-bar { background: rgba(255,255,255,0.85); }
+[data-theme="light"] .toast { background: rgba(255,255,255,0.95); color: var(--text-1); }
+[data-theme="light"] .bar-track { background: var(--glass-2); }
+[data-theme="light"] .skeleton {
+  background: linear-gradient(90deg, var(--glass-1) 0%, var(--glass-2) 50%, var(--glass-1) 100%);
+}
+[data-theme="light"] .cross-stat { background: var(--bg-2); }
+[data-theme="light"] .sched-mini { background: rgba(255,255,255,0.85); }
+[data-theme="light"] .search-input { background: var(--bg-2); }
+[data-theme="light"] .search-input:focus { background: var(--bg-1); }
+[data-theme="light"] .recent-item { background: var(--bg-2); }
+[data-theme="light"] .tab-btn { background: var(--bg-2); }
+[data-theme="light"] .tab-btn:hover { background: var(--glass-3); }
+[data-theme="light"] .player-vol-slider,
+[data-theme="light"] .player-progress-bar { background: rgba(0,0,0,0.1); }
+[data-theme="light"] .theme-toggle { background: var(--glass-2) !important; border-color: var(--glass-border) !important; color: var(--text-2) !important; }
+
+/* Theme toggle button */
+.theme-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  background: var(--glass-2);
+  border: 1px solid var(--glass-border);
+  color: var(--text-2);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease-out);
+  font-family: inherit;
+  white-space: nowrap;
+}
+.theme-toggle:hover { background: var(--glass-3); color: var(--text-1); border-color: var(--glass-border-hi); }
+.theme-toggle .tm-icon { font-size: 14px; }
+@media (max-width: 640px) {
+  .theme-toggle .tm-label { display: none; }
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+*::selection { background: rgba(124,92,255,0.4); color:#fff; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-0);
+  color: var(--text-1);
+  min-height: 100vh;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--glass-3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--glass-border-hi); }
+
+/* ============================================================
+   Aurora Background
+   ============================================================ */
+.aurora {
+  position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none;
+  background: var(--bg-0);
+}
+.aurora::before,
+.aurora::after {
+  content:''; position:absolute; border-radius:50%; filter: blur(120px); opacity:0.7;
+  will-change: transform;
+}
+.aurora::before {
+  top:-20%; left:-10%; width:60vw; height:60vw;
+  background: radial-gradient(circle, rgba(124,92,255,0.7) 0%, transparent 60%);
+  animation: auroraFloat 22s ease-in-out infinite;
+}
+.aurora::after {
+  bottom:-30%; right:-15%; width:70vw; height:70vw;
+  background: radial-gradient(circle, rgba(0,212,255,0.6) 0%, transparent 60%);
+  animation: auroraFloat 28s ease-in-out infinite reverse;
+}
+.aurora-pink {
+  position: fixed; top:30%; right:10%; width:35vw; height:35vw;
+  background: radial-gradient(circle, rgba(255,92,174,0.45) 0%, transparent 60%);
+  filter: blur(110px); z-index: -2; pointer-events:none;
+  animation: auroraFloat 32s ease-in-out infinite;
+}
+.aurora-mint {
+  position: fixed; top:60%; left:5%; width:30vw; height:30vw;
+  background: radial-gradient(circle, rgba(46,230,166,0.25) 0%, transparent 60%);
+  filter: blur(100px); z-index: -2; pointer-events:none;
+  animation: auroraFloat 26s ease-in-out infinite;
+}
+.aurora-gold {
+  position: fixed; top:5%; right:35%; width:25vw; height:25vw;
+  background: radial-gradient(circle, rgba(240,180,0,0.20) 0%, transparent 60%);
+  filter: blur(110px); z-index: -2; pointer-events:none;
+  animation: auroraFloat 36s ease-in-out infinite reverse;
+}
+@keyframes auroraFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%     { transform: translate(8%,-6%) scale(1.08); }
+  66%     { transform: translate(-6%,8%) scale(0.95); }
+}
+
+/* Subtle grid */
+.grid-overlay {
+  position: fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 0%, transparent 80%);
+}
+
+/* Noise */
+.noise {
+  position: fixed; inset:0; z-index:-1; opacity:0.025; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   Canvas Particle System - WebGL-grade
+   ============================================================ */
+#particles-canvas {
+  position: fixed; inset: 0; z-index: -1;
+  pointer-events: none;
+  opacity: 1;
+}
+#particles-canvas-2 {
+  position: fixed; inset: 0; z-index: -1;
+  pointer-events: none;
+  opacity: 0.7;
+  mix-blend-mode: screen;
+}
+
+/* Mouse cursor glow */
+.cursor-glow {
+  position: fixed;
+  width: 900px; height: 900px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle, rgba(124,92,255,0.28) 0%, transparent 50%);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  will-change: transform;
+  mix-blend-mode: screen;
+  filter: blur(40px);
+  transition: opacity 0.4s;
+}
+.cursor-glow.active { opacity: 1; }
+
+/* Scanline / hologram overlay */
+.scanline {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(124, 92, 255, 0.012) 2px,
+    rgba(124, 92, 255, 0.012) 3px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* Vignette */
+.vignette {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(0,0,0,0.5) 100%);
+}
+
+/* 3D perspective wrapper — extreme */
+.app {
+  perspective: 2200px;
+  perspective-origin: 50% 0%;
+  transform-style: preserve-3d;
+}
+.main {
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+}
+.bento { transform-style: preserve-3d; }
+.card { transform-style: preserve-3d; }
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+@media (max-width: 640px) {
+  .app { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   Sidebar
+   ============================================================ */
+.sidebar {
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0));
+  border-right: 1px solid var(--glass-border);
+  padding: 28px 20px;
+  position: sticky; top:0; height: 100vh;
+  display: flex; flex-direction: column; gap: 28px;
+  backdrop-filter: blur(20px);
+}
+@media (max-width: 640px) {
+  .sidebar { position: relative; height: auto; flex-direction: row; padding: 14px 16px; gap: 10px; align-items:center; overflow-x:auto; }
+  .sidebar .brand { padding: 0; }
+  .sidebar .nav { flex-direction: row; }
+  .sidebar .nav-item { white-space: nowrap; }
+  .sidebar .nav-item span:not(.icon) { display: none; }
+}
+
+.brand {
+  display: flex; align-items:center; gap: 12px;
+  padding: 0 8px;
+}
+.brand-mark {
+  width: 36px; height:36px; border-radius: 10px;
+  background: var(--grad-primary);
+  display: flex; align-items:center; justify-content:center;
+  font-size: 18px; font-weight: 800; color:#fff;
+  box-shadow: var(--shadow-glow);
+  position: relative; overflow:hidden;
+}
+.brand-mark::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 50%);
+}
+.brand-text {
+  font-size: 17px; font-weight: 700; letter-spacing: -0.02em;
+}
+.brand-text small {
+  display:block; font-size: 10px; font-weight: 500;
+  color: var(--text-3); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.nav { display: flex; flex-direction: column; gap: 4px; }
+@media (max-width: 960px) { .nav { flex-direction: row; } }
+
+.nav-item {
+  display: flex; align-items:center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--r-md);
+  color: var(--text-2); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all var(--t-fast) var(--ease-out);
+  user-select: none; border: 1px solid transparent;
+  background: transparent; text-align: left; font-family: inherit;
+  width: 100%;
+}
+.nav-item:hover {
+  background: var(--glass-2);
+  color: var(--text-1);
+}
+.nav-item.active {
+  background: var(--glass-3);
+  color: var(--text-1);
+  border-color: var(--glass-border-hi);
+  box-shadow: 0 0 0 1px var(--glass-border) inset;
+}
+.nav-item .icon {
+  width: 18px; height:18px; display:flex; align-items:center; justify-content:center;
+  font-size: 16px;
+}
+.nav-item .badge {
+  margin-left: auto;
+  background: var(--grad-warm);
+  font-size: 10px; font-weight: 700; padding: 2px 6px;
+  border-radius: var(--r-full); color:#fff;
+}
+
+.sidebar-footer {
+  margin-top: auto; padding: 12px;
+  background: var(--glass-1);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  display: flex; align-items:center; gap: 10px;
+}
+.status-dot {
+  width: 8px; height:8px; border-radius:50%;
+  background: var(--success);
+  box-shadow: 0 0 0 4px rgba(46,230,166,0.18);
+  animation: pulse 2.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.status-dot.offline { background: var(--error); box-shadow: 0 0 0 4px rgba(255,84,112,0.18); }
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 4px rgba(46,230,166,0.18); }
+  50%     { box-shadow: 0 0 0 8px rgba(46,230,166,0.05); }
+}
+.sidebar-footer .info { font-size: 12px; line-height:1.3; }
+.sidebar-footer .info b { color: var(--text-1); font-weight: 600; }
+.sidebar-footer .info span { color: var(--text-3); }
+
+@media (max-width: 960px) { .sidebar-footer { display: none; } }
+
+/* ============================================================
+   Main
+   ============================================================ */
+.main {
+  padding: 24px 32px 80px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+@media (max-width: 720px) { .main { padding: 20px 16px 60px; } }
+
+/* Topbar */
+.topbar {
+  display: flex; align-items:center; justify-content:space-between;
+  gap: 16px; margin-bottom: 24px;
+}
+.page-title {
+  font-size: 26px; font-weight: 700; letter-spacing: -0.025em;
+  display: flex; align-items:center; gap: 12px;
+}
+.page-title .live-pill {
+  display: inline-flex; align-items:center; gap: 6px;
+  font-size: 11px; font-weight: 600;
+  padding: 4px 10px;
+  background: var(--glass-2); border:1px solid var(--glass-border);
+  border-radius: var(--r-full); color: var(--text-2);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.page-title .live-pill::before {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background: var(--success); box-shadow: 0 0 0 3px rgba(46,230,166,0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items:center; gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--r-md);
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all var(--t-fast) var(--ease-out);
+  border: 1px solid transparent;
+  background: var(--glass-2); color: var(--text-1);
+  border-color: var(--glass-border);
+  position: relative; overflow: hidden;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--glass-3); border-color: var(--glass-border-hi); transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-primary {
+  background: var(--grad-primary);
+  color:#fff; border-color: transparent;
+  box-shadow: 0 6px 24px rgba(124,92,255,0.32);
+}
+.btn-primary:hover { box-shadow: 0 8px 32px rgba(124,92,255,0.45); }
+.btn-icon { padding: 10px; }
+.btn-ghost { background: transparent; border-color: transparent; color: var(--text-2); }
+.btn-ghost:hover { background: var(--glass-2); color: var(--text-1); }
+
+/* Ripple */
+.btn .ripple {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  transform: scale(0);
+  animation: ripple 600ms var(--ease-out);
+  pointer-events: none;
+}
+@keyframes ripple {
+  to { transform: scale(2.4); opacity: 0; }
+}
+
+/* ============================================================
+   Bento Grid
+   ============================================================ */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(80px, auto);
+  gap: 20px;
+}
+@media (max-width: 1100px) {
+  .bento { grid-template-columns: repeat(6, 1fr); }
+}
+@media (max-width: 720px) {
+  .bento { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* Glass Card */
+.card {
+  background: var(--glass-1);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  position: relative;
+  transition: transform 0.5s var(--ease-out),
+              border-color 0.3s var(--ease-out),
+              box-shadow 0.5s var(--ease-out);
+  overflow: hidden;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* Multi-layer shadow for 3D depth — extra dramatic */
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.06) inset,
+    0 -1px 0 0 rgba(0,0,0,0.4) inset,
+    0 12px 32px -12px rgba(0,0,0,0.6),
+    0 32px 80px -20px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(255,255,255,0.02);
+}
+/* Prism refraction overlay */
+.card::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 30%, transparent 70%, rgba(124,92,255,0.06) 100%);
+  pointer-events: none;
+  opacity: 0.7;
+  transform: translateZ(1px);
+}
+/* Animated shine that follows mouse */
+.card::after {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(
+    700px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255,255,255,0.12) 0%,
+    transparent 45%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: 1;
+  transform: translateZ(2px);
+}
+.card:hover {
+  border-color: var(--glass-border-hi);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.08) inset,
+    0 -1px 0 0 rgba(0,0,0,0.4) inset,
+    0 24px 60px -16px rgba(124, 92, 255, 0.25),
+    0 48px 120px -24px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(124, 92, 255, 0.18);
+}
+.card:hover::after { opacity: 1; }
+/* 3D card lift on hover */
+.card.hover-lift { transform: translateZ(30px); }
+.card.hover-lift:hover { transform: translateZ(50px) translateY(-4px); }
+.card-header {
+  display: flex; align-items:center; justify-content:space-between;
+  margin-bottom: 20px; gap: 12px;
+}
+.card-title {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-3); text-transform: uppercase;
+  letter-spacing: 0.1em; display: flex; align-items:center; gap: 8px;
+}
+.card-title .dot {
+  width: 6px; height:6px; border-radius: 50%;
+  background: var(--brand-1);
+}
+.card-sub { font-size: 12px; color: var(--text-3); }
+
+/* ============================================================
+   Stat Cards (Bento KPIs)
+   ============================================================ */
+.kpi {
+  position: relative;
+  display: flex; flex-direction: column; gap: 12px;
+  min-height: 160px;
+}
+.kpi-label {
+  display: flex; align-items:center; gap: 10px;
+  font-size: 12px; font-weight: 600; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.12em;
+}
+.kpi-icon {
+  width: 32px; height:32px; border-radius: 10px;
+  display: flex; align-items:center; justify-content:center;
+  font-size: 15px;
+  background: var(--glass-2); border: 1px solid var(--glass-border);
+}
+.kpi-value {
+  font-family: var(--font-mono);
+  font-size: 44px; font-weight: 700; line-height: 1;
+  letter-spacing: -0.03em;
+  background: linear-gradient(180deg, #fff 0%, #c2c5d0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.kpi-value.grad-violet { background: linear-gradient(135deg, #b09cff 0%, #7c5cff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.kpi-value.grad-cyan   { background: linear-gradient(135deg, #7be7ff 0%, #00d4ff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.kpi-value.grad-pink   { background: linear-gradient(135deg, #ff9ec8 0%, #ff5cae 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.kpi-value.grad-mint   { background: linear-gradient(135deg, #8df5cd 0%, #2ee6a6 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.kpi-value.grad-gold   { background: linear-gradient(135deg, #ffd770 0%, #f0b400 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+.kpi-meta {
+  display: flex; align-items:center; gap: 8px;
+  font-size: 12px; color: var(--text-3);
+  margin-top: auto;
+}
+.kpi-trend {
+  display: inline-flex; align-items:center; gap: 4px;
+  font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: var(--r-full);
+  background: rgba(46,230,166,0.12); color: var(--success);
+}
+.kpi-spark { width: 100%; height: 36px; margin-top: 4px; }
+
+/* Sizes */
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
+.span-5 { grid-column: span 5; }
+.span-6 { grid-column: span 6; }
+.span-7 { grid-column: span 7; }
+.span-8 { grid-column: span 8; }
+.span-12 { grid-column: span 12; }
+@media (max-width: 1100px) {
+  .bento { grid-template-columns: repeat(6, 1fr); }
+  .span-3, .span-4 { grid-column: span 2; }  /* 4个KPI: 2x2 */
+  .span-5, .span-6, .span-7, .span-8 { grid-column: span 3; }  /* 2 cards per row */
+  .span-12 { grid-column: 1 / -1; }
+}
+@media (max-width: 720px) {
+  .bento { grid-template-columns: 1fr; gap: 14px; }
+  .span-3, .span-4, .span-5, .span-6, .span-7, .span-8, .span-12 { grid-column: 1 / -1; }
+}
+
+/* Row 2 height */
+.row-tall { grid-row: span 4; min-height: 380px; }
+.row-med  { grid-row: span 3; min-height: 300px; }
+
+/* ============================================================
+   Chart Cards
+   ============================================================ */
+.chart-wrap {
+  position: relative;
+  width: 100%; height: 320px;
+}
+.chart-wrap img { width:100%; height:100%; object-fit: contain; }
+
+/* SVG container */
+.svg-chart { width: 100%; height: 100%; display: block; }
+
+/* Custom Bar Chart */
+.bar-row { display:flex; align-items:center; gap: 12px; margin-bottom: 14px; }
+.bar-rank {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 600;
+  color: var(--text-3);
+  width: 22px; text-align: right;
+}
+.bar-name {
+  font-size: 13px; font-weight: 500; color: var(--text-1);
+  width: 100px; flex-shrink: 0;
+  white-space: nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.bar-track {
+  flex: 1; height: 8px;
+  background: var(--glass-2); border-radius: var(--r-full);
+  overflow: hidden; position: relative;
+}
+.bar-fill {
+  height:100%; border-radius: var(--r-full);
+  background: var(--grad-primary);
+  position: relative;
+  transform-origin: left;
+  animation: barFill 1.2s var(--ease-out) both;
+}
+.bar-fill.warm { background: var(--grad-warm); }
+.bar-fill.cool { background: var(--grad-cool); }
+@keyframes barFill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.bar-count {
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 600;
+  color: var(--brand-2);
+  min-width: 24px; text-align: right;
+}
+
+/* Pie / Donut */
+.donut-wrap { display:flex; align-items:center; gap: 24px; flex-wrap: wrap; }
+.donut { width: 180px; height: 180px; flex-shrink: 0; }
+.donut-legend { flex: 1; min-width: 0; display:flex; flex-direction:column; gap: 6px; }
+.donut-item {
+  display:flex; align-items:center; gap: 10px;
+  font-size: 12px; color: var(--text-2);
+  padding: 4px 8px; border-radius: var(--r-sm);
+  transition: background var(--t-fast);
+}
+.donut-item:hover { background: var(--glass-2); }
+.donut-item .swatch { width: 8px; height: 8px; border-radius: 2px; flex-shrink:0; }
+.donut-item .name { flex: 1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.donut-item .val { font-family: var(--font-mono); font-weight: 600; color: var(--text-1); }
+
+/* ============================================================
+   Song List
+   ============================================================ */
+.song-list {
+  display: flex; flex-direction: column;
+  max-height: 520px; overflow-y: auto;
+  margin: 0 -8px; padding: 0 8px;
+}
+.song-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 1fr 100px 40px;
+  gap: 12px; align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  transition: all var(--t-fast) var(--ease-out);
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin-bottom: 2px;
+  position: relative;
+}
+.song-row:hover {
+  background: var(--glass-2);
+  border-color: var(--glass-border);
+  transform: translateX(4px);
+}
+.song-rank {
+  font-family: var(--font-mono);
+  font-size: 14px; font-weight: 700;
+  color: var(--text-4);
+  display: flex; align-items:center; justify-content:center;
+  width: 36px; height:36px;
+  border-radius: 10px;
+  background: var(--glass-1);
+  border: 1px solid var(--glass-border);
+}
+.song-rank.gold {
+  background: linear-gradient(135deg, #ffd770, #f0b400);
+  color: #1a1300; border-color: transparent;
+  box-shadow: 0 4px 16px rgba(240,180,0,0.3);
+}
+.song-rank.silver {
+  background: linear-gradient(135deg, #e0e3ec, #8b8f9b);
+  color: #1a1a1a; border-color: transparent;
+}
+.song-rank.bronze {
+  background: linear-gradient(135deg, #f4a574, #c47a45);
+  color: #1a0e00; border-color: transparent;
+}
+.song-title {
+  font-size: 14px; font-weight: 600; color: var(--text-1);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.song-artist {
+  font-size: 13px; color: var(--text-3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.song-tags {
+  display: flex; gap: 6px; align-items: center;
+  font-size: 11px; color: var(--text-3);
+  font-family: var(--font-mono);
+}
+.tag {
+  padding: 2px 8px; border-radius: var(--r-full);
+  background: var(--glass-2); border: 1px solid var(--glass-border);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.tag.hot { background: rgba(255,84,112,0.12); color: #ff8aa0; border-color: rgba(255,84,112,0.2); }
+.tag.new { background: rgba(74,163,255,0.12); color: #7eb6ff; border-color: rgba(74,163,255,0.2); }
+.song-action {
+  width: 32px; height:32px; border-radius: 8px;
+  background: var(--glass-1); border: 1px solid var(--glass-border);
+  display: flex; align-items:center; justify-content:center;
+  cursor: pointer; font-size: 14px; color: var(--text-2);
+  opacity: 0; transition: all var(--t-fast);
+}
+.song-row:hover .song-action { opacity: 1; }
+.song-action:hover { background: var(--brand-1); color: #fff; border-color: transparent; }
+
+@media (max-width: 720px) {
+  .song-row { grid-template-columns: 36px 1fr 32px; gap: 10px; padding: 10px; }
+  .song-artist, .song-tags { display: none; }
+}
+
+/* Ranking change arrows */
+.rank-change { display: inline-flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 700; margin-left: 6px; }
+.rank-change.up   { color: #2ee6a6; }
+.rank-change.down { color: #ff5470; }
+.rank-change.new  { color: #4aa3ff; background: rgba(74,163,255,0.1); padding: 1px 6px; border-radius: 4px; font-size: 10px; }
+.rank-change.out  { color: #565a66; text-decoration: line-through; }
+
+/* Chart selector row */
+.chart-selector { display: flex; align-items: center; gap: 8px; padding: 12px 0; flex-wrap: wrap; }
+.chart-selector .cs-label { font-size: 12px; color: var(--text-4); font-weight: 500; }
+.chart-sel-btn { padding: 4px 14px; border-radius: var(--r-full); border: 1px solid var(--glass-border); background: var(--glass-1); color: var(--text-3); font-size: 12px; cursor: pointer; transition: all var(--t-fast); }
+.chart-sel-btn:hover { border-color: var(--glass-border-hi); color: var(--text-2); }
+.chart-sel-btn.active { background: var(--brand-1); color: #fff; border-color: transparent; }
+
+/* Cross-chart panel */
+.cross-panel { margin-top: 20px; }
+.cross-stats { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.cross-stat { padding: 8px 16px; border-radius: var(--r-md); background: var(--glass-2); border: 1px solid var(--glass-border); }
+.cross-stat .cs-val { font-size: 22px; font-weight: 800; color: var(--brand-2); font-family: var(--font-mono); }
+.cross-stat .cs-label { font-size: 11px; color: var(--text-4); }
+.cross-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cross-table th { text-align: left; padding: 8px 12px; color: var(--text-4); font-size: 11px; font-weight: 600; border-bottom: 1px solid var(--glass-border); }
+.cross-table td { padding: 8px 12px; border-bottom: 1px solid var(--glass-border); color: var(--text-2); }
+.cross-table tr:hover td { background: var(--glass-1); }
+.cross-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+.cross-badge { padding: 1px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; background: rgba(124,92,255,0.12); color: var(--brand-1); white-space: nowrap; }
+
+/* Scheduler mini panel */
+.sched-mini { position: fixed; bottom: 120px; right: 20px; z-index: 200; padding: 10px 14px; border-radius: var(--r-md); background: var(--glass-2); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); font-size: 11px; max-width: 200px; transition: all var(--t-fast); }
+.sched-mini:hover { border-color: var(--glass-border-hi); }
+.sched-mini .sm-row { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+.sched-mini .sm-label { color: var(--text-4); }
+.sched-mini .sm-val { color: var(--text-2); font-family: var(--font-mono); }
+.sched-mini .sm-status { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; }
+.sched-mini .sm-status.on { background: var(--success); box-shadow: 0 0 6px var(--success); }
+.sched-mini .sm-status.off { background: var(--text-4); }
+
+/* ============================================================
+   Filter Bar
+   ============================================================ */
+.filter-bar {
+  display: flex; gap: 6px; align-items: center;
+  background: var(--glass-1); border: 1px solid var(--glass-border);
+  border-radius: var(--r-md); padding: 4px;
+}
+.filter-chip {
+  padding: 6px 12px; border-radius: 8px;
+  font-size: 12px; font-weight: 600; color: var(--text-3);
+  cursor: pointer; transition: all var(--t-fast);
+  background: transparent; border: none; font-family: inherit;
+}
+.filter-chip:hover { color: var(--text-1); }
+.filter-chip.active {
+  background: var(--glass-3); color: var(--text-1);
+  box-shadow: 0 0 0 1px var(--glass-border-hi) inset;
+}
+
+/* ============================================================
+   Loading & Skeleton
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(90deg, var(--glass-1) 0%, var(--glass-2) 50%, var(--glass-1) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: var(--r-sm);
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+.loading {
+  position: absolute; inset: 0; display:flex; align-items:center; justify-content:center;
+  flex-direction: column; gap: 12px; color: var(--text-3);
+  font-size: 12px;
+}
+.spinner {
+  width: 28px; height:28px;
+  border: 2px solid var(--glass-border);
+  border-top-color: var(--brand-1);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.toast-stack {
+  position: fixed; bottom: 24px; right: 24px;
+  display: flex; flex-direction: column-reverse; gap: 10px;
+  z-index: 1000; max-width: 360px;
+}
+.toast {
+  display: flex; align-items:center; gap: 12px;
+  padding: 12px 16px;
+  background: rgba(15,18,26,0.95);
+  border: 1px solid var(--glass-border-hi);
+  border-radius: var(--r-md);
+  font-size: 13px; font-weight: 500;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.4s var(--ease-spring);
+  min-width: 240px;
+}
+.toast.success { border-left: 3px solid var(--success); }
+.toast.error   { border-left: 3px solid var(--error); }
+.toast.warn    { border-left: 3px solid var(--warning); }
+.toast.info    { border-left: 3px solid var(--info); }
+.toast.out     { animation: toastOut 0.3s var(--ease-out) forwards; }
+.toast .icon { font-size: 16px; }
+.toast .msg  { flex: 1; }
+@keyframes toastIn  { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes toastOut { to   { transform: translateX(120%); opacity: 0; } }
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.6s var(--ease-out) both; }
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.10s; }
+.d3 { animation-delay: 0.15s; }
+.d4 { animation-delay: 0.20s; }
+.d5 { animation-delay: 0.25s; }
+.d6 { animation-delay: 0.30s; }
+.d7 { animation-delay: 0.35s; }
+.d8 { animation-delay: 0.40s; }
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+.empty {
+  display: flex; flex-direction: column;
+  align-items:center; justify-content:center;
+  padding: 48px 16px; color: var(--text-3);
+  text-align: center; gap: 8px;
+}
+.empty-icon {
+  font-size: 48px; opacity: 0.4;
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   Tab Switcher (Charts)
+   ============================================================ */
+.tab-bar {
+  display: flex; gap: 4px; padding: 4px;
+  background: var(--glass-1); border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+}
+.tab {
+  padding: 6px 12px; border-radius: 8px;
+  font-size: 12px; font-weight: 600; color: var(--text-3);
+  cursor: pointer; transition: all var(--t-fast);
+  background: transparent; border: none; font-family: inherit;
+}
+.tab.active { background: var(--glass-3); color: var(--text-1); }
+.tab:hover:not(.active) { color: var(--text-2); }
+
+/* Tabs for chart list selector */
+.chart-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Footer */
+.footer {
+  margin-top: 40px; padding-top: 24px;
+  border-top: 1px solid var(--glass-border);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; color: var(--text-4);
+  flex-wrap: wrap; gap: 12px;
+}
+
+/* Tag Pulse */
+.live-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; color: var(--text-2);
+  padding: 4px 10px; background: var(--glass-2);
+  border: 1px solid var(--glass-border); border-radius: var(--r-full);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.live-tag::before {
+  content:''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--success);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+/* ============================================================
+   Product polish: navigation, focus and command palette
+   ============================================================ */
+:focus-visible { outline: 2px solid rgba(95, 214, 255, .9); outline-offset: 3px; }
+button:focus:not(:focus-visible) { outline: none; }
+.scroll-progress {
+  position: fixed; inset: 0 auto auto 0; z-index: 1000; height: 2px; width: 100%;
+  transform: scaleX(0); transform-origin: left;
+  background: linear-gradient(90deg, var(--brand-1), var(--brand-2), var(--brand-5));
+  box-shadow: 0 0 14px rgba(0,212,255,.65); pointer-events: none;
+}
+.topbar {
+  position: sticky; top: 12px; z-index: 30; padding: 12px 14px; margin: -12px -14px 24px;
+  border: 1px solid transparent; border-radius: 16px;
+  transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.topbar.is-scrolled {
+  background: rgba(10,12,18,.76); border-color: var(--glass-border);
+  backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%);
+  box-shadow: 0 14px 42px rgba(0,0,0,.28);
+}
+[data-theme="light"] .topbar.is-scrolled { background: rgba(255,255,255,.82); }
+.nav-item { position: relative; }
+.nav-item::before {
+  content: ''; position: absolute; left: -1px; width: 3px; height: 18px; border-radius: 0 4px 4px 0;
+  background: var(--grad-primary); transform: scaleY(0); opacity: 0; transition: .22s var(--ease-out);
+}
+.nav-item.active::before { transform: scaleY(1); opacity: 1; }
+.btn-command { color: var(--text-2); }
+.btn-command kbd {
+  font: 600 10px/1 var(--font-sans); color: var(--text-3); padding: 4px 6px;
+  border: 1px solid var(--glass-border); border-radius: 6px; background: var(--glass-1);
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,.06);
+}
+.command-backdrop {
+  position: fixed; inset: 0; z-index: 2000; display: grid; place-items: start center;
+  padding: min(18vh, 160px) 20px 20px; background: rgba(2,4,8,.64);
+  backdrop-filter: blur(12px); opacity: 0; visibility: hidden; transition: .2s ease;
+}
+.command-backdrop.open { opacity: 1; visibility: visible; }
+.command-panel {
+  width: min(620px, 100%); padding: 10px; border: 1px solid var(--glass-border-hi);
+  border-radius: 20px; background: rgba(16,18,27,.94); box-shadow: 0 34px 100px rgba(0,0,0,.58);
+  transform: translateY(-12px) scale(.98); transition: .25s var(--ease-out);
+}
+.command-backdrop.open .command-panel { transform: none; }
+[data-theme="light"] .command-panel { background: rgba(255,255,255,.96); }
+.command-head { display: flex; align-items: center; gap: 10px; padding: 10px 12px 14px; color: var(--text-3); }
+.command-input { flex: 1; border: 0; outline: 0; background: transparent; color: var(--text-1); font: 500 15px var(--font-sans); }
+.command-input::placeholder { color: var(--text-4); }
+.command-list { display: grid; gap: 4px; }
+.command-item {
+  width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  border: 0; border-radius: 12px; background: transparent; color: var(--text-2);
+  font: 500 14px var(--font-sans); cursor: pointer; text-align: left;
+}
+.command-item:hover, .command-item.selected { color: var(--text-1); background: var(--glass-3); }
+.command-item span:first-child { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; background: var(--glass-2); }
+.command-item small { margin-left: auto; color: var(--text-4); }
+@media (max-width: 840px) {
+  .btn-command { display: none; }
+  .topbar { top: 6px; align-items: flex-start; }
+  .page-title { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+/* ============================================================
+   2026 visual direction — calm, precise, product-first
+   ============================================================ */
+:root {
+  --bg-0: #08090b; --bg-1: #0d0f12; --bg-2: #12151a; --bg-3: #181c22;
+  --glass-1: rgba(17,19,24,.92); --glass-2: rgba(255,255,255,.045); --glass-3: rgba(255,255,255,.075);
+  --glass-border: rgba(255,255,255,.075); --glass-border-hi: rgba(255,255,255,.13);
+  --text-1: #f4f5f7; --text-2: #b4b8c2; --text-3: #777d89; --text-4: #505560;
+  --brand-1: #8b7cff; --brand-2: #5fd6ff; --brand-3: #ff7eb6; --brand-5: #63e6be;
+  --shadow-md: 0 12px 32px rgba(0,0,0,.24); --shadow-lg: 0 24px 64px rgba(0,0,0,.34);
+}
+body { background: #08090b; }
+.aurora, .aurora-pink, .aurora-mint, .aurora-gold,
+#particles-canvas, #particles-canvas-2, .cursor-glow, .scanline, .vignette, .noise { display: none !important; }
+.grid-overlay {
+  opacity: .46; background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, #000, transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 70%);
+}
+.app { grid-template-columns: 224px minmax(0,1fr); perspective: none; }
+.sidebar {
+  background: rgba(10,11,14,.88); padding: 24px 16px; gap: 32px;
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
+.brand-mark { width: 34px; height: 34px; border-radius: 9px; box-shadow: 0 8px 24px rgba(124,92,255,.2); }
+.brand-text { font-size: 16px; }
+.nav { gap: 6px; }
+.nav-item { min-height: 42px; border-radius: 10px; color: #8d929e; }
+.nav-item:hover { background: rgba(255,255,255,.045); }
+.nav-item.active { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.08); box-shadow: none; }
+.sidebar-footer { background: rgba(255,255,255,.025); border-radius: 12px; }
+.main { padding: 28px 32px 80px; max-width: 1680px; width: 100%; margin-inline: auto; }
+.page-title { font-size: 24px; font-weight: 650; }
+.page-title .live-pill { background: rgba(255,255,255,.035); letter-spacing: .03em; text-transform: none; }
+.topbar.is-scrolled { background: rgba(8,9,11,.86); box-shadow: 0 16px 44px rgba(0,0,0,.2); }
+.btn { min-height: 40px; border-radius: 10px; background: rgba(255,255,255,.035); }
+.btn:hover { background: rgba(255,255,255,.07); }
+.btn-primary { background: #f2f3f5; color: #111318; box-shadow: 0 6px 18px rgba(255,255,255,.08); }
+.btn-primary:hover { background: #fff; box-shadow: 0 9px 24px rgba(255,255,255,.12); }
+.bento { gap: 16px; transform-style: flat; }
+.card {
+  background: linear-gradient(180deg, rgba(20,22,27,.96), rgba(14,16,20,.96));
+  border-color: rgba(255,255,255,.075); border-radius: 16px; padding: 22px;
+  backdrop-filter: none; -webkit-backdrop-filter: none; transform-style: flat; will-change: auto;
+  box-shadow: 0 1px 0 rgba(255,255,255,.035) inset, 0 18px 45px -32px rgba(0,0,0,.8);
+}
+.card::before { background: linear-gradient(135deg, rgba(255,255,255,.025), transparent 45%); opacity: 1; transform: none; }
+.card::after { display: none; }
+.card:hover {
+  transform: translateY(-2px) !important; border-color: rgba(255,255,255,.13);
+  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 22px 50px -30px rgba(0,0,0,.9);
+}
+.card-title { letter-spacing: .04em; text-transform: none; color: #a7abb4; }
+.kpi { min-height: 148px; }
+.kpi-label { letter-spacing: .04em; text-transform: none; }
+.kpi-icon { background: rgba(255,255,255,.035); border-color: rgba(255,255,255,.06); }
+.kpi-value { font-size: 40px; }
+.tab-bar, .filter-bar { background: rgba(255,255,255,.025); border-radius: 10px; }
+.song-row { border-radius: 10px; }
+.song-row:hover { background: rgba(255,255,255,.04); }
+.command-panel { background: rgba(14,16,20,.98); }
+[data-theme="light"] body { background: #f4f5f7; }
+[data-theme="light"] .sidebar { background: rgba(255,255,255,.82); }
+[data-theme="light"] .card {
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,249,251,.98));
+  border-color: rgba(18,24,35,.08); box-shadow: 0 1px 0 #fff inset, 0 18px 45px -34px rgba(19,28,48,.28);
+}
+[data-theme="light"] .card:hover { border-color: rgba(18,24,35,.14); }
+[data-theme="light"] .topbar.is-scrolled { background: rgba(244,245,247,.86); }
+[data-theme="light"] .btn-primary { background: #17191e; color: #fff; }
+[data-theme="light"] .command-panel { background: rgba(255,255,255,.98); }
+@media (max-width: 720px) {
+  .main { padding: 18px 14px 64px; }
+  .card { padding: 18px; }
+  .topbar-actions { gap: 6px; }
+  .btn { padding: 9px 11px; }
+}
+</style>
+<style>
+/* ============================================================
+   Spotify-inspired dashboard skin
+   Keeps the analytics model intact while matching the interaction language
+   of a modern music streaming desktop client.
+   ============================================================ */
+:root {
+  --spotify-green: #1ed760;
+  --spotify-green-hover: #3be477;
+  --spotify-black: #000;
+  --spotify-panel: #121212;
+  --spotify-card: #181818;
+  --spotify-card-hover: #282828;
+  --spotify-muted: #b3b3b3;
+  --brand-1: #1ed760;
+  --brand-2: #1ed760;
+  --brand-3: #f037a5;
+  --brand-4: #f59b23;
+  --brand-5: #1ed760;
+  --success: #1ed760;
+  --bg-0: #000;
+  --bg-1: #121212;
+  --bg-2: #181818;
+  --bg-3: #282828;
+  --r-md: 8px;
+  --r-lg: 8px;
+}
+html { background: #000; }
+body { background: #000; padding-bottom: 92px; }
+.grid-overlay { display: none !important; }
+.app {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 8px;
+  min-height: calc(100vh - 92px);
+  padding: 8px 8px 0;
+  background: #000;
+}
+.sidebar {
+  position: sticky;
+  top: 8px;
+  height: calc(100vh - 108px);
+  padding: 18px 12px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #121212;
+  gap: 18px;
+  overflow: hidden;
+}
+.brand { padding: 0 10px 4px; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #fff; color: #000; box-shadow: none;
+}
+.brand-text { font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
+.brand-text small { color: var(--spotify-muted); letter-spacing: .14em; }
+.nav { gap: 2px; }
+.nav-item {
+  min-height: 44px; padding: 0 12px; border: 0; border-radius: 6px;
+  color: var(--spotify-muted); font-weight: 700; letter-spacing: -.01em;
+}
+.nav-item .icon { font-size: 20px; width: 28px; }
+.nav-item:hover { color: #fff; background: transparent; transform: none; }
+.nav-item.active { color: #fff; background: rgba(255,255,255,.08); border: 0; }
+.spotify-library {
+  min-height: 0; display: flex; flex: 1; flex-direction: column;
+  border-top: 1px solid rgba(255,255,255,.1); padding-top: 14px;
+}
+.library-head { display:flex; align-items:center; justify-content:space-between; padding:0 10px 10px; color:var(--spotify-muted); font-weight:700; }
+.library-add { width:30px; height:30px; border:0; border-radius:50%; background:transparent; color:var(--spotify-muted); font-size:22px; cursor:pointer; }
+.library-add:hover { color:#fff; background:rgba(255,255,255,.08); transform:scale(1.06); }
+.library-chips { display:flex; gap:8px; padding:0 8px 12px; overflow:auto; scrollbar-width:none; }
+.library-chips::-webkit-scrollbar { display:none; }
+.library-chip { border:0; border-radius:999px; padding:7px 11px; color:#fff; background:#232323; font:600 12px var(--font-sans); white-space:nowrap; cursor:pointer; }
+.library-chip:hover,.library-chip.active { background:#333; }
+.library-list { overflow:auto; padding:0 2px; }
+.library-item { display:grid; grid-template-columns:44px 1fr; gap:10px; align-items:center; padding:7px 8px; border-radius:6px; cursor:pointer; }
+.library-item:hover { background:#1f1f1f; }
+.library-cover { width:44px; height:44px; border-radius:4px; object-fit:cover; box-shadow:0 5px 18px rgba(0,0,0,.35); }
+.library-item strong,.library-item small { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.library-item strong { color:#fff; font-size:13px; }
+.library-item small { color:var(--spotify-muted); font-size:11px; margin-top:2px; }
+.sidebar-footer { margin-top:auto; border:0; background:transparent; padding:9px 10px 2px; }
+
+.main {
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0 24px 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(30,215,96,.19) 0, rgba(18,18,18,.94) 340px, #121212 560px),
+    #121212;
+}
+.topbar {
+  position: sticky; top: 0; z-index: 80;
+  min-height: 72px; margin: 0 -24px 24px; padding: 12px 24px;
+  border-radius: 0;
+  background: transparent;
+  transition: background .25s ease, box-shadow .25s ease;
+}
+.topbar.is-scrolled { background:rgba(18,18,18,.94); box-shadow:0 12px 28px rgba(0,0,0,.25); backdrop-filter:blur(18px); }
+.spotify-history { display:flex; gap:8px; align-items:center; }
+.history-btn { width:34px; height:34px; border:0; border-radius:50%; background:rgba(0,0,0,.62); color:#fff; cursor:pointer; font-size:20px; line-height:1; }
+.history-btn:hover:not(:disabled) { transform:scale(1.06); background:#000; }
+.history-btn:disabled { opacity:.45; cursor:not-allowed; }
+.page-title { margin-right:auto; font-size:25px; font-weight:800; letter-spacing:-.04em; }
+.page-title .live-pill { color:#d7f8e2; background:rgba(0,0,0,.34); border:0; }
+.topbar-actions { gap:8px; }
+.btn { min-height:34px; padding:7px 13px; border:0; border-radius:999px; font-weight:750; background:rgba(0,0,0,.55); }
+.btn:hover { background:#000; transform:scale(1.035); }
+.btn-primary { background:#fff; color:#000; box-shadow:none; }
+.btn-primary:hover { background:#fff; }
+.theme-toggle { min-height:34px; border:0; border-radius:999px; background:rgba(0,0,0,.55); }
+
+.bento { gap:20px; }
+.card {
+  position:relative; padding:20px; border:0; border-radius:8px;
+  background:#181818; box-shadow:none;
+  transition:background .3s ease, transform .3s cubic-bezier(.2,0,0,1), box-shadow .3s ease;
+}
+.card::before,.card::after { display:none; }
+.card:hover { background:#282828; border:0; transform:translateY(-4px) !important; box-shadow:0 18px 40px rgba(0,0,0,.28); }
+.card::marker { display:none; }
+.card-play {
+  position:absolute; right:18px; bottom:18px; z-index:6;
+  width:48px; height:48px; border:0; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#000; background:var(--spotify-green);
+  box-shadow:0 8px 22px rgba(0,0,0,.42);
+  opacity:0; transform:translateY(10px); cursor:pointer;
+  transition:opacity .25s ease, transform .25s ease, background .2s ease;
+}
+.card:hover .card-play,.card:focus-within .card-play { opacity:1; transform:translateY(0); }
+.card-play:hover { background:var(--spotify-green-hover); transform:translateY(0) scale(1.06) !important; }
+.kpi { min-height:164px; }
+.kpi-icon { border:0; background:#282828; }
+.kpi-value,.grad-cyan,.grad-violet,.grad-mint { color:#fff !important; -webkit-text-fill-color:#fff !important; background:none !important; }
+.kpi-trend { color:var(--spotify-green); background:rgba(30,215,96,.12); }
+.card-title { color:#fff; font-weight:800; letter-spacing:-.015em; }
+.card-sub,.kpi-meta { color:var(--spotify-muted); }
+.dot { background:var(--spotify-green) !important; box-shadow:none !important; }
+.tab-bar,.filter-bar { background:#121212; border:0; }
+.tab,.filter-chip,.chart-sel-btn { border-radius:999px; }
+.tab.active,.filter-chip.active,.chart-sel-btn.active { background:#fff; color:#000; }
+.song-row { min-height:60px; border-radius:6px; transition:background .15s ease; }
+.song-row:hover { background:#2a2a2a; }
+.song-row:hover .song-action { color:#fff; transform:scale(1.08); }
+.bar-fill { background:var(--spotify-green) !important; box-shadow:none !important; }
+.footer { padding-bottom:32px; }
+
+.spotify-player {
+  position:fixed; left:0; right:0; bottom:0; z-index:9000;
+  height:92px; display:grid; grid-template-columns:minmax(220px,30%) minmax(340px,40%) minmax(220px,30%);
+  align-items:center; gap:16px; padding:10px 18px;
+  color:#fff; background:#000; border-top:1px solid #282828;
+}
+.sp-now { min-width:0; display:grid; grid-template-columns:56px minmax(0,1fr) 28px; gap:12px; align-items:center; }
+.sp-cover { width:56px; height:56px; border-radius:4px; object-fit:cover; background:#282828; }
+.sp-meta { min-width:0; }
+.sp-title,.sp-artist { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sp-title { font-size:13px; font-weight:650; }
+.sp-artist { color:var(--spotify-muted); font-size:11px; margin-top:3px; }
+.sp-like,.sp-icon { border:0; background:transparent; color:var(--spotify-muted); cursor:pointer; }
+.sp-like:hover,.sp-icon:hover { color:#fff; transform:scale(1.08); }
+.sp-like.active { color:var(--spotify-green); }
+.sp-icon.active { color:var(--spotify-green); }
+.sp-center { min-width:0; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.sp-controls { display:flex; align-items:center; gap:18px; }
+.sp-play { width:34px; height:34px; border:0; border-radius:50%; display:grid; place-items:center; background:#fff; color:#000; cursor:pointer; }
+.sp-play:hover { transform:scale(1.08); }
+.sp-progress { width:100%; display:grid; grid-template-columns:42px minmax(80px,1fr) 42px; align-items:center; gap:8px; color:var(--spotify-muted); font-size:10px; font-variant-numeric:tabular-nums; }
+.sp-range { width:100%; height:4px; accent-color:var(--spotify-green); cursor:pointer; }
+.sp-range:hover { accent-color:var(--spotify-green); }
+.sp-right { display:flex; align-items:center; justify-content:flex-end; gap:10px; }
+.sp-volume { width:min(110px,42%); }
+#_gp_disc { display:none !important; }
+
+@media (max-width:1100px) {
+  .app { grid-template-columns:88px minmax(0,1fr); }
+  .sidebar { padding-inline:8px; }
+  .brand-text,.nav-item span:last-child,.spotify-library,.sidebar-footer .info { display:none; }
+  .brand { justify-content:center; padding-inline:0; }
+  .nav-item { justify-content:center; padding:0; }
+  .nav-item .icon { width:auto; }
+  .sidebar-footer { justify-content:center; }
+  .spotify-player { grid-template-columns:minmax(180px,1fr) minmax(320px,1.5fr) 180px; }
+  .btn-command span:nth-child(2),.btn-command kbd,#btn-export span:last-child { display:none; }
+}
+@media (max-width:720px) {
+  body { padding-bottom:76px; }
+  .app { display:block; padding:0; min-height:calc(100vh - 76px); }
+  .sidebar { position:fixed; left:0; right:0; bottom:76px; top:auto; z-index:8500; width:100%; height:58px; padding:5px 8px; border-radius:0; }
+  .brand,.spotify-library,.sidebar-footer { display:none; }
+  .nav { display:grid; grid-template-columns:repeat(5,1fr); width:100%; gap:2px; }
+  .nav-item { min-height:48px; display:flex; flex-direction:column; gap:1px; font-size:9px; }
+  .nav-item span:last-child { display:block; }
+  .nav-item .icon { font-size:17px; }
+  .main { border-radius:0; padding:0 14px 90px; }
+  .topbar { min-height:62px; margin:0 -14px 16px; padding:10px 14px; }
+  .spotify-history,.page-title .live-pill,.btn-command,#btn-export,.theme-toggle { display:none !important; }
+  .page-title { font-size:21px; }
+  .spotify-player { height:76px; bottom:0; grid-template-columns:1fr auto; padding:9px 12px; background:#181818; }
+  .sp-now { grid-template-columns:48px minmax(0,1fr); }
+  .sp-cover { width:48px; height:48px; }
+  .sp-like,.sp-progress,.sp-right,.sp-controls .sp-icon { display:none; }
+  .sp-center { align-items:flex-end; }
+  .sp-controls { gap:0; }
+  .sp-play { width:38px; height:38px; }
+  .card-play { opacity:1; transform:none; width:42px; height:42px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .card,.card-play,.history-btn,.sp-play { transition:none !important; }
+}
+</style>
+</head>
+<body>
+  <div class="scroll-progress" id="scroll-progress"></div>
+  <div class="aurora"></div>
+  <div class="aurora-pink"></div>
+  <div class="aurora-mint"></div>
+  <div class="aurora-gold"></div>
+  <div class="grid-overlay"></div>
+  <div class="noise"></div>
+  <canvas id="particles-canvas"></canvas>
+  <canvas id="particles-canvas-2"></canvas>
+  <div class="cursor-glow" id="cursor-glow"></div>
+  <div class="scanline"></div>
+  <div class="vignette"></div>
+
+  <div class="app">
+    <!-- ============ Sidebar ============ -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          Pulse
+          <small>Music Analytics</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-section="dashboard">
+          <span class="icon">⌂</span><span>仪表盘</span>
+        </button>
+        <button class="nav-item" data-section="charts">
+          <span class="icon">◉</span><span>可视化</span>
+        </button>
+        <button class="nav-item" data-section="songs">
+          <span class="icon">♪</span><span>歌曲列表</span>
+        </button>
+        <button class="nav-item" data-section="history">
+          <span class="icon">◷</span><span>历史数据</span>
+        </button>
+        <button class="nav-item" data-section="player">
+          <span class="icon">▶</span><span>在线听歌</span>
+        </button>
+      </nav>
+
+      <section class="spotify-library" aria-label="分析资料库">
+        <div class="library-head"><span>≡　你的资料库</span><button class="library-add" type="button" title="新建视图">＋</button></div>
+        <div class="library-chips">
+          <button class="library-chip active" type="button">榜单</button>
+          <button class="library-chip" type="button">歌手</button>
+          <button class="library-chip" type="button">趋势</button>
+        </div>
+        <div class="library-list">
+          <div class="library-item" data-library-target="songs"><img class="library-cover" src="/static/covers/afterglow.png" alt=""><div><strong>实时热歌榜</strong><small>榜单 · 200 首</small></div></div>
+          <div class="library-item" data-library-target="charts"><img class="library-cover" src="/static/covers/blue-current.png" alt=""><div><strong>歌手趋势雷达</strong><small>分析 · 实时更新</small></div></div>
+          <div class="library-item" data-library-target="history"><img class="library-cover" src="/static/covers/red-prism.png" alt=""><div><strong>历史排名变化</strong><small>趋势 · 近 30 天</small></div></div>
+        </div>
+      </section>
+
+      <div class="sidebar-footer">
+        <div class="status-dot" id="status-dot"></div>
+        <div class="info">
+          <b id="sidebar-status">在线</b><br>
+          <span id="sidebar-meta">实时数据</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============ Main ============ -->
+    <main class="main">
+      <!-- Topbar -->
+      <div class="topbar fade-up">
+        <div class="spotify-history" aria-label="浏览历史">
+          <button class="history-btn" id="history-back" type="button" aria-label="后退">‹</button>
+          <button class="history-btn" id="history-forward" type="button" aria-label="前进">›</button>
+        </div>
+        <h1 class="page-title">
+          数据洞察
+          <span class="live-pill" id="data-source-pill">实时 · 网易云音乐</span>
+        </h1>
+        <div class="topbar-actions">
+          <button class="btn btn-command" id="btn-command" title="快速定位（Ctrl/⌘ K）">
+            <span>⌕</span><span>快速定位</span><kbd>⌘ K</kbd>
+          </button>
+          <button class="btn btn-ghost btn-icon" id="btn-refresh" title="刷新">
+            <span id="refresh-icon">↻</span>
+          </button>
+          <div id="theme-toggle-slot"></div>
+          <button class="btn" id="btn-export">
+            <span>↓</span><span>导出</span>
+          </button>
+          <button class="btn btn-primary" id="btn-scrape">
+            <span>⚡</span><span>获取最新</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ Bento Grid ============ -->
+      <div class="bento">
+        <!-- KPI 1: 歌曲总数 -->
+        <div class="card span-3 kpi fade-up d1">
+          <div class="kpi-label">
+            <div class="kpi-icon">♪</div>
+            歌曲总数
+          </div>
+          <div class="kpi-value grad-cyan" id="kpi-songs">—</div>
+          <svg class="kpi-spark" id="spark-songs" viewBox="0 0 200 36" preserveAspectRatio="none"></svg>
+          <div class="kpi-meta">
+            <span>当前榜单收录</span>
+            <span class="kpi-trend" id="kpi-songs-trend">↑ 0</span>
+          </div>
+        </div>
+
+        <!-- KPI 2: 歌手数量 -->
+        <div class="card span-3 kpi fade-up d2">
+          <div class="kpi-label">
+            <div class="kpi-icon">◐</div>
+            独立歌手
+          </div>
+          <div class="kpi-value grad-violet" id="kpi-artists">—</div>
+          <svg class="kpi-spark" id="spark-artists" viewBox="0 0 200 36" preserveAspectRatio="none"></svg>
+          <div class="kpi-meta">
+            <span>上榜艺人</span>
+            <span class="kpi-trend">↑ 实时</span>
+          </div>
+        </div>
+
+        <!-- KPI 3: 数据来源 -->
+        <div class="card span-3 kpi fade-up d3">
+          <div class="kpi-label">
+            <div class="kpi-icon">☁</div>
+            数据来源
+          </div>
+          <div class="kpi-value" id="kpi-source" style="font-size: 22px;">—</div>
+          <div class="kpi-meta">
+            <span>网易云音乐</span>
+          </div>
+        </div>
+
+        <!-- KPI 4: 更新时间 -->
+        <div class="card span-3 kpi fade-up d4">
+          <div class="kpi-label">
+            <div class="kpi-icon">◷</div>
+            最后更新
+          </div>
+          <div class="kpi-value grad-mint" id="kpi-time" style="font-size: 28px;">—</div>
+          <div class="kpi-meta">
+            <span id="kpi-time-rel">尚未获取</span>
+          </div>
+        </div>
+
+        <!-- TOP 10 歌手柱状图 -->
+        <div class="card span-7 row-tall fade-up d4">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><span class="dot"></span>TOP 10 歌手 · 上榜次数</div>
+              <div class="card-sub">按出现频次排序 · 实时统计</div>
+            </div>
+            <div class="tab-bar">
+              <button class="tab active" data-chart="bar">柱状</button>
+              <button class="tab" data-chart="donut">环形</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart-bar">
+            <div class="loading"><div class="spinner"></div>正在分析数据...</div>
+          </div>
+        </div>
+
+        <!-- 词云 -->
+        <div class="card span-5 row-tall fade-up d5">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><span class="dot" style="background: var(--brand-3)"></span>歌手词云</div>
+              <div class="card-sub">热度分布 · 字大小 ∝ 上榜频次</div>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart-wordcloud">
+            <div class="loading"><div class="spinner"></div>生成词云中...</div>
+          </div>
+        </div>
+
+        <!-- 饼图(全宽,精细化) -->
+        <div class="card span-6 row-med fade-up d5">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><span class="dot" style="background: var(--brand-4)"></span>头部歌手占比</div>
+              <div class="card-sub">TOP 10 占全部上榜比例</div>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart-pie">
+            <div class="loading"><div class="spinner"></div>计算中...</div>
+          </div>
+        </div>
+
+        <!-- 趋势 -->
+        <div class="card span-6 row-med fade-up d6">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><span class="dot" style="background: var(--brand-5)"></span>排名分布</div>
+              <div class="card-sub">TOP 20 排名趋势分析</div>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart-line">
+            <div class="loading"><div class="spinner"></div>渲染中...</div>
+          </div>
+        </div>
+
+        <!-- 历史趋势图（新增） -->
+        <div class="card span-12 fade-up d7">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><span class="dot" style="background: var(--brand-2)"></span>榜单 Top10 排名走势</div>
+              <div class="card-sub" id="trend-chart-sub">点击右上榜单切换 · 越低越火</div>
+            </div>
+            <div class="tab-bar" id="trend-day-tabs">
+              <button class="tab active" data-days="7">近 7 天</button>
+              <button class="tab" data-days="14">近 14 天</button>
+              <button class="tab" data-days="30">近 30 天</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart-trend" style="height:360px">
+            <div class="loading"><div class="spinner"></div>加载历史趋势...</div>
+          </div>
+        </div>
+
+        <!-- 歌曲列表 -->
+        <div class="card span-12 fade-up d7">
+          <div class="card-header">
+            <div>
+              <div class="card-title"><span class="dot" style="background: var(--brand-1)"></span>实时榜单</div>
+              <div class="card-sub" id="song-count-meta">共 — 首歌曲</div>
+            </div>
+            <div class="chart-selector" id="chart-selector"></div>
+            <div class="filter-bar">
+              <button class="filter-chip active" data-filter="all">全部</button>
+              <button class="filter-chip" data-filter="top10">TOP 10</button>
+              <button class="filter-chip" data-filter="top50">TOP 50</button>
+              <button class="filter-chip" data-filter="top100">TOP 100</button>
+            </div>
+          </div>
+          <div class="song-list" id="song-list">
+            <div class="empty">
+              <div class="empty-icon">♪</div>
+              <div>暂无数据</div>
+              <div style="font-size:12px;margin-top:4px">点击右上「获取最新」开始分析</div>
+            </div>
+          </div>
+
+          <!-- 跨榜交集分析 -->
+          <div class="card span-6 cross-panel" id="cross-panel" style="display:none">
+            <div class="card-title"><span class="dot" style="background:var(--brand-2)"></span>跨榜交集分析</div>
+            <div class="cross-stats" id="cross-stats"></div>
+            <div style="max-height:360px;overflow-y:auto">
+              <table class="cross-table" id="cross-table"></table>
+            </div>
+            <div id="cross-empty" style="display:none;padding:20px;text-align:center;color:var(--text-4)">暂无跨榜歌曲</div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div>© 2026 Pulse · 网易云音乐数据洞察</div>
+        <div style="display:flex;gap:16px;">
+          <span class="live-tag">Live</span>
+          <span id="footer-time">—</span>
+        </div>
+      </footer>
+
+      <!-- 调度器状态迷你面板 -->
+      <div class="sched-mini" id="sched-mini" style="display:none">
+        <div style="font-weight:700;color:var(--text-3);margin-bottom:6px;font-size:10px">⏱ 爬取调度</div>
+        <div class="sm-row"><span class="sm-label">状态</span><span class="sm-val" id="sm-status">—</span></div>
+        <div class="sm-row"><span class="sm-label">上次</span><span class="sm-val" id="sm-last">—</span></div>
+        <div class="sm-row"><span class="sm-label">下次</span><span class="sm-val" id="sm-next">—</span></div>
+        <div class="sm-row"><span class="sm-label">结果</span><span class="sm-val" id="sm-result">—</span></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="spotify-player" id="spotify-player" aria-label="音乐播放器">
+    <div class="sp-now">
+      <img class="sp-cover" id="sp-cover" src="/static/covers/afterglow.png" alt="当前播放封面">
+      <div class="sp-meta"><div class="sp-title" id="sp-title">从榜单选择一首歌</div><div class="sp-artist" id="sp-artist">Pulse Music Analytics</div></div>
+      <button class="sp-like" id="sp-like" type="button" aria-label="收藏">♡</button>
+    </div>
+    <div class="sp-center">
+      <div class="sp-controls">
+        <button class="sp-icon" id="sp-shuffle" type="button" aria-label="随机播放">⌘</button>
+        <button class="sp-icon" id="sp-prev" type="button" aria-label="上一首">◀</button>
+        <button class="sp-play" id="sp-play" type="button" aria-label="播放">▶</button>
+        <button class="sp-icon" id="sp-next" type="button" aria-label="下一首">▶</button>
+        <button class="sp-icon" id="sp-repeat" type="button" aria-label="循环播放">↻</button>
+      </div>
+      <div class="sp-progress"><span id="sp-current">0:00</span><input class="sp-range" id="sp-progress" type="range" min="0" max="100" value="0" step="0.1" aria-label="播放进度"><span id="sp-duration">0:00</span></div>
+    </div>
+    <div class="sp-right">
+      <button class="sp-icon" type="button" title="正在播放视图">▤</button>
+      <button class="sp-icon" type="button" title="播放队列">☷</button>
+      <span aria-hidden="true">◖</span><input class="sp-range sp-volume" id="sp-volume" type="range" min="0" max="100" value="80" aria-label="音量">
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <div class="command-backdrop" id="command-backdrop" aria-hidden="true">
+    <section class="command-panel" role="dialog" aria-modal="true" aria-label="快速定位">
+      <div class="command-head"><span>⌕</span><input class="command-input" id="command-input" placeholder="搜索页面或操作…" autocomplete="off"><span>ESC</span></div>
+      <div class="command-list" id="command-list">
+        <button class="command-item" data-command="dashboard"><span>⌂</span>返回仪表盘顶部<small>首页</small></button>
+        <button class="command-item" data-command="charts"><span>◉</span>查看数据可视化<small>图表</small></button>
+        <button class="command-item" data-command="songs"><span>♪</span>浏览实时榜单<small>歌曲</small></button>
+        <button class="command-item" data-command="refresh"><span>↻</span>刷新最新数据<small>操作</small></button>
+        <button class="command-item" data-command="player"><span>▶</span>打开在线听歌<small>页面</small></button>
+      </div>
+    </section>
+  </div>
+
+<!-- 跨页面全局后台播放器 — 切到主页也能继续听歌 -->
+<script src="/static/theme-manager.js"></script>
+<script src="/static/player-core.js"></script>
+
+<script>
+/* ============================================================
+   State
+   ============================================================ */
+const state = {
+  songs: [],
+  analysis: null,
+  currentFilter: 'all',
+  currentChart: '热歌榜',
+  rankChanges: {},
+  crossChart: null,
+  schedulerStatus: null,
+
+  loading: { scrape: false, charts: false },
+  startTime: Date.now(),
+  lastUpdate: null,
+};
+
+const $  = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+/* ============================================================
+   Toast
+   ============================================================ */
+function toast(msg, type = 'info', duration = 3200) {
+  const stack = $('#toast-stack');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  const icons = { success: '✓', error: '✕', warn: '⚠', info: 'ⓘ' };
+  el.innerHTML = `<span class="icon">${icons[type] || 'ⓘ'}</span><span class="msg">${msg}</span>`;
+  stack.appendChild(el);
+  setTimeout(() => {
+    el.classList.add('out');
+    setTimeout(() => el.remove(), 300);
+  }, duration);
+}
+
+/* ============================================================
+   Ripple on buttons
+   ============================================================ */
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.btn, .nav-item, .filter-chip, .tab');
+  if (!btn) return;
+  const rect = btn.getBoundingClientRect();
+  const r = document.createElement('span');
+  r.className = 'ripple';
+  const size = Math.max(rect.width, rect.height);
+  r.style.width = r.style.height = size + 'px';
+  r.style.left = (e.clientX - rect.left - size/2) + 'px';
+  r.style.top  = (e.clientY - rect.top  - size/2) + 'px';
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 600);
+});
+
+/* ============================================================
+   Time helpers
+   ============================================================ */
+function fmtTime(d) {
+  return d.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+function fmtRelTime(date) {
+  if (!date) return '尚未获取';
+  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diff < 5) return '刚刚';
+  if (diff < 60) return `${diff} 秒前`;
+  if (diff < 3600) return `${Math.floor(diff/60)} 分钟前`;
+  return `${Math.floor(diff/3600)} 小时前`;
+}
+
+/* ============================================================
+   Animate number
+   ============================================================ */
+function animateNumber(el, target, duration = 800) {
+  const start = parseFloat((el.textContent || '0').replace(/[^0-9.-]/g, '')) || 0;
+  const t0 = performance.now();
+  function tick(t) {
+    const p = Math.min((t - t0) / duration, 1);
+    const e = 1 - Math.pow(1 - p, 3); // easeOutCubic
+    el.textContent = Math.floor(start + (target - start) * e).toLocaleString();
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = target.toLocaleString();
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ============================================================
+   Sparkline (SVG)
+   ============================================================ */
+function drawSparkline(svg, data, color = '#00d4ff') {
+  if (!data || data.length < 2) {
+    data = Array.from({ length: 12 }, () => Math.random() * 0.6 + 0.2);
+  }
+  const w = 200, h = 36;
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const range = max - min || 1;
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - min) / range) * h * 0.85 - h * 0.075;
+    return [x, y];
+  });
+  const path = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const area = path + ` L ${w},${h} L 0,${h} Z`;
+  const gradId = 'sg-' + Math.random().toString(36).slice(2, 8);
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${area}" fill="url(#${gradId})"/>
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  `;
+}
+
+/* ============================================================
+   Donut Chart (custom SVG)
+   ============================================================ */
+function drawDonut(svgEl, data) {
+  if (!svgEl) return;
+  const w = 180, h = 180, cx = 90, cy = 90, r = 64, sw = 22;
+  const total = data.reduce((s, d) => s + d.value, 0) || 1;
+  const colors = ['#7c5cff','#00d4ff','#2ee6a6','#f0b400','#ff5cae','#4aa3ff','#ff8e72','#a78bfa','#34d399','#fbbf24'];
+  let acc = 0;
+  const segs = data.map((d, i) => {
+    const start = acc / total * Math.PI * 2 - Math.PI / 2;
+    acc += d.value;
+    const end   = acc / total * Math.PI * 2 - Math.PI / 2;
+    const x1 = cx + r * Math.cos(start), y1 = cy + r * Math.sin(start);
+    const x2 = cx + r * Math.cos(end),   y2 = cy + r * Math.sin(end);
+    const large = (end - start) > Math.PI ? 1 : 0;
+    const color = colors[i % colors.length];
+    return `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 ${large} 1 ${x2.toFixed(2)},${y2.toFixed(2)}"
+            fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round">
+            <animate attributeName="stroke-dasharray" from="0 1000" to="1000 0" dur="1.2s" fill="freeze"/>
+            </path>`;
+  }).join('');
+  svgEl.innerHTML = `
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="${sw}"/>
+    ${segs}
+    <text x="${cx}" y="${cy - 4}" text-anchor="middle" font-size="11" fill="#8b8f9b" font-family="Inter">TOTAL</text>
+    <text x="${cx}" y="${cy + 14}" text-anchor="middle" font-size="22" font-weight="700" fill="#f5f6fa" font-family="JetBrains Mono">${data.reduce((s,d)=>s+d.value,0)}</text>
+  `;
+}
+
+/* ============================================================
+   Custom Bar Chart (HTML)
+   ============================================================ */
+function renderBarChart(data) {
+  if (!data || !data.length) {
+    return '<div class="empty"><div class="empty-icon">▦</div><div>暂无数据</div></div>';
+  }
+  const max = Math.max(...data.map(d => d.value)) || 1;
+  const colors = ['',' warm','','','','',' cool','','',''];
+  return data.slice(0, 10).map((d, i) => `
+    <div class="bar-row">
+      <div class="bar-rank">${String(i+1).padStart(2,'0')}</div>
+      <div class="bar-name" title="${d.name}">${d.name}</div>
+      <div class="bar-track">
+        <div class="bar-fill${colors[i]||''}" style="width:${(d.value/max*100).toFixed(1)}%; animation-delay:${i*60}ms"></div>
+      </div>
+      <div class="bar-count">${d.value}</div>
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   Custom Line Chart (SVG)
+   ============================================================ */
+function drawLineChart(svgEl, data) {
+  if (!svgEl) return;
+  const w = 600, h = 240, padL = 36, padR = 16, padT = 24, padB = 32;
+  const innerW = w - padL - padR, innerH = h - padT - padB;
+  const points = data.map((d, i) => ({
+    x: padL + (i / Math.max(1, data.length - 1)) * innerW,
+    y: padT + (1 - d.value / 100) * innerH,
+    raw: d
+  }));
+  const path = points.map((p, i) => (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
+  const area = path + ` L ${padL + innerW},${padT + innerH} L ${padL},${padT + innerH} Z`;
+  const gradId = 'lg-' + Math.random().toString(36).slice(2, 8);
+
+  // grid
+  const yLines = [0, 0.25, 0.5, 0.75, 1].map(p => {
+    const y = padT + p * innerH;
+    return `<line x1="${padL}" y1="${y}" x2="${padL+innerW}" y2="${y}" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 4"/>
+            <text x="${padL - 8}" y="${y+4}" text-anchor="end" font-size="10" fill="#565a66" font-family="JetBrains Mono">${Math.round((1-p)*100)}</text>`;
+  }).join('');
+
+  // x labels (every 4)
+  const xLabels = points.filter((_, i) => i % 4 === 0 || i === points.length - 1).map(p => {
+    return `<text x="${p.x}" y="${padT+innerH+18}" text-anchor="middle" font-size="10" fill="#8b8f9b" font-family="JetBrains Mono">${p.raw.label}</text>`;
+  }).join('');
+
+  // dots
+  const dots = points.map((p, i) => {
+    if (i % 4 !== 0 && i !== points.length - 1) return '';
+    return `<g>
+      <circle cx="${p.x}" cy="${p.y}" r="3" fill="#00d4ff" stroke="#06070a" stroke-width="2"/>
+    </g>`;
+  }).join('');
+
+  svgEl.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svgEl.innerHTML = `
+    <defs>
+      <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#7c5cff" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#7c5cff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${yLines}
+    ${xLabels}
+    <path d="${area}" fill="url(#${gradId})"/>
+    <path d="${path}" fill="none" stroke="url(#${gradId.replace('lg','#7c5cff-').slice(0,10)})" stroke="#7c5cff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${dots}
+  `;
+  // fix stroke (single-color)
+  svgEl.querySelector('path[stroke^="url"]')?.setAttribute('stroke', '#7c5cff');
+}
+
+/* ============================================================
+   Render functions
+   ============================================================ */
+function renderKPI() {
+  animateNumber($('#kpi-songs'), state.songs.length || 0);
+  animateNumber($('#kpi-artists'), state.analysis?.total_artists || 0);
+  $('#kpi-source').textContent = state.scrapeMethod || '未获取';
+  if (state.lastUpdate) {
+    $('#kpi-time').textContent = fmtTime(state.lastUpdate);
+  }
+  drawSparkline($('#spark-songs'), state.songs.map((_, i) => 10 + Math.random() * 90).slice(0, 24), '#00d4ff');
+  drawSparkline($('#spark-artists'), state.analysis?.top10?.map(a => a.count * 12) || [40,55,38,72,49,66,58,80,45,62], '#7c5cff');
+}
+
+function renderBar(chartType = 'bar') {
+  const el = $('#chart-bar');
+  if (!state.analysis?.top10) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">▦</div><div>等待数据</div></div>';
+    return;
+  }
+  const data = state.analysis.top10.map(a => ({ name: a.name, value: a.count }));
+  if (chartType === 'donut') {
+    el.innerHTML = `
+      <div class="donut-wrap">
+        <svg class="donut svg-chart" id="donut-svg" viewBox="0 0 180 180"></svg>
+        <div class="donut-legend">
+          ${data.map((d, i) => {
+            const colors = ['#7c5cff','#00d4ff','#2ee6a6','#f0b400','#ff5cae','#4aa3ff','#ff8e72','#a78bfa','#34d399','#fbbf24'];
+            return `<div class="donut-item">
+              <span class="swatch" style="background:${colors[i%10]}"></span>
+              <span class="name">${d.name}</span>
+              <span class="val">${d.value}</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    requestAnimationFrame(() => drawDonut($('#donut-svg'), data));
+  } else {
+    el.innerHTML = renderBarChart(data);
+  }
+}
+
+function renderWordCloud() {
+  const el = $('#chart-wordcloud');
+  if (state.wordcloudImg) {
+    el.innerHTML = `<img src="data:image/png;base64,${state.wordcloudImg}" alt="歌手词云" style="width:100%;height:100%;object-fit:contain;">`;
+  } else {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">☁</div><div>等待词云</div></div>';
+  }
+}
+
+function renderPie() {
+  const el = $('#chart-pie');
+  if (!state.analysis?.top10) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">◐</div><div>等待数据</div></div>';
+    return;
+  }
+  const total = state.analysis.top10.reduce((s, a) => s + a.count, 0);
+  const rest  = Math.max(0, state.analysis.total_songs - total);
+  const data = state.analysis.top10.map(a => ({ name: a.name, value: a.count }));
+  if (rest > 0) data.push({ name: '其他', value: rest });
+  el.innerHTML = `
+    <div class="donut-wrap">
+      <svg class="donut svg-chart" id="pie-svg" viewBox="0 0 180 180"></svg>
+      <div class="donut-legend">
+        ${data.slice(0, 8).map((d, i) => {
+          const colors = ['#7c5cff','#00d4ff','#2ee6a6','#f0b400','#ff5cae','#4aa3ff','#ff8e72','#a78bfa'];
+          return `<div class="donut-item">
+            <span class="swatch" style="background:${colors[i%8]}"></span>
+            <span class="name">${d.name}</span>
+            <span class="val">${d.value}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  requestAnimationFrame(() => drawDonut($('#pie-svg'), data));
+}
+
+function renderLine() {
+  const el = $('#chart-line');
+  if (!state.analysis?.top10) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">∿</div><div>等待数据</div></div>';
+    return;
+  }
+  // 模拟排名趋势(根据top10生成高度变化曲线)
+  const data = state.analysis.top10.map((a, i) => ({
+    label: a.name.slice(0, 4),
+    value: 100 - i * 6 - Math.random() * 8
+  }));
+  el.innerHTML = `<svg class="svg-chart" id="line-svg"></svg>`;
+  requestAnimationFrame(() => drawLineChart($('#line-svg'), data));
+}
+
+function renderSongList() {
+  const el = $('#song-list');
+  let songs = [...state.songs];
+  if (state.currentFilter === 'top10')  songs = songs.slice(0, 10);
+  if (state.currentFilter === 'top50')  songs = songs.slice(0, 50);
+  if (state.currentFilter === 'top100') songs = songs.slice(0, 100);
+  $('#song-count-meta').textContent = `共 ${songs.length} 首歌曲`;
+
+  if (!songs.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">♪</div><div>暂无数据</div></div>`;
+    return;
+  }
+
+  // 排名变化数据
+  const rcMap = {};
+  if (state.rankChanges && state.rankChanges.changes) {
+    state.rankChanges.changes.forEach(c => { rcMap[c.title + '|' + c.artist] = c; });
+  }
+
+  el.innerHTML = songs.map(s => {
+    const rankCls = s.rank === 1 ? 'gold' : s.rank === 2 ? 'silver' : s.rank === 3 ? 'bronze' : '';
+    const key = s.title + '|' + s.artist;
+    const rc = rcMap[key];
+    let changeHtml = '';
+    if (rc) {
+      if (rc.rank_change > 0) changeHtml = `<span class="rank-change up">↑${rc.rank_change}</span>`;
+      else if (rc.rank_change < 0) changeHtml = `<span class="rank-change down">↓${Math.abs(rc.rank_change)}</span>`;
+      else if (rc.old_rank === rc.new_rank) changeHtml = `<span class="rank-change" style="color:var(--text-4)">—</span>`;
+    } else {
+      // 新增歌曲（在最新快照中但不在旧快照）
+      changeHtml = `<span class="rank-change new">NEW</span>`;
+    }
+    return `
+      <div class="song-row" data-rank="${s.rank}">
+        <div class="song-rank ${rankCls}">${s.rank}</div>
+        <div class="song-title">${escapeHtml(s.title)}${changeHtml}</div>
+        <div class="song-artist">${escapeHtml(s.artist)}</div>
+        <div class="song-tags">${s.rank <= 3 ? '<span class="tag hot">TOP 3</span>' : s.rank <= 10 ? '<span class="tag new">TOP 10</span>' : `<span class="tag">#${s.rank}</span>`}</div>
+        <div class="song-action" onclick="event.stopPropagation();copySong('${escapeHtml(s.title).replace(/'/g, "\\'")} - ${escapeHtml(s.artist).replace(/'/g, "\\'")}')" title="复制">⎘</div>
+      </div>
+    `;
+  }).join('');
+
+  el.querySelectorAll('.song-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const t = row.querySelector('.song-title').textContent.replace(/[↑↓NEWnew\d\s—]+$/,'').trim();
+      const a = row.querySelector('.song-artist').textContent;
+      copySong(`${t} - ${a}`);
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ============================================================
+   Data fetching
+   ============================================================ */
+async function loadScrape() {
+  if (state.loading.scrape) return;
+  state.loading.scrape = true;
+  const icon = $('#refresh-icon');
+  if (icon) icon.style.animation = 'spin 1s linear infinite';
+  try {
+    const r = await fetch('/api/scrape', { method: 'POST' });
+    const j = await r.json();
+    if (j.success) {
+      state.songs = j.data || [];
+      state.scrapeMethod = j.method || 'API';
+      state.lastUpdate = new Date();
+      toast(`获取 ${j.data.length} 首歌曲 · ${j.method}`, 'success');
+      await Promise.all([loadAnalysis(), loadCharts()]);
+      buildChartSelector();
+      loadRankChanges();
+      loadCrossChart();
+      loadSchedulerStatus();
+      renderAll();
+    } else {
+      toast('获取失败: ' + (j.error || '未知错误'), 'error');
+    }
+  } catch (e) {
+    toast('网络错误: ' + e.message, 'error');
+  } finally {
+    state.loading.scrape = false;
+    if (icon) icon.style.animation = '';
+  }
+}
+
+async function loadAnalysis() {
+  try {
+    const r = await fetch('/api/analyze');
+    const j = await r.json();
+    if (j.success) state.analysis = j;
+  } catch (e) { console.warn('分析失败', e); }
+}
+
+async function loadCharts() {
+  // 词云优先
+  try {
+    const r = await fetch('/api/chart/wordcloud');
+    const j = await r.json();
+    if (j.success) state.wordcloudImg = j.image;
+  } catch (e) {}
+}
+
+// 排名变化追踪
+async function loadRankChanges() {
+  try {
+    const r = await fetch('/api/history/rank_changes/' + encodeURIComponent(state.currentChart));
+    const j = await r.json();
+    if (j.success) state.rankChanges = j;
+  } catch (e) { state.rankChanges = {}; }
+  renderSongList();
+}
+
+// 跨榜交集分析
+async function loadCrossChart() {
+  try {
+    const r = await fetch('/api/analysis/cross-chart');
+    const j = await r.json();
+    if (j.success && j.crossing && j.crossing.length) {
+      state.crossChart = j;
+      $('#cross-panel').style.display = '';
+      $('#cross-empty').style.display = 'none';
+      // 统计
+      $('#cross-stats').innerHTML = `
+        <div class="cross-stat"><div class="cs-val">${j.summary.total_crossing}</div><div class="cs-label">跨榜歌曲</div></div>
+        <div class="cross-stat"><div class="cs-val">${j.summary.crossing_2_charts}</div><div class="cs-label">2 榜交集</div></div>
+        <div class="cross-stat"><div class="cs-val">${j.summary.crossing_3_charts}</div><div class="cs-label">3 榜交集</div></div>
+        <div class="cross-stat"><div class="cs-val">${j.summary.crossing_4plus}</div><div class="cs-label">4+ 榜</div></div>
+      `;
+      // 表格
+      $('#cross-table').innerHTML = `
+        <thead><tr><th>歌曲</th><th>歌手</th><th>上榜数</th><th>榜单排名</th></tr></thead>
+        <tbody>${j.crossing.slice(0, 30).map(x => `
+          <tr>
+            <td style="color:var(--text-1);font-weight:600">${escapeHtml(x.title)}</td>
+            <td>${escapeHtml(x.artist)}</td>
+            <td style="color:var(--brand-2);font-weight:700">${x.chart_count}</td>
+            <td><div class="cross-badges">${x.appearances.map(a => `<span class="cross-badge">${a.chart}#${a.rank}</span>`).join('')}</div></td>
+          </tr>`).join('')}</tbody>`;
+    } else {
+      $('#cross-panel').style.display = '';
+      $('#cross-stats').innerHTML = '';
+      $('#cross-table').innerHTML = '';
+      $('#cross-empty').style.display = '';
+    }
+  } catch (e) { $('#cross-panel').style.display = 'none'; }
+}
+
+// 调度器状态轮询
+async function loadSchedulerStatus() {
+  try {
+    const r = await fetch('/api/scheduler/status');
+    const j = await r.json();
+    if (j.success) {
+      state.schedulerStatus = j;
+      $('#sched-mini').style.display = '';
+      const dot = j.running ? '<span class="sm-status on"></span>' : '<span class="sm-status off"></span>';
+      $('#sm-status').innerHTML = dot + (j.running ? '运行中' : '已停止');
+      if (j.last_result) {
+        const t = new Date(j.last_result.timestamp);
+        $('#sm-last').textContent = fmtRelative(t);
+        $('#sm-result').textContent = j.last_result.success ? '✅ 成功' : '❌ 失败';
+        $('#sm-result').style.color = j.last_result.success ? 'var(--success)' : 'var(--error)';
+      }
+      // 计算下次运行
+      if (j.running && j.last_result) {
+        const next = new Date(new Date(j.last_result.timestamp).getTime() + j.interval * 1000);
+        const now = Date.now();
+        if (next > now) {
+          const secs = Math.floor((next - now) / 1000);
+          $('#sm-next').textContent = secs > 3600 ? Math.floor(secs/3600)+'时'+(Math.floor(secs/60)%60)+'分' : Math.floor(secs/60)+'分'+secs%60+'秒';
+        } else { $('#sm-next').textContent = '即将...'; }
+      } else { $('#sm-next').textContent = '—'; }
+    }
+  } catch (e) {}
+}
+
+// 榜单切换
+async function switchChart(chartName) {
+  state.currentChart = chartName;
+  state.currentFilter = 'all';
+  // 更新按钮状态
+  $$('.chart-sel-btn').forEach(b => b.classList.toggle('active', b.dataset.chart === chartName));
+  $$('.filter-chip').forEach((c,i) => c.classList.toggle('active', i === 0));
+  // 获取该榜单最新快照
+  try {
+    const r = await fetch('/api/history/snapshot/' + encodeURIComponent(chartName));
+    const j = await r.json();
+    if (j.success && j.data) {
+      state.songs = j.data.map(s => ({ rank: s.rank, title: s.title, artist: s.artist }));
+      state.lastUpdate = new Date();
+    }
+  } catch (e) { toast('榜单加载失败', 'error'); return; }
+  renderSongList();
+  loadRankChanges();
+  loadSchedulerStatus();
+  renderTrendChart();   // 同步刷新趋势图
+}
+
+// 构建榜单选择器
+async function buildChartSelector() {
+  try {
+    const r = await fetch('/api/history/charts');
+    const j = await r.json();
+    if (j.success && j.charts.length) {
+      $('#chart-selector').innerHTML = `
+        <span class="cs-label">榜单:</span>
+        ${j.charts.map(c => `<button class="chart-sel-btn${c === state.currentChart ? ' active' : ''}" data-chart="${c}">${c}</button>`).join('')}
+      `;
+      $$('.chart-sel-btn').forEach(b => b.addEventListener('click', () => switchChart(b.dataset.chart)));
+    }
+  } catch (e) {}
+}
+
+function renderAll() {
+  renderKPI();
+  renderBar($('#chart-bar').dataset.current || 'bar');
+  renderWordCloud();
+  renderPie();
+  renderLine();
+  renderSongList();
+  renderTrendChart();
+  $('#footer-time').textContent = fmtTime(new Date());
+}
+
+// 历史趋势图（ECharts）
+let trendChart = null;
+let trendDays = 7;
+async function renderTrendChart() {
+  const el = document.getElementById('chart-trend');
+  if (!el) return;
+  if (!window.echarts) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">∿</div><div>ECharts 未加载</div></div>';
+    return;
+  }
+  try {
+    const r = await fetch('/api/chart/topn_trend?chart_name=' + encodeURIComponent(state.currentChart) + '&top_n=10&days=' + trendDays);
+    const j = await r.json();
+    if (!j.success || !j.dates || !j.dates.length) {
+      el.innerHTML = '<div class="empty"><div class="empty-icon">∿</div><div>暂无历史数据</div><div style="font-size:11px;margin-top:4px">需要至少 2 次爬取快照</div></div>';
+      return;
+    }
+    el.innerHTML = '';
+    if (!trendChart) trendChart = echarts.init(el, null, { renderer: 'canvas' });
+
+    // 配色（10 种）
+    const colors = ['#7c5cff','#00d4ff','#2ee6a6','#f0b400','#ff5cae','#4aa3ff','#ff8e72','#a78bfa','#34d399','#fbbf24'];
+
+    const dates = j.dates.map(d => d.slice(5, 16).replace('T', ' '));
+
+    const series = j.songs.map((s, i) => {
+      const data = s.trend.map(t => t.rank === null ? null : t.rank);
+      return {
+        name: (s.title + ' / ' + s.artist).slice(0, 18),
+        type: 'line',
+        smooth: 0.3,
+        symbol: 'circle',
+        symbolSize: 5,
+        showSymbol: data.filter(d => d !== null).length <= 15, // 数据多就不显示点
+        lineStyle: { width: 2, color: colors[i % colors.length] },
+        itemStyle: { color: colors[i % colors.length] },
+        emphasis: { focus: 'series', lineStyle: { width: 3 } },
+        connectNulls: true,
+        data,
+      };
+    });
+
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const textColor = isLight ? '#4a4f5a' : '#c2c5d0';
+    const axisColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.08)';
+    const splitLineColor = isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+
+    trendChart.setOption({
+      backgroundColor: 'transparent',
+      textStyle: { color: textColor, fontFamily: 'Inter, "Noto Sans SC", sans-serif' },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: isLight ? 'rgba(255,255,255,0.95)' : 'rgba(15,18,26,0.95)',
+        borderColor: isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)',
+        textStyle: { color: isLight ? '#1a1d24' : '#e6edf3', fontSize: 12 },
+        axisPointer: { type: 'cross', lineStyle: { color: axisColor } },
+        valueFormatter: v => v === null ? '—' : 'No.' + v,
+      },
+      legend: {
+        type: 'scroll',
+        bottom: 0,
+        textStyle: { color: textColor, fontSize: 11 },
+        itemWidth: 12, itemHeight: 8,
+      },
+      grid: { top: 16, right: 24, bottom: 56, left: 48 },
+      xAxis: {
+        type: 'category',
+        data: dates,
+        axisLine: { lineStyle: { color: axisColor } },
+        axisLabel: { color: textColor, fontSize: 10, rotate: 30 },
+        axisTick: { show: false },
+      },
+      yAxis: {
+        type: 'value',
+        name: '排名',
+        nameTextStyle: { color: textColor, fontSize: 11 },
+        inverse: true,    // 排名 1 在上
+        min: 1,
+        max: 100,
+        axisLine: { show: false },
+        axisLabel: { color: textColor, fontSize: 10 },
+        splitLine: { lineStyle: { color: splitLineColor } },
+      },
+      series,
+    }, true);
+  } catch (e) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">∿</div><div>趋势图加载失败</div></div>';
+    console.error(e);
+  }
+}
+
+window.addEventListener('resize', () => {
+  if (trendChart) trendChart.resize();
+});
+
+// 主题切换时重新渲染趋势图（用新配色）
+ThemeManager.onChange(() => {
+  if (trendChart) renderTrendChart();
+});
+
+// 天数切换
+$$('#trend-day-tabs .tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    $$('#trend-day-tabs .tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    trendDays = parseInt(tab.dataset.days) || 7;
+    renderTrendChart();
+  });
+});
+
+/* ============================================================
+   Actions
+   ============================================================ */
+async function exportCSV() {
+  if (!state.songs.length) { toast('暂无数据可导出', 'warn'); return; }
+  toast('正在导出 CSV...', 'info');
+  try {
+    const r = await fetch('/api/export_csv');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const blob = await r.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `热歌榜_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('CSV 已下载', 'success');
+  } catch (e) { toast('导出失败: ' + e.message, 'error'); }
+}
+
+function copySong(text) {
+  navigator.clipboard.writeText(text).then(
+    () => toast('已复制: ' + text, 'success', 2200),
+    () => toast('复制失败', 'error')
+  );
+}
+
+/* ============================================================
+   Event bindings
+   ============================================================ */
+$('#btn-scrape').addEventListener('click', loadScrape);
+$('#btn-refresh').addEventListener('click', loadScrape);
+$('#btn-export').addEventListener('click', exportCSV);
+
+
+$$('.filter-chip').forEach(c => c.addEventListener('click', () => {
+  $$('.filter-chip').forEach(x => x.classList.remove('active'));
+  c.classList.add('active');
+  state.currentFilter = c.dataset.filter;
+  renderSongList();
+}));
+
+$$('#chart-bar').forEach(()=>{}); // placeholder
+const chartBarEl = $('#chart-bar');
+chartBarEl.parentElement.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    chartBarEl.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    chartBarEl.dataset.current = tab.dataset.chart;
+    renderBar(tab.dataset.chart);
+  });
+});
+
+// Sidebar navigation (scroll to section)
+$$('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    $$('.nav-item').forEach(x => x.classList.remove('active'));
+    item.classList.add('active');
+    const section = item.dataset.section;
+    if (section === 'player') {
+      window.location.href = '/player';
+      return;
+    }
+    if (section === 'history') {
+      window.location.href = '/api/history/charts';
+      return;
+    }
+    if (section === 'songs') {
+      document.querySelector('.song-list').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    if (section === 'charts') {
+      document.querySelectorAll('.chart-wrap')[0]?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// Sticky toolbar, reading progress and quick navigation palette
+const topbar = $('.topbar');
+const scrollProgress = $('#scroll-progress');
+function updatePageChrome() {
+  const y = window.scrollY || document.documentElement.scrollTop;
+  const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  topbar?.classList.toggle('is-scrolled', y > 18);
+  if (scrollProgress) scrollProgress.style.transform = `scaleX(${Math.min(1, y / max)})`;
+
+  const songsTop = $('.song-list')?.getBoundingClientRect().top ?? Infinity;
+  const chartsTop = document.querySelector('.row-tall')?.getBoundingClientRect().top ?? Infinity;
+  const active = songsTop < window.innerHeight * .62 ? 'songs' : chartsTop < window.innerHeight * .62 ? 'charts' : 'dashboard';
+  $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.section === active));
+}
+window.addEventListener('scroll', updatePageChrome, { passive: true });
+updatePageChrome();
+
+const commandBackdrop = $('#command-backdrop');
+const commandInput = $('#command-input');
+const commandItems = $$('.command-item');
+let commandIndex = 0;
+function paintCommandSelection() {
+  const visible = commandItems.filter(item => item.style.display !== 'none');
+  commandIndex = Math.max(0, Math.min(commandIndex, visible.length - 1));
+  commandItems.forEach(item => item.classList.remove('selected'));
+  visible[commandIndex]?.classList.add('selected');
+}
+function setCommandOpen(open) {
+  commandBackdrop?.classList.toggle('open', open);
+  commandBackdrop?.setAttribute('aria-hidden', String(!open));
+  document.body.style.overflow = open ? 'hidden' : '';
+  if (open) {
+    commandInput.value = '';
+    commandItems.forEach(item => { item.style.display = ''; });
+    commandIndex = 0;
+    paintCommandSelection();
+    setTimeout(() => commandInput.focus(), 80);
+  }
+}
+function runCommand(command) {
+  setCommandOpen(false);
+  if (command === 'refresh') return loadScrape();
+  if (command === 'player') return window.location.href = '/player';
+  if (command === 'songs') return $('.song-list')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (command === 'charts') return document.querySelector('.row-tall')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+$('#btn-command')?.addEventListener('click', () => setCommandOpen(true));
+commandBackdrop?.addEventListener('click', e => { if (e.target === commandBackdrop) setCommandOpen(false); });
+commandItems.forEach(item => item.addEventListener('click', () => runCommand(item.dataset.command)));
+commandInput?.addEventListener('input', () => {
+  const q = commandInput.value.trim().toLowerCase();
+  commandItems.forEach(item => { item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+  commandIndex = 0;
+  paintCommandSelection();
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault(); setCommandOpen(!commandBackdrop?.classList.contains('open')); return;
+  }
+  if (!commandBackdrop?.classList.contains('open')) return;
+  const visible = commandItems.filter(item => item.style.display !== 'none');
+  if (e.key === 'Escape') setCommandOpen(false);
+  if (e.key === 'ArrowDown') { e.preventDefault(); commandIndex = (commandIndex + 1) % Math.max(1, visible.length); paintCommandSelection(); }
+  if (e.key === 'ArrowUp') { e.preventDefault(); commandIndex = (commandIndex - 1 + Math.max(1, visible.length)) % Math.max(1, visible.length); paintCommandSelection(); }
+  if (e.key === 'Enter' && visible[commandIndex]) runCommand(visible[commandIndex].dataset.command);
+});
+
+/* ============================================================
+   Tick
+   ============================================================ */
+setInterval(() => {
+  if (state.lastUpdate) {
+    $('#kpi-time-rel').textContent = fmtRelTime(state.lastUpdate);
+  }
+}, 1000);
+
+/* ============================================================
+   Particle System (Canvas 2D)
+   - Background starfield with mouse interaction
+   - 3D depth via parallax + z-axis sizing
+   ============================================================ */
+const particleCanvas = document.getElementById('particles-canvas');
+const pctx = particleCanvas.getContext('2d', { alpha: true });
+let particles = [];
+let mouse = { x: -1000, y: -1000, vx: 0, vy: 0, lastX: 0, lastY: 0 };
+let particleRAF = null;
+
+function resizeCanvas() {
+  particleCanvas.width = window.innerWidth;
+  particleCanvas.height = window.innerHeight;
+}
+
+function initParticles() {
+  resizeCanvas();
+  const count = Math.min(180, Math.floor((particleCanvas.width * particleCanvas.height) / 12000));
+  particles = Array.from({ length: count }, () => {
+    const z = Math.random() * 0.8 + 0.2; // depth factor 0.2-1.0
+    const colors = [
+      [124, 92, 255],   // violet
+      [0, 212, 255],    // cyan
+      [255, 92, 174],   // pink
+      [46, 230, 166],   // mint
+      [240, 180, 0]     // gold
+    ];
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    return {
+      x: Math.random() * particleCanvas.width,
+      y: Math.random() * particleCanvas.height,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      z,                                  // depth 0.2-1.0
+      r: (Math.random() * 1.5 + 0.5) * z, // size scales with depth
+      color: c,
+      alpha: (Math.random() * 0.5 + 0.3) * z,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+      twinklePhase: Math.random() * Math.PI * 2,
+    };
+  });
+}
+
+function drawParticles() {
+  pctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+  const t = performance.now() * 0.001;
+
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+
+    // Drift
+    p.x += p.vx;
+    p.y += p.vy;
+
+    // Mouse repulsion (force based on z-depth)
+    const dx = p.x - mouse.x;
+    const dy = p.y - mouse.y;
+    const distSq = dx * dx + dy * dy;
+    const repulseRadius = 140 * p.z;
+    if (distSq < repulseRadius * repulseRadius && distSq > 0) {
+      const dist = Math.sqrt(distSq);
+      const force = (1 - dist / repulseRadius) * 0.6 * p.z;
+      p.x += (dx / dist) * force * 3;
+      p.y += (dy / dist) * force * 3;
+    }
+
+    // Wrap around screen
+    if (p.x < -10) p.x = particleCanvas.width + 10;
+    if (p.x > particleCanvas.width + 10) p.x = -10;
+    if (p.y < -10) p.y = particleCanvas.height + 10;
+    if (p.y > particleCanvas.height + 10) p.y = -10;
+
+    // Twinkle
+    const twinkle = (Math.sin(t * p.twinkleSpeed * 60 + p.twinklePhase) + 1) / 2;
+    const alpha = p.alpha * (0.5 + 0.5 * twinkle);
+
+    // Glow halo
+    const grd = pctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 6);
+    grd.addColorStop(0, `rgba(${p.color[0]},${p.color[1]},${p.color[2]},${alpha})`);
+    grd.addColorStop(0.4, `rgba(${p.color[0]},${p.color[1]},${p.color[2]},${alpha * 0.3})`);
+    grd.addColorStop(1, `rgba(${p.color[0]},${p.color[1]},${p.color[2]},0)`);
+    pctx.fillStyle = grd;
+    pctx.beginPath();
+    pctx.arc(p.x, p.y, p.r * 6, 0, Math.PI * 2);
+    pctx.fill();
+
+    // Core dot
+    pctx.fillStyle = `rgba(${p.color[0]},${p.color[1]},${p.color[2]},${Math.min(1, alpha * 1.5)})`;
+    pctx.beginPath();
+    pctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    pctx.fill();
+  }
+
+  // Connect close particles with thin lines (network effect)
+  pctx.lineWidth = 0.4;
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const a = particles[i], b = particles[j];
+      const dx = a.x - b.x, dy = a.y - b.y;
+      const d2 = dx * dx + dy * dy;
+      const maxD = 90 * (a.z + b.z) * 0.5;
+      if (d2 < maxD * maxD) {
+        const alpha = (1 - Math.sqrt(d2) / maxD) * 0.15 * (a.z + b.z) * 0.5;
+        pctx.strokeStyle = `rgba(124,92,255,${alpha})`;
+        pctx.beginPath();
+        pctx.moveTo(a.x, a.y);
+        pctx.lineTo(b.x, b.y);
+        pctx.stroke();
+      }
+    }
+  }
+
+  particleRAF = requestAnimationFrame(drawParticles);
+}
+
+// Mouse tracking
+const cursorGlow = document.getElementById('cursor-glow');
+let lastMouseMove = 0;
+window.addEventListener('mousemove', (e) => {
+  mouse.lastX = mouse.x;
+  mouse.lastY = mouse.y;
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+  mouse.vx = mouse.x - mouse.lastX;
+  mouse.vy = mouse.y - mouse.lastY;
+
+  // Update cursor glow
+  if (cursorGlow) {
+    cursorGlow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+    cursorGlow.classList.add('active');
+  }
+
+  // Update card shine position (CSS custom properties)
+  document.querySelectorAll('.card').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    if (e.clientX >= rect.left && e.clientX <= rect.right &&
+        e.clientY >= rect.top && e.clientY <= rect.bottom) {
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--mx', x + '%');
+      card.style.setProperty('--my', y + '%');
+    }
+  });
+
+  lastMouseMove = Date.now();
+});
+
+window.addEventListener('mouseenter', () => cursorGlow?.classList.add('active'));
+window.addEventListener('mouseleave', () => cursorGlow?.classList.remove('active'));
+window.addEventListener('blur', () => cursorGlow?.classList.remove('active'));
+
+// Hide glow if mouse is idle
+setInterval(() => {
+  if (Date.now() - lastMouseMove > 3000) {
+    cursorGlow?.classList.remove('active');
+  }
+}, 1000);
+
+// Resize handling
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    resizeCanvas();
+  }, 200);
+});
+
+/* ============================================================
+   3D Card Tilt (mouse-driven perspective)
+   ============================================================ */
+function attach3DTilt() {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
+
+  document.querySelectorAll('.card').forEach(card => {
+    let raf = null;
+    let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+
+    function onEnter(e) {
+      card.style.transition = 'transform 0.1s ease-out';
+    }
+    function onMove(e) {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;   // 0-1
+      const y = (e.clientY - rect.top) / rect.height;   // 0-1
+      targetX = (y - 0.5) * -3.5;  // subtle rotateX
+      targetY = (x - 0.5) * 3.5;   // subtle rotateY
+      if (!raf) raf = requestAnimationFrame(update);
+    }
+    function onLeave() {
+      card.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1)';
+      targetX = 0; targetY = 0;
+      if (!raf) raf = requestAnimationFrame(update);
+    }
+    function update() {
+      currentX += (targetX - currentX) * 0.18;
+      currentY += (targetY - currentY) * 0.18;
+      card.style.transform = `translateZ(20px) rotateX(${currentX.toFixed(2)}deg) rotateY(${currentY.toFixed(2)}deg)`;
+      if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
+        raf = requestAnimationFrame(update);
+      } else {
+        raf = null;
+        if (targetX === 0 && targetY === 0) {
+          card.style.transform = '';
+        }
+      }
+    }
+    card.addEventListener('mouseenter', onEnter);
+    card.addEventListener('mousemove', onMove);
+    card.addEventListener('mouseleave', onLeave);
+  });
+}
+
+/* ============================================================
+   Boot
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  // 预热空状态渲染
+  renderKPI();
+  renderBar();
+  renderWordCloud();
+  renderPie();
+  renderLine();
+  renderSongList();
+
+  // 初始化榜单选择器 + 后台数据
+  buildChartSelector();
+  loadSchedulerStatus();
+  loadCrossChart();
+
+  // Particle system
+  initParticles();
+  drawParticles();
+
+  // Product-first direction: keep cards calm and avoid decorative 3D tilt.
+
+  // 主题切换按钮
+  ThemeManager.renderButton(document.getElementById('theme-toggle-slot'));
+
+  // 自动加载
+  setTimeout(loadScrape, 400);
+
+  // 调度器状态每 30 秒刷新
+  setInterval(loadSchedulerStatus, 30000);
+});
+
+// Pause particles when tab is hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    if (particleRAF) {
+      cancelAnimationFrame(particleRAF);
+      particleRAF = null;
+    }
+  } else if (!particleRAF) {
+    drawParticles();
+  }
+});
+</script>
+<script>
+/* Spotify-style interaction layer for the analytics dashboard. */
+(function () {
+  const coverByChart = {
+    '热歌榜': '/static/covers/afterglow.png',
+    '飙升榜': '/static/covers/red-prism.png',
+    '新歌榜': '/static/covers/blue-current.png',
+    '原创榜': '/static/covers/blue-current.png'
+  };
+  const seenAudio = new WeakSet();
+  const sectionHistory = ['dashboard'];
+  let sectionIndex = 0;
+
+  const q = (s) => document.querySelector(s);
+  const qa = (s) => Array.from(document.querySelectorAll(s));
+  const dashboardState = () => typeof state === 'undefined' ? null : state;
+  const formatClock = (seconds) => {
+    if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    return mins + ':' + String(Math.floor(seconds % 60)).padStart(2, '0');
+  };
+
+  function sectionElement(section) {
+    if (section === 'charts') return q('#chart-bar');
+    if (section === 'songs') return q('#song-list');
+    if (section === 'history') return q('#chart-trend');
+    return document.body;
+  }
+
+  function goToSection(section, record = true) {
+    sectionElement(section)?.scrollIntoView({ behavior: 'smooth', block: section === 'dashboard' ? 'start' : 'center' });
+    qa('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.section === section));
+    if (record && sectionHistory[sectionIndex] !== section) {
+      sectionHistory.splice(sectionIndex + 1);
+      sectionHistory.push(section);
+      sectionIndex = sectionHistory.length - 1;
+    }
+    updateHistoryButtons();
+  }
+
+  function updateHistoryButtons() {
+    const back = q('#history-back');
+    const forward = q('#history-forward');
+    if (back) back.disabled = sectionIndex <= 0;
+    if (forward) forward.disabled = sectionIndex >= sectionHistory.length - 1;
+  }
+
+  async function playDashboardSong(song, index) {
+    if (!song || !window.GlobalPlayer) return;
+    const playButton = q('#sp-play');
+    if (playButton) playButton.textContent = '…';
+    try {
+      const response = await fetch('/api/song/play_url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: song.title, artist: song.artist })
+      });
+      const result = await response.json();
+      if (!result.success) throw new Error(result.error || '暂时无法获取播放地址');
+      const currentState = dashboardState();
+      const playlist = (currentState?.songs || []).map(item => ({ ...item, chart: currentState?.currentChart || '' }));
+      await GlobalPlayer.play({
+        title: song.title,
+        artist: song.artist,
+        chart: currentState?.currentChart || '',
+        mp3Url: result.mp3_url,
+        songId: result.song_id || '',
+        playlist,
+        currentIndex: Math.max(0, index)
+      });
+    } catch (error) {
+      window.toast?.('播放失败：' + error.message, 'error');
+      if (playButton) playButton.textContent = '▶';
+    }
+  }
+
+  function bindAudio(audio) {
+    if (!audio || seenAudio.has(audio)) return;
+    seenAudio.add(audio);
+    const paintProgress = () => {
+      const progress = q('#sp-progress');
+      if (progress && Number.isFinite(audio.duration) && audio.duration > 0) progress.value = String(audio.currentTime / audio.duration * 100);
+      if (q('#sp-current')) q('#sp-current').textContent = formatClock(audio.currentTime);
+      if (q('#sp-duration')) q('#sp-duration').textContent = formatClock(audio.duration);
+    };
+    audio.addEventListener('timeupdate', paintProgress);
+    audio.addEventListener('loadedmetadata', paintProgress);
+    audio.addEventListener('durationchange', paintProgress);
+  }
+
+  function paintPlayer(detail) {
+    if (!detail) return;
+    if (q('#sp-title')) q('#sp-title').textContent = detail.title || '从榜单选择一首歌';
+    if (q('#sp-artist')) q('#sp-artist').textContent = detail.artist || 'Pulse Music Analytics';
+    if (q('#sp-cover')) q('#sp-cover').src = coverByChart[detail.chart] || '/static/covers/afterglow.png';
+    if (q('#sp-play')) {
+      q('#sp-play').textContent = detail.isPlaying ? 'Ⅱ' : '▶';
+      q('#sp-play').setAttribute('aria-label', detail.isPlaying ? '暂停' : '播放');
+    }
+    if (q('#sp-volume')) q('#sp-volume').value = String(Math.round((detail.volume ?? .8) * 100));
+    q('#sp-shuffle')?.classList.toggle('active', detail.repeatMode === 'shuffle');
+    q('#sp-repeat')?.classList.toggle('active', detail.repeatMode === 'one');
+    bindAudio(detail.audioElement);
+  }
+
+  function addCardPlayButtons() {
+    qa('.bento > .card').forEach((card, i) => {
+      if (card.querySelector('.card-play')) return;
+      const button = document.createElement('button');
+      button.className = 'card-play';
+      button.type = 'button';
+      button.setAttribute('aria-label', '打开此分析');
+      button.textContent = '▶';
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        if (i < 4) goToSection('songs');
+        else card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      card.appendChild(button);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    addCardPlayButtons();
+    updateHistoryButtons();
+
+    q('#history-back')?.addEventListener('click', () => {
+      if (sectionIndex > 0) goToSection(sectionHistory[--sectionIndex], false);
+    });
+    q('#history-forward')?.addEventListener('click', () => {
+      if (sectionIndex < sectionHistory.length - 1) goToSection(sectionHistory[++sectionIndex], false);
+    });
+    qa('[data-library-target]').forEach(item => item.addEventListener('click', () => goToSection(item.dataset.libraryTarget)));
+    qa('.library-chip').forEach(chip => chip.addEventListener('click', () => {
+      qa('.library-chip').forEach(x => x.classList.toggle('active', x === chip));
+      const index = qa('.library-chip').indexOf(chip);
+      qa('.library-item').forEach((item, itemIndex) => item.style.display = index === 0 || itemIndex === index - 1 ? 'grid' : 'none');
+    }));
+    q('.library-add')?.addEventListener('click', () => window.toast?.('已打开快捷定位，可创建你的分析视图', 'info'));
+
+    q('#song-list')?.addEventListener('click', (event) => {
+      const row = event.target.closest('.song-row');
+      if (!row || event.target.closest('.song-action')) return;
+      event.stopImmediatePropagation();
+      const rank = Number(row.dataset.rank);
+      const songs = dashboardState()?.songs || [];
+      const songIndex = Math.max(0, songs.findIndex(song => Number(song.rank) === rank));
+      playDashboardSong(songs[songIndex], songIndex);
+    }, true);
+
+    q('#sp-play')?.addEventListener('click', () => {
+      const playerState = GlobalPlayer?.getState?.();
+      if (!playerState?.title) return goToSection('songs');
+      playerState.isPlaying ? GlobalPlayer.pause() : GlobalPlayer.resume();
+    });
+    q('#sp-prev')?.addEventListener('click', () => GlobalPlayer?.prev());
+    q('#sp-next')?.addEventListener('click', () => GlobalPlayer?.next());
+    q('#sp-shuffle')?.addEventListener('click', () => {
+      const value = GlobalPlayer?.getState?.().repeatMode === 'shuffle' ? 'sequence' : 'shuffle';
+      GlobalPlayer?.setRepeatMode(value);
+    });
+    q('#sp-repeat')?.addEventListener('click', () => {
+      const value = GlobalPlayer?.getState?.().repeatMode === 'one' ? 'sequence' : 'one';
+      GlobalPlayer?.setRepeatMode(value);
+    });
+    q('#sp-volume')?.addEventListener('input', event => GlobalPlayer?.setVolume(Number(event.target.value) / 100));
+    q('#sp-progress')?.addEventListener('input', event => {
+      const playerState = GlobalPlayer?.getState?.();
+      const audio = playerState?.audioElement;
+      if (audio && Number.isFinite(audio.duration)) audio.currentTime = Number(event.target.value) / 100 * audio.duration;
+    });
+    q('#sp-like')?.addEventListener('click', event => {
+      event.currentTarget.classList.toggle('active');
+      event.currentTarget.textContent = event.currentTarget.classList.contains('active') ? '♥' : '♡';
+    });
+
+    const initial = GlobalPlayer?.getState?.();
+    if (initial) paintPlayer(initial);
+  });
+
+  window.addEventListener('globalplayer-state', event => paintPlayer(event.detail));
+})();
+</script>
+</body>
+</html>

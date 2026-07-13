@@ -3,7 +3,7 @@ $ErrorActionPreference = "Continue"
 $OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$ProjectDir = "E:\Music Analysis Work"
+$ProjectDir = $PSScriptRoot
 $OutputLog = Join-Path $ProjectDir "stop_output.log"
 
 Set-Location $ProjectDir
@@ -17,14 +17,19 @@ Write-Host ""
 
 # Stop cloudflared
 Write-Host "[1/2] Stopping cloudflared..." -ForegroundColor Cyan
-$cf = Get-Process cloudflared -ErrorAction SilentlyContinue
-if ($cf) {
-    Stop-Process -Name cloudflared -Force
+$tunnelPidFile = Join-Path $ProjectDir "cloudflared.pid"
+$tunnelPid = if (Test-Path $tunnelPidFile) {
+    [int](Get-Content -LiteralPath $tunnelPidFile -Raw -ErrorAction SilentlyContinue)
+} else { 0 }
+$cf = if ($tunnelPid -gt 0) { Get-Process -Id $tunnelPid -ErrorAction SilentlyContinue } else { $null }
+if ($cf -and $cf.ProcessName -eq "cloudflared") {
+    Stop-Process -Id $tunnelPid -Force
     Start-Sleep -Seconds 1
-    Write-Host "      cloudflared stopped" -ForegroundColor Green
+    Write-Host "      project cloudflared stopped (PID: $tunnelPid)" -ForegroundColor Green
 } else {
-    Write-Host "      cloudflared not running" -ForegroundColor Gray
+    Write-Host "      project cloudflared not running" -ForegroundColor Gray
 }
+Remove-Item -LiteralPath $tunnelPidFile -Force -ErrorAction SilentlyContinue
 
 # Stop Flask
 Write-Host "[2/2] Stopping Flask..." -ForegroundColor Cyan

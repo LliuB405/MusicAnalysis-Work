@@ -2,7 +2,7 @@
 chcp 65001 >nul
 setlocal
 
-cd /d "E:\Music Analysis Work"
+cd /d "%~dp0"
 
 echo.
 echo ============================================================
@@ -12,11 +12,12 @@ echo.
 
 REM 关闭 cloudflared
 echo [1/2] 关闭 cloudflared...
-taskkill /F /IM cloudflared.exe >nul 2>&1
-if errorlevel 1 (
+if not exist "cloudflared.pid" (
     echo        cloudflared 未运行
 ) else (
-    echo        cloudflared 已关闭
+    for /f "usebackq delims=" %%p in ("cloudflared.pid") do taskkill /PID %%p /T /F >nul 2>&1
+    del /q "cloudflared.pid" >nul 2>&1
+    echo        当前项目的 cloudflared 已关闭
 )
 
 REM 关闭 Flask（用 daemon.py 的 stop 子命令）
