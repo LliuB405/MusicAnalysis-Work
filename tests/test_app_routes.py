@@ -190,6 +190,18 @@ class TestVIPRoutes:
         )
         assert rv.status_code == 403
 
+    def test_spotify_config_is_public_and_secretless(self, client, monkeypatch):
+        """PKCE 配置只暴露公开 Client ID，不需要 Client Secret。"""
+        monkeypatch.setenv("SPOTIFY_CLIENT_ID", "public-client-id")
+        monkeypatch.setenv("SPOTIFY_REDIRECT_URI", "http://127.0.0.1:5000/player")
+        rv = client.get('/api/spotify/config')
+        data = json.loads(rv.data)
+        assert rv.status_code == 200
+        assert data["configured"] is True
+        assert data["client_id"] == "public-client-id"
+        assert "streaming" in data["scopes"]
+        assert "client_secret" not in data
+
 
 class TestPlayRoutes:
     """播放路由测试"""

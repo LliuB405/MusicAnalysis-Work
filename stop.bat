@@ -3,30 +3,8 @@ chcp 65001 >nul
 setlocal
 
 cd /d "%~dp0"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0MusicAnalysis-Stop.ps1"
+set "EXIT_CODE=%ERRORLEVEL%"
 
-echo.
-echo ============================================================
-echo    Music Analysis Work  关闭中...
-echo ============================================================
-echo.
-
-REM 关闭 cloudflared
-echo [1/2] 关闭 cloudflared...
-if not exist "cloudflared.pid" (
-    echo        cloudflared 未运行
-) else (
-    for /f "usebackq delims=" %%p in ("cloudflared.pid") do taskkill /PID %%p /T /F >nul 2>&1
-    del /q "cloudflared.pid" >nul 2>&1
-    echo        当前项目的 cloudflared 已关闭
-)
-
-REM 关闭 Flask（用 daemon.py 的 stop 子命令）
-echo [2/2] 关闭 Flask...
-python daemon.py stop >nul 2>&1
-echo        Flask 已关闭
-
-echo.
-echo [完成] 所有服务已停止。公网 URL 已失效。
-echo.
-pause
-endlocal
+if not "%EXIT_CODE%"=="0" pause
+endlocal & exit /b %EXIT_CODE%

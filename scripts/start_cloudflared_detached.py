@@ -32,6 +32,7 @@ def find_cloudflared() -> str:
 EXE = find_cloudflared()
 LOG = PROJECT_DIR / "cloudflared.log"
 PID = PROJECT_DIR / "cloudflared.pid"
+URL_FILE = PROJECT_DIR / "public_url.txt"
 
 def _is_cloudflared_process(pid: int) -> bool:
     """Avoid terminating an unrelated process if a stale PID was reused."""
@@ -68,8 +69,8 @@ def _stop_previous_tunnel() -> None:
 _stop_previous_tunnel()
 time.sleep(1)
 
-# 2. 尝试清理旧 log（可能被占用就忽略）
-for f in (LOG, PID):
+# 2. 清理上一次的日志、PID 和公网地址，避免误发已经失效的旧链接。
+for f in (LOG, PID, URL_FILE):
     try:
         if f.exists():
             f.unlink()
@@ -100,7 +101,6 @@ print(f"Started cloudflared PID: {p.pid}")
 print(f"Log: {LOG}")
 
 # 等 cloudflared 注册 + 写公网 URL 到独立文件（方便 bat 提取）
-URL_FILE = PROJECT_DIR / "public_url.txt"
 print("Waiting for cloudflared to assign URL (up to 20s)...")
 for i in range(40):  # 最多等 20 秒
     time.sleep(0.5)

@@ -10,6 +10,8 @@ dependencies = [
     "matplotlib>=3.5.0",
     "wordcloud>=1.8.0",
     "pandas>=1.4.0",
+    "openpyxl>=3.0.0",
+    "reportlab>=4.0.0",
 ]
 
 [project.optional-dependencies]

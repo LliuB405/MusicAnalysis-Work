@@ -77,7 +77,7 @@ def _is_alive(pid: Optional[int]) -> bool:
 
 
 def start() -> int:
-    """启动 Flask（完全独立进程）"""
+    """启动 Flask，并让子进程脱离当前 BAT/cmd 窗口。"""
     if _is_listening():
         pid = _read_pid()
         print(f"[已运行] Flask 正在监听 5000 端口 (PID: {pid})")
@@ -87,23 +87,49 @@ def start() -> int:
         print(f"[错误] 找不到 {APP_SCRIPT}")
         return 1
 
-    # 关键：用 cmd /c start 完全脱离 shell 启动
-    # /B 表示不创建新窗口（仅在已经脱离时才有意义，配合 start /B）
-    cmd = (
-        f'cd /d "{PROJECT_DIR}" && '
-        f'start /B "" "{PYTHON_EXE}" "{APP_SCRIPT}" '
-        f'> "{LOG_FILE}" 2> "{ERR_FILE}"'
-    )
-    subprocess.Popen(cmd, shell=True)
+    # Do not use `cmd start /B`: that process remains attached to the console
+    # job and can be terminated as soon as the one-click BAT window closes.
+    # Spawn app.py directly with Windows detached-process flags instead.
+    popen_kwargs = {
+        "cwd": str(PROJECT_DIR),
+        "stdin": subprocess.DEVNULL,
+        "close_fds": True,
+    }
+    if os.name == "nt":
+        popen_kwargs["creationflags"] = (
+            subprocess.DETACHED_PROCESS
+            | subprocess.CREATE_NEW_PROCESS_GROUP
+            | subprocess.CREATE_NO_WINDOW
+        )
+    else:
+        popen_kwargs["start_new_session"] = True
+
+    try:
+        with LOG_FILE.open("wb") as stdout_file, ERR_FILE.open("wb") as stderr_file:
+            child = subprocess.Popen(
+                [str(PYTHON_EXE), str(APP_SCRIPT)],
+                stdout=stdout_file,
+                stderr=stderr_file,
+                **popen_kwargs,
+            )
+    except OSError as exc:
+        print(f"[错误] 无法创建 Flask 进程: {exc}")
+        return 1
 
     # 等待启动
     for _ in range(20):
         time.sleep(0.5)
         if _is_listening():
-            print(f"[成功] Flask 已在 http://127.0.0.1:5000 启动")
+            print(f"[成功] Flask 已在 http://127.0.0.1:5000 启动 (PID: {child.pid})")
             print(f"       日志: {LOG_FILE}")
             return 0
 
+    if _is_pid_alive(child.pid):
+        subprocess.run(
+            ["taskkill", "/F", "/PID", str(child.pid)] if os.name == "nt" else ["kill", str(child.pid)],
+            capture_output=True,
+            check=False,
+        )
     print(f"[失败] 启动超时，请检查 {ERR_FILE}")
     return 1
 

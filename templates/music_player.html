@@ -120,8 +120,15 @@
             overflow-x: auto;
             scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
         }
         .tabs-wrap::-webkit-scrollbar { display:none; }
+        .tabs-arrow { position:absolute; top:50%; transform:translateY(-50%); width:32px; height:32px; border-radius:50%; border:0; background:rgba(0,0,0,.55); color:#fff; font-size:16px; cursor:pointer; z-index:5; transition:all .2s; }
+        .tabs-arrow:hover { background:rgba(0,0,0,.75); transform:translateY(-50%) scale(1.08); }
+        .tabs-arrow.left { left:8px; }
+        .tabs-arrow.right { right:8px; }
+        .tabs-arrow:disabled { opacity:.3; cursor:default; }
+        .tabs-wrap-container { position:relative; }
         .tab-btn {
             flex-shrink: 0;
             padding: 9px 22px;
@@ -850,9 +857,16 @@
         .am-gallery-section { padding: 130px 0 150px; background: #f5f5f7; color: #1d1d1f; overflow: hidden; }
         .am-section-heading { width: min(1180px,calc(100% - 48px)); margin: 0 auto 52px; }
         .am-section-heading h2 { max-width: 850px; }
-        .am-cover-rail { display: flex; gap: 24px; overflow-x: auto; padding: 0 max(24px,calc((100vw - 1180px)/2)) 30px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .am-cover-rail { display: flex; gap: 20px; overflow-x: auto; padding: 0 max(20px,calc((100vw - 1180px)/2)) 30px max(20px,calc((100vw - 1180px)/2)); scroll-snap-type: x mandatory; scrollbar-width: none; scroll-padding-left: max(20px,calc((100vw - 1180px)/2)); }
         .am-cover-rail::-webkit-scrollbar { display: none; }
-        .rail-card { flex: 0 0 clamp(260px,28vw,390px); border: 0; background: transparent; text-align: left; font: inherit; cursor: pointer; scroll-snap-align: start; color: #1d1d1f; }
+        .am-cover-rail::after { content: ''; flex: 0 0 max(20px,calc((100vw - 1180px)/2)); }
+        .rail-card { flex: 0 0 clamp(220px,22vw,320px); border: 0; background: transparent; text-align: left; font: inherit; cursor: pointer; scroll-snap-align: start; color: #1d1d1f; }
+        .rail-arrow { position:absolute; top:50%; transform:translateY(-60%); width:44px; height:44px; border-radius:50%; border:0; background:rgba(255,255,255,.95); color:#1d1d1f; font-size:18px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.18); z-index:5; transition:all .2s; }
+        .rail-arrow:hover { background:#fff; transform:translateY(-60%) scale(1.06); }
+        .rail-arrow.left { left:16px; }
+        .rail-arrow.right { right:16px; }
+        .rail-arrow:disabled { opacity:.4; cursor:default; }
+        .am-gallery-section { position:relative; }
         .rail-card img,.rail-gradient { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 20px; box-shadow: 0 22px 48px rgba(0,0,0,.14); transition: transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s; }
         .rail-card:hover img,.rail-card:hover .rail-gradient { transform: scale(1.018) translateY(-6px); box-shadow: 0 30px 62px rgba(0,0,0,.19); }
         .rail-card strong { display: block; margin-top: 16px; font-size: 17px; }
@@ -1024,7 +1038,9 @@
 
 <section class="am-gallery-section" id="discovery">
     <div class="am-section-heading reveal-on-scroll"><span class="am-kicker">音乐发现</span><h2>你的下一首喜欢，<br>就在这里。</h2></div>
-    <div class="am-cover-rail">
+    <button class="rail-arrow left" id="rail-left" type="button" aria-label="向左滚动">‹</button>
+    <button class="rail-arrow right" id="rail-right" type="button" aria-label="向右滚动">›</button>
+    <div class="am-cover-rail" id="am-cover-rail">
         <button class="rail-card" data-feature-chart="热歌榜"><img src="/static/covers/afterglow.png" alt="热歌榜"><strong>全站热歌</strong><small>此刻最受欢迎</small></button>
         <button class="rail-card" data-feature-chart="飙升榜"><img src="/static/covers/red-prism.png" alt="飙升榜"><strong>热度飙升</strong><small>趋势正在发生</small></button>
         <button class="rail-card" data-feature-chart="新歌榜"><img src="/static/covers/blue-current.png" alt="新歌榜"><strong>本周新声</strong><small>值得关注的新作品</small></button>
@@ -1043,7 +1059,11 @@
 </div>
 
 <!-- Chart Tabs -->
-<div class="tabs-wrap" id="tabsWrap"></div>
+<div class="tabs-wrap-container">
+    <button class="tabs-arrow left" id="tabs-left" type="button" aria-label="向左滚动">‹</button>
+    <div class="tabs-wrap" id="tabsWrap"></div>
+    <button class="tabs-arrow right" id="tabs-right" type="button" aria-label="向右滚动">›</button>
+</div>
 
 <!-- Song count -->
 <div class="song-count-bar" id="countBar" style="display:none">
@@ -1103,6 +1123,7 @@
 <!-- 跨页面全局播放器 -->
 <script src="/static/theme-manager.js"></script>
 <script src="/static/player-core.js"></script>
+<script src="/static/spotify-official-player.js"></script>
 <script src="/static/song-detail-modal.js"></script>
 
 <script>
@@ -1159,6 +1180,7 @@
     let chartRequestController = null;
     let playRequestVersion = 0;
     let playRequestController = null;
+    let officialPlayerActive = false;
     const viewBackBtn = document.getElementById('viewBackBtn');
 
     function cancelChartRequest() {
@@ -1205,6 +1227,39 @@
         toast.className = 'toast' + (isError ? ' error' : '') + ' show';
         toastTimer = setTimeout(() => toast.className = 'toast', 2500);
     }
+
+    function paintSpotifyPlayer(detail) {
+        if (!detail) return;
+        if (!detail.connected) {
+            officialPlayerActive = false;
+            playerBar.removeAttribute('data-provider');
+            const localState = GlobalPlayer?.getState?.();
+            if (localState?.title) {
+                playerBar.classList.add('show');
+                nowTitle.textContent = localState.title;
+                nowArtist.textContent = localState.artist || '';
+                updatePlayPauseBtn(localState.isPlaying);
+                updateRepeatBtn(localState.repeatMode || 'sequence');
+            }
+            return;
+        }
+        if (!detail.title) return;
+
+        officialPlayerActive = true;
+        playerBar.dataset.provider = 'spotify';
+        playerBar.classList.add('show');
+        nowTitle.textContent = detail.title;
+        nowArtist.textContent = detail.artist || 'Spotify';
+        updatePlayPauseBtn(detail.isPlaying);
+        updateRepeatBtn(detail.repeatMode || 'sequence');
+        highlightCurrentSong(detail.title, detail.artist, detail.isPlaying);
+        progressBar.max = detail.duration || 100;
+        progressBar.value = detail.position || 0;
+        curTimeEl.textContent = fmtTime(Number(detail.position || 0) / 1000);
+        durTimeEl.textContent = fmtTime(Number(detail.duration || 0) / 1000);
+    }
+
+    window.addEventListener('spotify-official-state', event => paintSpotifyPlayer(event.detail));
 
     const STABLE_UNAVAILABLE_REASONS = new Set([
         'vip_required', 'purchase_required', 'copyright_unavailable', 'playback_unavailable'
@@ -1321,17 +1376,35 @@
     function saveFavs(arr) { localStorage.setItem(FAVS_KEY, JSON.stringify(arr)); }
     function isFav(title, artist) { return getFavs().some(f => f.title === title && f.artist === artist); }
     window.isFav = isFav;
+    // 页面加载时从后端同步收藏列表
+    (function syncFavsFromBackend() {
+        fetch('/api/favorites').then(r => r.json()).then(d => {
+            if (d.success && Array.isArray(d.favorites)) {
+                saveFavs(d.favorites);
+                if (activeChart === '⭐收藏') renderSongList(activeChart);
+            }
+        }).catch(() => {});
+    })();
     window._showDetail = function(title, artist, chartName, rank) {
         if (window.SongDetailModal) {
             SongDetailModal.open({ title, artist, chart: chartName, rank });
         }
     };
     window._toggleFav = function(title, artist, chartName, btnEl) {
+        const wasFaved = isFav(title, artist);
+        const action = wasFaved ? 'remove' : 'add';
         let favs = getFavs();
         const idx = favs.findIndex(f => f.title === title && f.artist === artist);
-        if (idx >= 0) { favs.splice(idx, 1); if (btnEl) { btnEl.classList.remove('faved'); btnEl.textContent = '☆'; } }
-        else { favs.push({ title, artist, chart: chartName }); if (btnEl) { btnEl.classList.add('faved'); btnEl.textContent = '★'; } }
+        if (wasFaved) { if (idx >= 0) favs.splice(idx, 1); if (btnEl) { btnEl.classList.remove('faved'); btnEl.textContent = '☆'; } }
+        else { if (idx < 0) favs.push({ title, artist, chart: chartName }); if (btnEl) { btnEl.classList.add('faved'); btnEl.textContent = '★'; } }
         saveFavs(favs);
+        // 同步到后端（明确 add/remove）
+        fetch('/api/favorites', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, artist, chart: chartName, action })
+        }).then(r => r.json()).then(d => {
+            if (d.success) { saveFavs(d.favorites); }
+        }).catch(() => {});
         if (activeChart === '⭐收藏') renderSongList(activeChart);
     };
 
@@ -1387,6 +1460,48 @@
         tabsWrap.innerHTML = ALL_CHARTS.map(c =>
             `<button class="tab-btn${c===activeChart?' active':''}" data-chart="${escapeAttr(c)}">${escapeHtml(c)}</button>`
         ).join('') + '<button class="tab-btn" data-chart="⭐收藏">⭐ 收藏</button>';
+
+        // URL 参数 ?view=favorites → 自动切到收藏歌单
+        const params = new URLSearchParams(location.search);
+        if (params.get('view') === 'favorites') {
+            setTimeout(() => setView('favorites'), 300);
+        }
+
+        // 卡片轮播左右滚动
+        const rail = document.getElementById('am-cover-rail');
+        const railLeft = document.getElementById('rail-left');
+        const railRight = document.getElementById('rail-right');
+        if (rail && railLeft && railRight) {
+            const updateArrowState = () => {
+                railLeft.disabled = rail.scrollLeft <= 8;
+                railRight.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 8;
+            };
+            const step = () => Math.max(280, rail.clientWidth * 0.6);
+            railLeft.addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
+            railRight.addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
+            rail.addEventListener('scroll', updateArrowState, { passive: true });
+            window.addEventListener('resize', updateArrowState);
+            updateArrowState();
+        }
+
+        // 榜单 tabs 左右滚动
+        const tabs = document.getElementById('tabsWrap');
+        const tabsLeft = document.getElementById('tabs-left');
+        const tabsRight = document.getElementById('tabs-right');
+        if (tabs && tabsLeft && tabsRight) {
+            const updateTabsArrow = () => {
+                tabsLeft.disabled = tabs.scrollLeft <= 8;
+                tabsRight.disabled = tabs.scrollLeft + tabs.clientWidth >= tabs.scrollWidth - 8;
+            };
+            const tabsStep = () => Math.max(220, tabs.clientWidth * 0.5);
+            tabsLeft.addEventListener('click', () => tabs.scrollBy({ left: -tabsStep(), behavior: 'smooth' }));
+            tabsRight.addEventListener('click', () => tabs.scrollBy({ left: tabsStep(), behavior: 'smooth' }));
+            tabs.addEventListener('scroll', updateTabsArrow, { passive: true });
+            window.addEventListener('resize', updateTabsArrow);
+            // tabs 内容是异步加载的，需要观察变化
+            new MutationObserver(updateTabsArrow).observe(tabs, { childList: true, subtree: true });
+            setTimeout(updateTabsArrow, 200);
+        }
 
         // Tab click
         tabsWrap.addEventListener('click', e => {
@@ -1642,6 +1757,7 @@
         // ── 同步 GlobalPlayer 状态到全功能播放条 ──
         window.addEventListener('globalplayer-state', e => {
             const s = e.detail;
+            if (officialPlayerActive && window.SpotifyOfficial?.isConnected?.()) return;
             if (!s.title) {
                 playerBar.classList.remove('show');
                 return;
@@ -1682,6 +1798,7 @@
 
         // 定时轮询进度（比 event 更流畅）
         setInterval(() => {
+            if (officialPlayerActive && window.SpotifyOfficial?.isConnected?.()) return;
             const gs = GlobalPlayer.getState();
             if (gs.title && gs.audioElement && !isNaN(gs.audioElement.duration)) {
                 progressBar.value = gs.audioElement.currentTime || 0;
@@ -2181,6 +2298,25 @@
         const requestVersion = ++playRequestVersion;
         if (playRequestController) playRequestController.abort();
         playRequestController = null;
+
+        if (window.SpotifyOfficial?.isConnected?.()) {
+            if (btnEl) btnEl.classList.add('loading');
+            try {
+                GlobalPlayer?.pause?.();
+                await SpotifyOfficial.initialize();
+                const track = await SpotifyOfficial.searchAndPlay(title, artist);
+                if (requestVersion !== playRequestVersion) return;
+                addRecent(title, artist, chartName, track?.id || songId, fee);
+                showToast('Spotify 正在播放：' + title, false);
+            } catch (e) {
+                console.error('Spotify play error:', e);
+                showToast('Spotify 播放失败：' + e.message, true);
+            } finally {
+                if (btnEl) btnEl.classList.remove('loading');
+            }
+            return;
+        }
+
         const gs = GlobalPlayer.getState();
 
         // 同一首歌 → 切换播放/暂停

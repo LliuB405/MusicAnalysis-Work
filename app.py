@@ -15,10 +15,13 @@ Run:
     Open http://127.0.0.1:5000
 """
 
+import logging
 import os
 import sys
-import logging
+import tempfile
+import threading
 from datetime import datetime
+
 import requests
 
 # Ensure src/ directory is on the Python path so that the
@@ -894,6 +897,263 @@ def api_vip_logout():
 
 
 # ============================================================
+# 收藏歌单 API（后端持久化，跨页面同步）
+# ============================================================
+_FAVORITES_FILE = os.path.join(_PROJECT_ROOT, ".favorites.json")
+_FAVORITES_LOCK = threading.RLock()
+_FAVORITES_MAX_COUNT = 500
+_FAVORITES_MAX_PAYLOAD_BYTES = 4096
+_FAVORITES_FIELD_LIMITS = {"title": 200, "artist": 200, "chart": 100}
+
+
+class _FavoritesStorageError(RuntimeError):
+    """收藏文件无法安全读取或写入。"""
+
+
+def _normalize_favorite_field(value, field, *, required=False):
+    """校验并规范化收藏字段，避免匿名接口无限扩张存储。"""
+    if value is None:
+        value = ""
+    if not isinstance(value, str):
+        raise ValueError(f"{field} 必须是字符串")
+    value = value.strip()
+    if required and not value:
+        raise ValueError(f"缺少 {field}")
+    if len(value) > _FAVORITES_FIELD_LIMITS[field]:
+        raise ValueError(
+            f"{field} 不能超过 {_FAVORITES_FIELD_LIMITS[field]} 个字符"
+        )
+    return value
+
+
+def _validate_favorites(favorites):
+    """验证磁盘数据，避免在损坏文件上继续覆盖写入。"""
+    if not isinstance(favorites, list):
+        raise _FavoritesStorageError("收藏文件格式无效")
+    if len(favorites) > _FAVORITES_MAX_COUNT:
+        raise _FavoritesStorageError("收藏文件超过数量限制")
+
+    validated = []
+    try:
+        for item in favorites:
+            if not isinstance(item, dict):
+                raise ValueError("收藏项必须是对象")
+            validated.append({
+                "title": _normalize_favorite_field(
+                    item.get("title"), "title", required=True
+                ),
+                "artist": _normalize_favorite_field(
+                    item.get("artist"), "artist", required=True
+                ),
+                "chart": _normalize_favorite_field(item.get("chart"), "chart"),
+            })
+    except ValueError as exc:
+        raise _FavoritesStorageError("收藏文件内容无效") from exc
+    return validated
+
+
+def _load_favorites_unlocked():
+    """在调用方持锁时从磁盘加载收藏列表。"""
+    if not os.path.exists(_FAVORITES_FILE):
+        return []
+    try:
+        with open(_FAVORITES_FILE, "r", encoding="utf-8") as file_obj:
+            return _validate_favorites(_json.load(file_obj))
+    except _FavoritesStorageError:
+        raise
+    except (OSError, ValueError, TypeError, _json.JSONDecodeError) as exc:
+        raise _FavoritesStorageError("无法读取收藏文件") from exc
+
+
+def _save_favorites_unlocked(favorites):
+    """在调用方持锁时，通过同目录临时文件原子保存收藏。"""
+    favorites = _validate_favorites(favorites)
+    target_dir = os.path.dirname(_FAVORITES_FILE) or "."
+    temp_path = None
+    file_descriptor = None
+    try:
+        file_descriptor, temp_path = tempfile.mkstemp(
+            prefix=".favorites-", suffix=".tmp", dir=target_dir
+        )
+        with os.fdopen(file_descriptor, "w", encoding="utf-8", newline="\n") as file_obj:
+            file_descriptor = None
+            _json.dump(favorites, file_obj, ensure_ascii=False, separators=(",", ":"))
+            file_obj.write("\n")
+            file_obj.flush()
+            os.fsync(file_obj.fileno())
+        os.replace(temp_path, _FAVORITES_FILE)
+        temp_path = None
+    except (OSError, ValueError, TypeError) as exc:
+        raise _FavoritesStorageError("无法保存收藏文件") from exc
+    finally:
+        if file_descriptor is not None:
+            try:
+                os.close(file_descriptor)
+            except OSError:
+                pass
+        if temp_path is not None:
+            try:
+                os.remove(temp_path)
+            except OSError:
+                pass
+
+
+def _load_favorites():
+    """线程安全地从磁盘加载收藏列表。"""
+    with _FAVORITES_LOCK:
+        return _load_favorites_unlocked()
+
+
+def _favorites_storage_error_response(exc):
+    logger.warning("收藏存储操作失败: %s", exc)
+    return jsonify({
+        "success": False,
+        "error": "收藏数据暂时不可用，请稍后重试",
+        "code": "favorites_storage_error",
+    }), 500
+
+
+@app.route("/api/favorites", methods=["GET"])
+def api_get_favorites():
+    """获取收藏列表"""
+    try:
+        return jsonify({"success": True, "favorites": _load_favorites()})
+    except _FavoritesStorageError as exc:
+        return _favorites_storage_error_response(exc)
+
+
+@app.route("/api/favorites", methods=["POST"])
+def api_toggle_favorite():
+    """添加/取消收藏（明确指定 action，避免 toggle 竞态）"""
+    from flask import request
+
+    if (
+        request.content_length is not None
+        and request.content_length > _FAVORITES_MAX_PAYLOAD_BYTES
+    ):
+        return jsonify({
+            "success": False,
+            "error": "请求体过大",
+            "code": "payload_too_large",
+        }), 413
+
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        return jsonify({
+            "success": False,
+            "error": "请求体必须是 JSON 对象",
+            "code": "invalid_request",
+        }), 400
+
+    try:
+        title = _normalize_favorite_field(body.get("title"), "title", required=True)
+        artist = _normalize_favorite_field(
+            body.get("artist"), "artist", required=True
+        )
+        chart = _normalize_favorite_field(body.get("chart"), "chart")
+    except ValueError as exc:
+        return jsonify({
+            "success": False,
+            "error": str(exc),
+            "code": "validation_error",
+        }), 400
+
+    raw_action = body.get("action", "")
+    if raw_action is None:
+        raw_action = ""
+    if not isinstance(raw_action, str):
+        return jsonify({
+            "success": False,
+            "error": "action 必须是字符串",
+            "code": "invalid_action",
+        }), 400
+    action = raw_action.strip().lower()
+    if action not in ("", "toggle", "add", "remove"):
+        return jsonify({
+            "success": False,
+            "error": "action 仅支持 add、remove 或 toggle",
+            "code": "invalid_action",
+        }), 400
+
+    try:
+        with _FAVORITES_LOCK:
+            favorites = _load_favorites_unlocked()
+            index = next((
+                index
+                for index, favorite in enumerate(favorites)
+                if favorite["title"] == title and favorite["artist"] == artist
+            ), -1)
+            changed = False
+
+            if action == "add":
+                result = "added"
+                if index < 0:
+                    if len(favorites) >= _FAVORITES_MAX_COUNT:
+                        return jsonify({
+                            "success": False,
+                            "error": f"收藏数量不能超过 {_FAVORITES_MAX_COUNT} 首",
+                            "code": "favorite_limit_reached",
+                        }), 409
+                    favorites.append({"title": title, "artist": artist, "chart": chart})
+                    changed = True
+            elif action == "remove":
+                result = "removed"
+                if index >= 0:
+                    favorites.pop(index)
+                    changed = True
+            elif index >= 0:
+                favorites.pop(index)
+                result = "removed"
+                changed = True
+            else:
+                if len(favorites) >= _FAVORITES_MAX_COUNT:
+                    return jsonify({
+                        "success": False,
+                        "error": f"收藏数量不能超过 {_FAVORITES_MAX_COUNT} 首",
+                        "code": "favorite_limit_reached",
+                    }), 409
+                favorites.append({"title": title, "artist": artist, "chart": chart})
+                result = "added"
+                changed = True
+
+            if changed:
+                _save_favorites_unlocked(favorites)
+    except _FavoritesStorageError as exc:
+        return _favorites_storage_error_response(exc)
+
+    return jsonify({
+        "success": True,
+        "action": result,
+        "changed": changed,
+        "favorites": favorites,
+    })
+
+
+@app.route("/api/spotify/config", methods=["GET"])
+def api_spotify_config():
+    """返回公开的 Spotify PKCE 配置，不返回或要求 Client Secret。"""
+    from flask import request
+
+    client_id = os.environ.get("SPOTIFY_CLIENT_ID", "").strip()
+    redirect_uri = os.environ.get("SPOTIFY_REDIRECT_URI", "").strip()
+    if not redirect_uri:
+        redirect_uri = request.url_root.rstrip("/") + "/player"
+    return jsonify({
+        "success": True,
+        "configured": bool(client_id),
+        "client_id": client_id,
+        "redirect_uri": redirect_uri,
+        "scopes": [
+            "streaming",
+            "user-read-email",
+            "user-read-private",
+            "user-read-playback-state",
+            "user-modify-playback-state",
+        ],
+    })
+
+
+# ============================================================
 # 音乐播放接口
 # ============================================================
 # 简单的进程级缓存：避免对同一首歌重复搜索
@@ -1097,7 +1357,8 @@ def api_song_play_url():
                 "cached": True,
             })
 
-        # 详细解析会优先使用榜单自带 song_id，并明确区分 VIP、付费与版权限制。
+        # 详细解析优先使用榜单自带 song_id，并明确区分 VIP、付费与版权限制。
+        # 不尝试绕过平台的会员、地区或访问控制。
         if hasattr(_scraper, "resolve_play_url_detailed"):
             info = _scraper.resolve_play_url_detailed(
                 title,
@@ -1112,9 +1373,9 @@ def api_song_play_url():
             return jsonify({key: value for key, value in info.items() if key != "_session"})
 
         import time
+
         mp3_url = info["mp3_url"]
         # 把 session 暂存到全局，让 stream 接口复用
-        # 用 song_id 作 key（同一首歌后续 stream 都用这个 session）
         if info.get("_session") is not None:
             _play_url_sessions[info["song_id"]] = info["_session"]
         cache_info = {

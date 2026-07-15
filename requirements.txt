@@ -10,7 +10,9 @@ wordcloud>=1.8.0
 pandas>=1.4.0
 openpyxl>=3.0.0    # Excel 导出
 reportlab>=4.0.0   # PDF 报表
-apscheduler>=6.0.0  # 定时任务调度
+
+# 定时刷新由 src/music_analytics/scheduler.py 的轻量后台线程实现，
+# 不依赖 APScheduler。
 
 # === 开发依赖 ===
 pytest>=7.0.0
