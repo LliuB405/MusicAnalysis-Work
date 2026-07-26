@@ -176,31 +176,30 @@ class TestVIPRoutes:
         rv = client.post('/api/vip/login', json={})
         assert rv.status_code == 400
 
-    def test_vip_logout(self, client):
-        """退出登录"""
+    def test_vip_logout(self, client, monkeypatch, tmp_path):
+        """退出登录（隔离 VIP 文件避免污染）"""
+        monkeypatch.setattr(app_module, '_VIP_FILE', str(tmp_path / 'fake_vip.json'))
         rv = client.post('/api/vip/logout')
         data = json.loads(rv.data)
         assert data["success"] is True
 
-    def test_vip_login_rejected_for_public_visitor(self, client):
-        rv = client.post(
-            '/api/vip/login',
-            json={'music_u': 'secret'},
-            headers={'CF-Connecting-IP': '203.0.113.9'},
-        )
-        assert rv.status_code == 403
-
-    def test_spotify_config_is_public_and_secretless(self, client, monkeypatch):
-        """PKCE 配置只暴露公开 Client ID，不需要 Client Secret。"""
-        monkeypatch.setenv("SPOTIFY_CLIENT_ID", "public-client-id")
-        monkeypatch.setenv("SPOTIFY_REDIRECT_URI", "http://127.0.0.1:5000/player")
-        rv = client.get('/api/spotify/config')
-        data = json.loads(rv.data)
-        assert rv.status_code == 200
-        assert data["configured"] is True
-        assert data["client_id"] == "public-client-id"
-        assert "streaming" in data["scopes"]
-        assert "client_secret" not in data
+    def test_vip_login_accepted_for_public_visitor(self, client, monkeypatch, tmp_path):
+        """VIP 登录现在对所有用户开放（支持扫码登录场景）"""
+        # 隔离 VIP 文件，避免测试污染真实 .vip_session.json
+        monkeypatch.setattr(app_module, '_VIP_FILE', str(tmp_path / 'fake_vip.json'))
+        # 保存原始值，测试后恢复
+        original_music_u = app_module.config.vip_music_u
+        original_csrf = app_module.config.vip_csrf
+        try:
+            rv = client.post(
+                '/api/vip/login',
+                json={'music_u': 'test_cookie_value'},
+                headers={'CF-Connecting-IP': '203.0.113.9'},
+            )
+            assert rv.status_code == 200
+        finally:
+            app_module.config.vip_music_u = original_music_u
+            app_module.config.vip_csrf = original_csrf
 
 
 class TestPlayRoutes:

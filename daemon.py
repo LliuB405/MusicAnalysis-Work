@@ -20,7 +20,7 @@ import sys
 import time
 import subprocess
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Set
 
 PROJECT_DIR = Path(__file__).resolve().parent
 PYTHON_EXE = Path(sys.executable).resolve()
@@ -74,6 +74,28 @@ def _is_alive(pid: Optional[int]) -> bool:
     if pid is None:
         return False
     return _is_pid_alive(pid)
+
+
+def _listener_pids(port: int = 5000) -> Set[int]:
+    """返回 Windows 上监听指定 TCP 端口的全部 PID。"""
+    if os.name != "nt":
+        return set()
+    result = subprocess.run(
+        ["netstat", "-ano", "-p", "tcp"],
+        capture_output=True,
+        text=True,
+        errors="ignore",
+        check=False,
+    )
+    listener_pids: Set[int] = set()
+    marker = f":{port}"
+    for line in result.stdout.splitlines():
+        if marker not in line or "LISTENING" not in line.upper():
+            continue
+        parts = line.split()
+        if parts and parts[-1].isdigit():
+            listener_pids.add(int(parts[-1]))
+    return listener_pids
 
 
 def start() -> int:
@@ -137,35 +159,42 @@ def start() -> int:
 def stop() -> int:
     """停止 Flask"""
     pid = _read_pid()
+    stopped_pids: Set[int] = set()
     if pid and _is_alive(pid):
-        subprocess.run(f"taskkill /F /PID {pid}", shell=True, capture_output=True)
+        subprocess.run(
+            ["taskkill", "/F", "/PID", str(pid)],
+            capture_output=True,
+            check=False,
+        )
         print(f"[已停止] 终止 PID {pid}")
-        return 0
-    # PID 文件可能陈旧，但旧版服务仍占用 5000。只终止明确监听该端口的进程，
-    # 避免 launcher 误以为旧模板已经是最新版。
-    if _is_listening():
-        try:
-            result = subprocess.run(
-                ["netstat", "-ano", "-p", "tcp"],
-                capture_output=True, text=True, errors="ignore", check=False,
+        stopped_pids.add(pid)
+
+    # PID 文件可能陈旧，或者旧启动器留下了多个 Flask。连续检查端口并
+    # 终止所有监听者，直到端口真正释放后再允许 restart 创建新进程。
+    for _ in range(30):
+        listener_pids = _listener_pids()
+        for listener_pid in listener_pids - stopped_pids:
+            subprocess.run(
+                ["taskkill", "/F", "/PID", str(listener_pid)],
+                capture_output=True,
+                check=False,
             )
-            listener_pids = set()
-            for line in result.stdout.splitlines():
-                if ":5000" in line and "LISTENING" in line.upper():
-                    parts = line.split()
-                    if parts and parts[-1].isdigit():
-                        listener_pids.add(int(parts[-1]))
-            for listener_pid in listener_pids:
-                subprocess.run(
-                    ["taskkill", "/F", "/PID", str(listener_pid)],
-                    capture_output=True, check=False,
-                )
-                print(f"[已停止] 终止占用 5000 端口的旧服务 PID {listener_pid}")
-            if listener_pids:
-                return 0
-        except OSError as exc:
-            print(f"[警告] 无法清理旧服务: {exc}")
-    print("[未运行] Flask 未在运行")
+            stopped_pids.add(listener_pid)
+            print(f"[已停止] 终止占用 5000 端口的旧服务 PID {listener_pid}")
+        if not _is_listening():
+            break
+        time.sleep(0.2)
+
+    try:
+        PID_FILE.unlink(missing_ok=True)
+    except OSError:
+        pass
+
+    if _is_listening():
+        print("[失败] 5000 端口仍被占用，无法安全重启")
+        return 1
+    if not stopped_pids:
+        print("[未运行] Flask 未在运行")
     return 0
 
 
@@ -193,8 +222,9 @@ def status() -> int:
 
 def restart() -> int:
     """重启 Flask"""
-    stop()
-    time.sleep(1)
+    if stop() != 0:
+        return 1
+    time.sleep(0.3)
     return start()
 
 

@@ -89,14 +89,58 @@ _history_mgr = HistoryManager()
 _scheduler: Scheduler | None = None
 _scraped_data: list = []  # in-memory cache of the latest scrape result
 
+# 图表 PNG 缓存：避免每次请求都用 matplotlib 重新生成（wordcloud 生成需要 ~1.3s）
+# 结构: {chart_type: (data_signature, image_base64)}
+_chart_png_cache: dict = {}
+
+
+def _scraped_data_signature():
+    """根据 _scraped_data 的特征生成签名，数据没变就不重新生成图表。"""
+    if not _scraped_data:
+        return None
+    first = _scraped_data[0]
+    last = _scraped_data[-1]
+    return (
+        len(_scraped_data),
+        getattr(first, "title", ""),
+        getattr(first, "song_id", ""),
+        getattr(last, "title", ""),
+        getattr(last, "song_id", ""),
+    )
+
+
+def _get_cached_chart(chart_type: str, generator):
+    """图表 PNG 缓存包装：数据签名没变就直接返回缓存的 base64。"""
+    sig = _scraped_data_signature()
+    if sig is None:
+        return None
+    cached = _chart_png_cache.get(chart_type)
+    if cached and cached[0] == sig:
+        return cached[1]  # 命中缓存，直接返回
+    try:
+        image = generator()
+    except Exception as e:
+        logger.error("%s 生成失败: %s", chart_type, e, exc_info=True)
+        return None
+    if image:
+        _chart_png_cache[chart_type] = (sig, image)
+    return image
+
+
+def _invalidate_chart_cache():
+    """数据更新后清空图表缓存（由调度器回调触发）。"""
+    _chart_png_cache.clear()
+
 
 def do_scrape():
     """Run the multi-strategy scraper and cache its result."""
     global _scraped_data
     result = _scraper.scrape()
     _scraped_data = result.data
-    # 自动保存到历史记录
+    # 数据更新后清空图表缓存，下次请求重新生成
     if _scraped_data:
+        _invalidate_chart_cache()
+        # 自动保存到历史记录
         try:
             _history_mgr.save_snapshot("热歌榜", "3778678", _scraped_data)
         except Exception as e:
@@ -153,10 +197,9 @@ def api_bar_chart():
     try:
         if not _scraped_data:
             return jsonify({"success": False, "error": "没有数据，请先爬取"})
-
         analyzer = ArtistAnalyzer(_scraped_data)
         top10 = analyzer.get_top_artists(10)
-        image = _chart_gen.generate_bar_chart(top10)
+        image = _get_cached_chart("bar", lambda: _chart_gen.generate_bar_chart(top10))
         if image:
             return jsonify({"success": True, "image": image})
         return jsonify({"success": False, "error": "生成失败"})
@@ -171,10 +214,9 @@ def api_wordcloud():
     try:
         if not _scraped_data:
             return jsonify({"success": False, "error": "没有数据，请先爬取"})
-
         analyzer = ArtistAnalyzer(_scraped_data)
         artist_counter = analyzer.get_artist_dict()
-        image = _chart_gen.generate_wordcloud(artist_counter)
+        image = _get_cached_chart("wordcloud", lambda: _chart_gen.generate_wordcloud(artist_counter))
         if image:
             return jsonify({"success": True, "image": image})
         return jsonify({"success": False, "error": "生成失败"})
@@ -189,10 +231,9 @@ def api_pie_chart():
     try:
         if not _scraped_data:
             return jsonify({"success": False, "error": "没有数据，请先爬取"})
-
         analyzer = ArtistAnalyzer(_scraped_data)
         top10 = analyzer.get_top_artists(10)
-        image = _chart_gen.generate_pie_chart(top10)
+        image = _get_cached_chart("pie", lambda: _chart_gen.generate_pie_chart(top10))
         if image:
             return jsonify({"success": True, "image": image})
         return jsonify({"success": False, "error": "生成失败"})
@@ -207,9 +248,8 @@ def api_line_chart():
     try:
         if not _scraped_data:
             return jsonify({"success": False, "error": "没有数据，请先爬取"})
-
         analyzer = ArtistAnalyzer(_scraped_data)
-        image = _chart_gen.generate_line_chart(_scraped_data)
+        image = _get_cached_chart("line", lambda: _chart_gen.generate_line_chart(_scraped_data))
         if image:
             return jsonify({"success": True, "image": image})
         return jsonify({"success": False, "error": "生成失败"})
@@ -227,7 +267,7 @@ def api_heatmap():
 
         analyzer = ArtistAnalyzer(_scraped_data)
         top_artists = analyzer.get_top_artists(15)
-        image = _chart_gen.generate_heatmap(top_artists, _scraped_data)
+        image = _get_cached_chart("heatmap", lambda: _chart_gen.generate_heatmap(top_artists, _scraped_data))
         if image:
             return jsonify({"success": True, "image": image})
         return jsonify({"success": False, "error": "生成失败"})
@@ -301,6 +341,7 @@ def api_clear():
     """Clear the in-memory dataset."""
     global _scraped_data
     _scraped_data = []
+    _invalidate_chart_cache()
     return jsonify({"success": True, "message": "数据已清空"})
 
 
@@ -846,8 +887,6 @@ def api_vip_login():
     """
     try:
         from flask import request
-        if not _is_local_admin_request(request):
-            return jsonify({"success": False, "error": "账号设置仅允许在服务器本机操作"}), 403
         body = request.get_json(silent=True) or {}
         music_u = (body.get("music_u") or "").strip()
         csrf = (body.get("csrf") or "").strip()
@@ -879,8 +918,6 @@ def api_vip_login():
 def api_vip_logout():
     """退出 VIP 登录"""
     from flask import request
-    if not _is_local_admin_request(request):
-        return jsonify({"success": False, "error": "账号设置仅允许在服务器本机操作"}), 403
     config.vip_music_u = ""
     config.vip_csrf = ""
     # 同步清空缓存（退出后旧 url 不可用）
@@ -894,6 +931,130 @@ def api_vip_logout():
     except Exception as e:
         logger.warning("删除 .vip_session.json 失败: %s", e)
     return jsonify({"success": True, "message": "已退出 VIP 登录"})
+
+
+# ============================================================
+# 网易云扫码登录 API（让用户用手机 App 扫码自动获取 VIP cookie）
+# ============================================================
+
+@app.route("/api/vip/qrcode/key", methods=["GET"])
+def api_vip_qrcode_key():
+    """生成扫码登录用的 unikey"""
+    try:
+        import requests as _req
+        session = _req.Session()
+        session.headers.update({
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0",
+            "Referer": "https://music.163.com/",
+            "Origin": "https://music.163.com",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept-Encoding": "gzip, deflate",
+        })
+        # 先访问首页建立会话
+        try:
+            session.get("https://music.163.com/", timeout=8)
+        except Exception:
+            pass
+        resp = session.post(
+            "https://music.163.com/api/login/qrcode/unikey",
+            data={"type": "1"},
+            timeout=10,
+        )
+        if resp.status_code != 200:
+            return jsonify({"success": False, "error": f"网易云返回 HTTP {resp.status_code}"}), 502
+        data = resp.json()
+        unikey = data.get("unikey")
+        if not unikey:
+            return jsonify({"success": False, "error": f"网易云未返回 unikey: {data}"}), 500
+        qr_url = f"https://music.163.com/login?codekey={unikey}"
+        return jsonify({"success": True, "unikey": unikey, "qr_url": qr_url})
+    except Exception as e:
+        logger.error("生成扫码 unikey 失败: %s", e, exc_info=True)
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/vip/qrcode/check", methods=["GET"])
+def api_vip_qrcode_check():
+    """轮询扫码状态，成功时自动提取 MUSIC_U cookie 并注入"""
+    from flask import request
+    unikey = (request.args.get("key") or "").strip()
+    if not unikey:
+        return jsonify({"success": False, "error": "缺少 key 参数"}), 400
+    try:
+        import requests as _req
+        session = _req.Session()
+        session.headers.update({
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0",
+            "Referer": "https://music.163.com/",
+            "Origin": "https://music.163.com",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept-Encoding": "gzip, deflate",
+        })
+        try:
+            session.get("https://music.163.com/", timeout=8)
+        except Exception:
+            pass
+        resp = session.post(
+            "https://music.163.com/api/login/qrcode/client/login",
+            data={"key": unikey, "type": "1"},
+            timeout=10,
+        )
+        if resp.status_code != 200:
+            return jsonify({
+                "success": False,
+                "code": 800,
+                "error": f"网易云返回 HTTP {resp.status_code}",
+            }), 502
+        data = resp.json()
+        code = data.get("code", 800)
+        result = {"success": True, "code": code}
+
+        if code == 803:
+            # 登录成功，从 session cookies 里提取 MUSIC_U 和 __csrf
+            music_u = ""
+            csrf = ""
+            for cookie in session.cookies:
+                if cookie.name == "MUSIC_U":
+                    music_u = cookie.value
+                elif cookie.name == "__csrf":
+                    csrf = cookie.value
+
+            if not music_u:
+                return jsonify({
+                    "success": False,
+                    "code": code,
+                    "error": "登录成功但未拿到 MUSIC_U cookie",
+                }), 500
+
+            # 注入到全局 config（和手动登录走同一条路）
+            config.vip_music_u = music_u
+            config.vip_csrf = csrf
+
+            # 清空旧缓存
+            cleared = len(_play_url_cache)
+            _play_url_cache.clear()
+            _play_url_sessions.clear()
+            _playability_cache.clear()
+
+            # 持久化
+            _save_vip_to_disk()
+
+            logger.info("扫码登录成功 (music_u: %s..., 清空 %d 条旧缓存)", music_u[:8], cleared)
+            result["message"] = f"扫码登录成功，VIP 已激活"
+            result["music_u_preview"] = music_u[:8] + "..."
+        elif code == 802:
+            result["message"] = "已扫码，请在手机上确认登录"
+        elif code == 801:
+            result["message"] = "等待扫码"
+        elif code == 800:
+            result["message"] = "二维码已过期，请刷新"
+        else:
+            result["message"] = f"未知状态: {code}"
+
+        return jsonify(result)
+    except Exception as e:
+        logger.error("扫码状态检查失败: %s", e, exc_info=True)
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 # ============================================================
@@ -1129,40 +1290,20 @@ def api_toggle_favorite():
     })
 
 
-@app.route("/api/spotify/config", methods=["GET"])
-def api_spotify_config():
-    """返回公开的 Spotify PKCE 配置，不返回或要求 Client Secret。"""
-    from flask import request
-
-    client_id = os.environ.get("SPOTIFY_CLIENT_ID", "").strip()
-    redirect_uri = os.environ.get("SPOTIFY_REDIRECT_URI", "").strip()
-    if not redirect_uri:
-        redirect_uri = request.url_root.rstrip("/") + "/player"
-    return jsonify({
-        "success": True,
-        "configured": bool(client_id),
-        "client_id": client_id,
-        "redirect_uri": redirect_uri,
-        "scopes": [
-            "streaming",
-            "user-read-email",
-            "user-read-private",
-            "user-read-playback-state",
-            "user-modify-playback-state",
-        ],
-    })
-
-
 # ============================================================
 # 音乐播放接口
 # ============================================================
+# 本地音频缓存：resolve + 下载原子完成，绕过 CDN authSecret 代理问题
+_AUDIO_CACHE_DIR = os.path.join(_PROJECT_ROOT, "data", "audio_cache")
+os.makedirs(_AUDIO_CACHE_DIR, exist_ok=True)
+
 # 简单的进程级缓存：避免对同一首歌重复搜索
 # 格式: {(title, artist): (timestamp, mp3_url)}
 _play_url_cache: dict = {}
 # 额外缓存：每个 song_id 对应的 session（带 cookie + authSecret 上下文）
 # 让 stream 代理能用同一个 session 拉 mp3，避免 403
 _play_url_sessions: dict = {}
-_PLAY_URL_CACHE_TTL = 3600  # 1 小时
+_PLAY_URL_CACHE_TTL = 120  # 2 分钟：网易云 authSecret 几分钟就过期，缓存太久会导致 403
 # 播放状态只缓存短时间；版权、地区和登录状态都可能变化。
 _playability_cache: dict = {}
 _PLAYABILITY_CACHE_TTL = 600
@@ -1384,6 +1525,8 @@ def api_song_play_url():
             "song_id": info["song_id"],
             "bitrate": info.get("bitrate"),
             "is_trial": info.get("is_trial", False),
+            "title": title,
+            "artist": artist,
         }
         _play_url_cache[_play_cache_key(title, artist, requested_song_id)] = cache_info
         _play_url_cache[_play_cache_key(title, artist, info["song_id"])] = cache_info
@@ -1403,116 +1546,213 @@ def api_song_play_url():
         return jsonify({"success": False, "error": str(e)})
 
 
+def _cache_audio_path(song_id: int) -> str:
+    """返回某首歌的本地缓存路径"""
+    return os.path.join(_AUDIO_CACHE_DIR, f"{song_id}.mp3")
+
+
+def _download_to_cache(title: str, artist: str, song_id: int, fee=None) -> str | None:
+    """原子操作：resolve URL + 用同一个 session 下载 mp3 到本地缓存
+
+    绕过 CDN authSecret 代理转发问题——resolve 和 download 在同一个
+    session 里毫秒级完成，没有中间存储导致 session 状态变化。
+    返回缓存文件路径，失败返回 None。
+    """
+    info = _scraper.resolve_play_url_detailed(title, artist, song_id=song_id, fee=fee)
+    if not info.get("success") or not info.get("mp3_url"):
+        logger.warning("缓存下载失败 [%s/%s]: resolve 未返回有效 URL", title, artist)
+        return None
+
+    session = info.get("_session")
+    if session is None:
+        session = _scraper._build_session()
+
+    mp3_url = info["mp3_url"]
+    cache_path = _cache_audio_path(info["song_id"])
+
+    try:
+        resp = session.get(
+            mp3_url,
+            headers={"Referer": "https://music.163.com/"},
+            stream=True,
+            timeout=30,
+            allow_redirects=False,
+        )
+        if resp.status_code not in (200, 206):
+            logger.warning("缓存下载失败 [%s/%s]: CDN HTTP %s", title, artist, resp.status_code)
+            return None
+
+        # 流式写入磁盘
+        tmp_path = cache_path + ".tmp"
+        with open(tmp_path, "wb") as f:
+            for chunk in resp.iter_content(chunk_size=65536):
+                if chunk:
+                    f.write(chunk)
+        os.replace(tmp_path, cache_path)
+
+        file_size = os.path.getsize(cache_path)
+        logger.info("音频缓存成功 [%s/%s]: %s (%.1f MB, bitrate=%s)",
+                     title, artist, cache_path, file_size / 1048576, info.get("bitrate"))
+        return cache_path
+    except Exception as e:
+        logger.warning("缓存下载异常 [%s/%s]: %s", title, artist, e)
+        # 清理可能的半截文件
+        for p in (cache_path, cache_path + ".tmp"):
+            try:
+                os.remove(p)
+            except OSError:
+                pass
+        return None
+
+
 @app.route("/api/song/stream")
 def api_song_stream():
-    """代理转发 mp3 音频流（解决网易云防盗链 403）
+    """音频流——优先本地缓存，缓存未命中时原子下载
 
-    前端 <audio src="/api/song/stream?url=..."> 这样调用。
-    后端：
-    1. 用 _scraper 的 session（自动带 VIP cookie + UA + 浏览器指纹）
-    2. 先访问首页建立完整会话（拿到衍生 cookie）
-    3. 再带 Referer 拉 mp3（避免 403）
+    前端 <audio src="/api/song/stream?song_id=...&title=...&artist=...&fee=..."> 这样调用。
     """
     try:
         from flask import request
-        from urllib.parse import unquote, urlparse
-        mp3_url = unquote(request.args.get("url", ""))
+        from urllib.parse import unquote
+
         song_id_param = request.args.get("song_id", "")
-        parsed_url = urlparse(mp3_url)
-        hostname = (parsed_url.hostname or "").lower()
-        trusted_host = (
-            hostname in {"music.163.com", "music.126.net"}
-            or hostname.endswith(".music.163.com")
-            or hostname.endswith(".music.126.net")
-        )
-        if parsed_url.scheme not in {"http", "https"} or not trusted_host:
-            return jsonify({"success": False, "error": "无效 URL"}), 400
-
-        # 优先用 play_url 接口暂存的 session（带 cookie + 正确的 authSecret 上下文）
-        session = None
+        title = unquote(request.args.get("title", ""))
+        artist = unquote(request.args.get("artist", ""))
+        fee_str = request.args.get("fee", "")
         try:
-            if song_id_param and int(song_id_param) in _play_url_sessions:
-                session = _play_url_sessions[int(song_id_param)]
+            fee = int(fee_str) if fee_str else None
         except (ValueError, TypeError):
-            pass
-        if not session:
-            session = _scraper._build_session()
+            fee = None
 
-        # 先访问首页建立完整会话（关键：拿到衍生 cookie）
         try:
-            session.get("https://music.163.com/", timeout=10)
-        except Exception:
-            pass  # 首页拉不到也不影响后续
+            song_id = int(song_id_param) if song_id_param else None
+        except (ValueError, TypeError):
+            song_id = None
 
-        # 透传 Range 请求（关键：拖动进度条时浏览器会发 Range=bytes=X-Y，
-        # 不透传的话每次 seek 都重头下载，音频会跳回开头）
-        forward_headers = {"Referer": "https://music.163.com/"}
-        range_header = request.headers.get("Range")
-        if range_header:
-            forward_headers["Range"] = range_header
+        if not song_id:
+            return jsonify({"success": False, "error": "缺少 song_id"}), 400
 
-        # 拉 mp3
-        upstream = session.get(
-            mp3_url,
-            headers=forward_headers,
-            stream=True,
-            timeout=20,
-            allow_redirects=False,
-        )
+        cache_path = _cache_audio_path(song_id)
 
-        if upstream.status_code not in (200, 206):
-            logger.warning(
-                "音频流转发失败: HTTP %s for %s",
-                upstream.status_code,
-                mp3_url[:80],
+        # ── 优先本地缓存 ──
+        if os.path.exists(cache_path):
+            file_size = os.path.getsize(cache_path)
+            range_header = request.headers.get("Range")
+            if range_header:
+                # 支持 Range 请求（seek）
+                import re
+                match = re.match(r"bytes=(\d+)-(\d*)", range_header)
+                if match:
+                    start = int(match.group(1))
+                    end_str = match.group(2)
+                    end = int(end_str) if end_str else file_size - 1
+                    with open(cache_path, "rb") as f:
+                        f.seek(start)
+                        data = f.read(end - start + 1)
+                    return Response(
+                        data,
+                        status=206,
+                        content_type="audio/mpeg",
+                        headers={
+                            "Content-Range": f"bytes {start}-{end}/{file_size}",
+                            "Content-Length": str(len(data)),
+                            "Accept-Ranges": "bytes",
+                            "Cache-Control": "public, max-age=86400",
+                        },
+                    )
+            # 完整文件
+            return Response(
+                open(cache_path, "rb"),
+                status=200,
+                content_type="audio/mpeg",
+                headers={
+                    "Content-Length": str(file_size),
+                    "Accept-Ranges": "bytes",
+                    "Cache-Control": "public, max-age=86400",
+                },
             )
-            return (
-                jsonify({"success": False, "error": f"上游 HTTP {upstream.status_code}"}),
-                502,
-            )
 
-        # 透传关键响应头
-        content_type = upstream.headers.get("Content-Type", "audio/mpeg")
-        response_headers = {
-            "Cache-Control": "public, max-age=3600",
-            "Accept-Ranges": "bytes",
-        }
-        # 透传 content-length / content-range（206 场景下浏览器需要）
-        content_length = upstream.headers.get("Content-Length")
-        if content_length:
-            response_headers["Content-Length"] = content_length
-        content_range = upstream.headers.get("Content-Range")
-        if content_range:
-            response_headers["Content-Range"] = content_range
+        # ── 缓存未命中 → 原子下载 ──
+        if not title or not artist:
+            # 尝试从 play_url_cache 恢复
+            for _key, _entry in list(_play_url_cache.items()):
+                if isinstance(_entry, dict) and _entry.get("song_id") == song_id:
+                    title = _entry.get("title", "")
+                    artist = _entry.get("artist", "")
+                    break
 
-        # 下载模式：加 Content-Disposition 触发浏览器下载
-        if request.args.get("download") == "1":
-            # 文件名清洗：去掉非法字符
-            from urllib.parse import unquote as _unquote
-            raw_name = request.args.get("filename", "audio.mp3")
-            safe_name = "".join(
-                c for c in raw_name if c not in r'<>:"/\|?*'
-            ).strip() or "audio.mp3"
-            if not safe_name.lower().endswith(".mp3"):
-                safe_name += ".mp3"
-            # RFC 5987 编码（兼容中文/特殊字符）
-            from urllib.parse import quote
-            response_headers["Content-Disposition"] = (
-                f"attachment; filename=\"audio.mp3\"; "
-                f"filename*=UTF-8''{quote(safe_name)}"
-            )
-            # 下载用流式时禁用缓存，确保拿到完整文件
-            response_headers["Cache-Control"] = "no-cache"
+        if not title or not artist:
+            return jsonify({"success": False, "error": "缺少 title/artist，无法下载缓存"}), 400
 
+        downloaded = _download_to_cache(title, artist, song_id, fee=fee)
+        if not downloaded:
+            return jsonify({"success": False, "error": "音频下载失败，请重试"}), 502
+
+        # 下载成功，递归调用自己（命中缓存路径）
+        file_size = os.path.getsize(downloaded)
         return Response(
-            upstream.iter_content(chunk_size=8192),
-            status=upstream.status_code,
-            content_type=content_type,
-            headers=response_headers,
+            open(downloaded, "rb"),
+            status=200,
+            content_type="audio/mpeg",
+            headers={
+                "Content-Length": str(file_size),
+                "Accept-Ranges": "bytes",
+                "Cache-Control": "public, max-age=86400",
+            },
         )
     except Exception as e:
-        logger.error("音频流代理失败: %s", e, exc_info=True)
+        logger.error("音频流失败: %s", e, exc_info=True)
         return jsonify({"success": False, "error": str(e)}), 500
+
+
+# ============================================================
+# 调试端点：原子化 resolve + stream（排查 CDN 403 根因）
+# ============================================================
+@app.route("/api/debug/direct_stream", methods=["POST"])
+def api_debug_direct_stream():
+    """不缓存 session，resolve 后直接 stream，用于对比测试"""
+    from flask import request
+    body = request.get_json(silent=True) or {}
+    title = (body.get("title") or "").strip()
+    artist = (body.get("artist") or "").strip()
+    song_id = body.get("song_id")
+    fee = body.get("fee")
+
+    if not title or not artist:
+        return jsonify({"success": False, "error": "缺少 title 或 artist"}), 400
+
+    # 原子操作：resolve → 立即 stream（不经过任何缓存/存储）
+    info = _scraper.resolve_play_url_detailed(title, artist, song_id=song_id, fee=fee)
+    if not info.get("success"):
+        return jsonify(info), 502
+
+    session = info.get("_session")
+    url = info["mp3_url"]
+    if session is None:
+        session = _scraper._build_session()
+
+    # 直接拉，不预热
+    upstream = session.get(
+        url,
+        headers={"Referer": "https://music.163.com/"},
+        stream=True,
+        timeout=20,
+        allow_redirects=False,
+    )
+
+    logger.info("Direct stream: HTTP %s for song_id=%s, bitrate=%s",
+                upstream.status_code, info.get("song_id"), info.get("bitrate"))
+
+    if upstream.status_code not in (200, 206):
+        return jsonify({"success": False, "error": f"Direct stream HTTP {upstream.status_code}"}), 502
+
+    content_type = upstream.headers.get("Content-Type", "audio/mpeg")
+    return Response(
+        upstream.iter_content(chunk_size=8192),
+        status=upstream.status_code,
+        content_type=content_type,
+        headers={"Cache-Control": "public, max-age=3600", "Accept-Ranges": "bytes"},
+    )
 
 
 # ============================================================
@@ -1535,6 +1775,8 @@ def _on_scheduler_run(result) -> None:
             )
             for item in latest
         ]
+        # 数据更新后清空图表缓存，下次请求重新生成
+        _invalidate_chart_cache()
         logger.info("调度器自动爬取完成，内存热榜已刷新（%d 首）", len(_scraped_data))
     except Exception as e:
         logger.error("调度器回调异常: %s", e, exc_info=True)
@@ -1548,6 +1790,24 @@ if __name__ == "__main__":
     logger.info("  Server: http://%s:%s", config.host, config.port)
     logger.info("  Stop:   Ctrl+C")
     logger.info("=" * 60)
+
+    # 启动时从历史快照恢复 _scraped_data（如果有），让冷启动也能秒开数据看板
+    try:
+        latest = _history_mgr.get_chart_snapshot("热歌榜") or []
+        if latest and not _scraped_data:
+            _scraped_data = [
+                SongData(
+                    rank=item["rank"],
+                    title=item["title"],
+                    artist=item["artist"],
+                    song_id=item.get("song_id"),
+                    fee=item.get("fee"),
+                )
+                for item in latest
+            ]
+            logger.info("启动时从历史快照恢复热榜 %d 首", len(_scraped_data))
+    except Exception as e:
+        logger.warning("启动恢复历史快照失败: %s", e)
 
     # 自动启动调度器
     if config.auto_refresh_on_start:

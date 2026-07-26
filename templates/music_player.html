@@ -983,7 +983,54 @@
     <button class="apple-nav-item" data-view="chart" data-chart="热歌榜"><span class="apple-nav-icon">♬</span>热歌榜</button>
     <button class="apple-nav-item" data-view="chart" data-chart="飙升榜"><span class="apple-nav-icon">↗</span>飙升榜</button>
     <a class="apple-nav-item" href="/"><span class="apple-nav-icon">⌁</span>数据洞察</a>
+    <div class="apple-nav-title">账号</div>
+    <button class="apple-nav-item" id="vipSettingsBtn"><span class="apple-nav-icon">★</span>VIP 设置 <span id="vipBadge" style="font-size:10px;padding:1px 6px;border-radius:8px;background:var(--accent,rgba(250,36,60,.15));color:var(--accent-text,#f24750);margin-left:4px;display:none">VIP</span></button>
 </aside>
+
+<!-- VIP Settings Modal -->
+<div id="vipModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);align-items:center;justify-content:center">
+  <div style="background:var(--card-bg,#1e1e1e);border-radius:16px;padding:28px;max-width:460px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <h3 style="margin:0;font-size:18px">★ VIP 账号设置</h3>
+      <button id="vipModalClose" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-secondary,#999);line-height:1">×</button>
+    </div>
+    <div id="vipStatusBox" style="padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:13px"></div>
+
+    <!-- Tab 切换：扫码登录 / 手动粘贴 -->
+    <div style="display:flex;gap:0;margin-bottom:18px;border-radius:8px;overflow:hidden;border:1px solid var(--border,rgba(255,255,255,.1))">
+      <button id="vipTabQrcode" style="flex:1;padding:9px;font-size:13px;font-weight:600;border:none;background:linear-gradient(135deg,#f24750,#fa6c3a);color:#fff;cursor:pointer">📱 扫码登录</button>
+      <button id="vipTabManual" style="flex:1;padding:9px;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--text-secondary,#999);cursor:pointer">🔑 手动粘贴</button>
+    </div>
+
+    <!-- 扫码登录面板 -->
+    <div id="vipQrcodePanel">
+      <div style="text-align:center">
+        <div id="vipQrcodeBox" style="display:inline-block;padding:16px;background:#fff;border-radius:12px;margin-bottom:14px;min-height:200px;display:flex;align-items:center;justify-content:center">
+          <div style="color:#999;font-size:13px">正在生成二维码…</div>
+        </div>
+        <div id="vipQrcodeStatus" style="font-size:13px;color:var(--text-secondary,#999);margin-bottom:14px;min-height:20px">点击下方按钮生成二维码</div>
+        <button id="vipQrcodeRefresh" style="padding:8px 20px;border-radius:8px;border:1px solid var(--border,rgba(255,255,255,.15));background:transparent;color:var(--text,#fff);cursor:pointer;font-size:13px">刷新二维码</button>
+      </div>
+    </div>
+
+    <!-- 手动粘贴面板 -->
+    <div id="vipManualPanel" style="display:none">
+      <p style="font-size:12px;color:var(--text-secondary,#999);line-height:1.6;margin-bottom:14px">
+        粘贴你网易云音乐的 <b>MUSIC_U</b> cookie 值即可解锁 VIP 歌曲播放。<br>
+        获取方式：浏览器登录网易云 → F12 → Application → Cookies → 复制 <code>MUSIC_U</code> 的值。
+      </p>
+      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">MUSIC_U Cookie</label>
+      <input id="vipMusicUInput" type="text" placeholder="粘贴 MUSIC_U 值…" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border,rgba(255,255,255,.1));background:var(--input-bg,rgba(255,255,255,.05));color:var(--text,#fff);font-size:13px;margin-bottom:12px;box-sizing:border-box">
+      <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">__csrf Cookie（可选）</label>
+      <input id="vipCsrfInput" type="text" placeholder="粘贴 __csrf 值（可选）…" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border,rgba(255,255,255,.1));background:var(--input-bg,rgba(255,255,255,.05));color:var(--text,#fff);font-size:13px;margin-bottom:18px;box-sizing:border-box">
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button id="vipLogoutBtn" style="padding:8px 16px;border-radius:8px;border:1px solid var(--border,rgba(255,255,255,.15));background:transparent;color:var(--text-secondary,#999);cursor:pointer;font-size:13px;display:none">退出登录</button>
+      <button id="vipLoginBtn" style="padding:8px 20px;border-radius:8px;border:none;background:linear-gradient(135deg,#f24750,#fa6c3a);color:#fff;cursor:pointer;font-size:13px;font-weight:600;display:none">保存并激活</button>
+    </div>
+  </div>
+</div>
 
 <!-- Apple Music inspired global + local navigation -->
 <header class="am-header">
@@ -1123,7 +1170,6 @@
 <!-- 跨页面全局播放器 -->
 <script src="/static/theme-manager.js"></script>
 <script src="/static/player-core.js"></script>
-<script src="/static/spotify-official-player.js"></script>
 <script src="/static/song-detail-modal.js"></script>
 
 <script>
@@ -1180,7 +1226,6 @@
     let chartRequestController = null;
     let playRequestVersion = 0;
     let playRequestController = null;
-    let officialPlayerActive = false;
     const viewBackBtn = document.getElementById('viewBackBtn');
 
     function cancelChartRequest() {
@@ -1227,39 +1272,6 @@
         toast.className = 'toast' + (isError ? ' error' : '') + ' show';
         toastTimer = setTimeout(() => toast.className = 'toast', 2500);
     }
-
-    function paintSpotifyPlayer(detail) {
-        if (!detail) return;
-        if (!detail.connected) {
-            officialPlayerActive = false;
-            playerBar.removeAttribute('data-provider');
-            const localState = GlobalPlayer?.getState?.();
-            if (localState?.title) {
-                playerBar.classList.add('show');
-                nowTitle.textContent = localState.title;
-                nowArtist.textContent = localState.artist || '';
-                updatePlayPauseBtn(localState.isPlaying);
-                updateRepeatBtn(localState.repeatMode || 'sequence');
-            }
-            return;
-        }
-        if (!detail.title) return;
-
-        officialPlayerActive = true;
-        playerBar.dataset.provider = 'spotify';
-        playerBar.classList.add('show');
-        nowTitle.textContent = detail.title;
-        nowArtist.textContent = detail.artist || 'Spotify';
-        updatePlayPauseBtn(detail.isPlaying);
-        updateRepeatBtn(detail.repeatMode || 'sequence');
-        highlightCurrentSong(detail.title, detail.artist, detail.isPlaying);
-        progressBar.max = detail.duration || 100;
-        progressBar.value = detail.position || 0;
-        curTimeEl.textContent = fmtTime(Number(detail.position || 0) / 1000);
-        durTimeEl.textContent = fmtTime(Number(detail.duration || 0) / 1000);
-    }
-
-    window.addEventListener('spotify-official-state', event => paintSpotifyPlayer(event.detail));
 
     const STABLE_UNAVAILABLE_REASONS = new Set([
         'vip_required', 'purchase_required', 'copyright_unavailable', 'playback_unavailable'
@@ -1757,7 +1769,6 @@
         // ── 同步 GlobalPlayer 状态到全功能播放条 ──
         window.addEventListener('globalplayer-state', e => {
             const s = e.detail;
-            if (officialPlayerActive && window.SpotifyOfficial?.isConnected?.()) return;
             if (!s.title) {
                 playerBar.classList.remove('show');
                 return;
@@ -1798,7 +1809,6 @@
 
         // 定时轮询进度（比 event 更流畅）
         setInterval(() => {
-            if (officialPlayerActive && window.SpotifyOfficial?.isConnected?.()) return;
             const gs = GlobalPlayer.getState();
             if (gs.title && gs.audioElement && !isNaN(gs.audioElement.duration)) {
                 progressBar.value = gs.audioElement.currentTime || 0;
@@ -1835,8 +1845,14 @@
         nextBtn.addEventListener('click', () => switchTrack('next'));
         playPauseBtn.addEventListener('click', () => {
             const gs = GlobalPlayer.getState();
-            if (gs.isPlaying) GlobalPlayer.pause();
-            else GlobalPlayer.resume();
+            if (gs.isPlaying) {
+                GlobalPlayer.pause();
+            } else if (gs.streamError && gs.title) {
+                // 上一首流加载失败 → 重新解析当前歌再播
+                window._playSong(gs.title, gs.artist, gs.chart || '', null, gs.songId || null);
+            } else {
+                GlobalPlayer.resume();
+            }
         });
 
         // 音量滑块
@@ -2299,28 +2315,10 @@
         if (playRequestController) playRequestController.abort();
         playRequestController = null;
 
-        if (window.SpotifyOfficial?.isConnected?.()) {
-            if (btnEl) btnEl.classList.add('loading');
-            try {
-                GlobalPlayer?.pause?.();
-                await SpotifyOfficial.initialize();
-                const track = await SpotifyOfficial.searchAndPlay(title, artist);
-                if (requestVersion !== playRequestVersion) return;
-                addRecent(title, artist, chartName, track?.id || songId, fee);
-                showToast('Spotify 正在播放：' + title, false);
-            } catch (e) {
-                console.error('Spotify play error:', e);
-                showToast('Spotify 播放失败：' + e.message, true);
-            } finally {
-                if (btnEl) btnEl.classList.remove('loading');
-            }
-            return;
-        }
-
         const gs = GlobalPlayer.getState();
 
-        // 同一首歌 → 切换播放/暂停
-        if (gs.title === title && gs.artist === artist) {
+        // 同一首歌 → 切换播放/暂停；但如果上一首流加载失败（streamError），重新解析播放
+        if (gs.title === title && gs.artist === artist && !gs.streamError) {
             if (gs.isPlaying) {
                 GlobalPlayer.pause();
             } else {
@@ -2432,6 +2430,210 @@
     renderRecentBar();
     init();
     ThemeManager.renderButton(document.getElementById('theme-toggle-slot'));
+
+    // ── VIP Settings ──
+    (function() {
+        const modal = document.getElementById('vipModal');
+        const btn = document.getElementById('vipSettingsBtn');
+        const closeBtn = document.getElementById('vipModalClose');
+        const loginBtn = document.getElementById('vipLoginBtn');
+        const logoutBtn = document.getElementById('vipLogoutBtn');
+        const statusBox = document.getElementById('vipStatusBox');
+        const musicUInput = document.getElementById('vipMusicUInput');
+        const csrfInput = document.getElementById('vipCsrfInput');
+        const badge = document.getElementById('vipBadge');
+
+        function openModal() {
+            modal.style.display = 'flex';
+            refreshStatus();
+        }
+        function closeModal() { modal.style.display = 'none'; }
+
+        btn?.addEventListener('click', openModal);
+        closeBtn?.addEventListener('click', closeModal);
+        modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+        async function refreshStatus() {
+            try {
+                const r = await fetch('/api/vip/status');
+                const d = await r.json();
+                if (d.logged_in) {
+                    statusBox.style.cssText = 'padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;background:rgba(40,200,100,.12);color:#28c864';
+                    statusBox.textContent = '✓ VIP 已激活（' + (d.music_u_preview || '') + '）';
+                    logoutBtn.style.display = 'inline-block';
+                    badge.style.display = 'inline-block';
+                } else {
+                    statusBox.style.cssText = 'padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;background:rgba(250,36,60,.1);color:#f24750';
+                    statusBox.textContent = '✗ 未登录 VIP，VIP 歌曲无法播放';
+                    logoutBtn.style.display = 'none';
+                    badge.style.display = 'none';
+                }
+            } catch(e) {
+                statusBox.textContent = '查询状态失败';
+            }
+        }
+
+        loginBtn?.addEventListener('click', async () => {
+            const music_u = musicUInput.value.trim();
+            const csrf = csrfInput.value.trim();
+            if (!music_u) { showToast('请粘贴 MUSIC_U cookie 值', true); return; }
+            loginBtn.textContent = '激活中…';
+            loginBtn.disabled = true;
+            try {
+                const r = await fetch('/api/vip/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ music_u, csrf })
+                });
+                const d = await r.json();
+                if (d.success) {
+                    showToast(d.message || 'VIP 激活成功', false);
+                    musicUInput.value = '';
+                    csrfInput.value = '';
+                    refreshStatus();
+                } else {
+                    showToast(d.error || '激活失败', true);
+                }
+            } catch(e) {
+                showToast('网络错误', true);
+            } finally {
+                loginBtn.textContent = '保存并激活';
+                loginBtn.disabled = false;
+            }
+        });
+
+        logoutBtn?.addEventListener('click', async () => {
+            try {
+                await fetch('/api/vip/logout', { method: 'POST' });
+                showToast('已退出 VIP', false);
+                refreshStatus();
+            } catch(e) { showToast('退出失败', true); }
+        });
+
+        // ── Tab 切换 ──
+        const tabQrcode = document.getElementById('vipTabQrcode');
+        const tabManual = document.getElementById('vipTabManual');
+        const panelQrcode = document.getElementById('vipQrcodePanel');
+        const panelManual = document.getElementById('vipManualPanel');
+        const qrcodeBox = document.getElementById('vipQrcodeBox');
+        const qrcodeStatus = document.getElementById('vipQrcodeStatus');
+        const qrcodeRefresh = document.getElementById('vipQrcodeRefresh');
+
+        function switchTab(tab) {
+            if (tab === 'qrcode') {
+                tabQrcode.style.background = 'linear-gradient(135deg,#f24750,#fa6c3a)';
+                tabQrcode.style.color = '#fff';
+                tabManual.style.background = 'transparent';
+                tabManual.style.color = 'var(--text-secondary,#999)';
+                panelQrcode.style.display = 'block';
+                panelManual.style.display = 'none';
+                loginBtn.style.display = 'none';
+            } else {
+                tabManual.style.background = 'linear-gradient(135deg,#f24750,#fa6c3a)';
+                tabManual.style.color = '#fff';
+                tabQrcode.style.background = 'transparent';
+                tabQrcode.style.color = 'var(--text-secondary,#999)';
+                panelQrcode.style.display = 'none';
+                panelManual.style.display = 'block';
+                loginBtn.style.display = 'inline-block';
+            }
+        }
+        tabQrcode?.addEventListener('click', () => switchTab('qrcode'));
+        tabManual?.addEventListener('click', () => { switchTab('manual'); stopQrcodePoll(); });
+
+        // ── 扫码登录逻辑 ──
+        let qrcodeUnikey = null;
+        let qrcodeTimer = null;
+        let qrcodePollCount = 0;
+
+        function stopQrcodePoll() {
+            if (qrcodeTimer) { clearInterval(qrcodeTimer); qrcodeTimer = null; }
+        }
+
+        async function generateQrcode() {
+            stopQrcodePoll();
+            qrcodeUnikey = null;
+            qrcodePollCount = 0;
+            qrcodeBox.innerHTML = '<div style="color:#999;font-size:13px">正在生成二维码…</div>';
+            qrcodeStatus.textContent = '请稍候…';
+            qrcodeStatus.style.color = 'var(--text-secondary,#999)';
+            try {
+                const r = await fetch('/api/vip/qrcode/key');
+                const d = await r.json();
+                if (!d.success) {
+                    qrcodeBox.innerHTML = '<div style="color:#f24750;font-size:13px">生成失败</div>';
+                    qrcodeStatus.textContent = d.error || '生成二维码失败';
+                    return;
+                }
+                qrcodeUnikey = d.unikey;
+                // 用在线 API 生成二维码图片（纯前端，不需要后端库）
+                const qrImg = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(d.qr_url)}`;
+                qrcodeBox.innerHTML = `<img src="${qrImg}" width="180" height="180" alt="二维码" style="display:block;border-radius:4px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div style="display:none;padding:10px;font-size:11px;word-break:break-all;max-width:180px;color:#333">${d.qr_url}</div>`;
+                qrcodeStatus.textContent = '请用网易云音乐 App 扫码登录';
+                qrcodeStatus.style.color = 'var(--text,#fff)';
+                // 开始轮询
+                startQrcodePoll();
+            } catch(e) {
+                qrcodeBox.innerHTML = '<div style="color:#f24750;font-size:13px">网络错误</div>';
+                qrcodeStatus.textContent = '生成二维码失败，请重试';
+            }
+        }
+
+        function startQrcodePoll() {
+            stopQrcodePoll();
+            qrcodeTimer = setInterval(async () => {
+                if (!qrcodeUnikey) return;
+                qrcodePollCount++;
+                if (qrcodePollCount > 120) { // 2分钟超时
+                    stopQrcodePoll();
+                    qrcodeStatus.textContent = '二维码已过期，请刷新';
+                    qrcodeStatus.style.color = '#f24750';
+                    return;
+                }
+                try {
+                    const r = await fetch(`/api/vip/qrcode/check?key=${encodeURIComponent(qrcodeUnikey)}`);
+                    const d = await r.json();
+                    if (d.code === 803) {
+                        // 登录成功
+                        stopQrcodePoll();
+                        qrcodeStatus.textContent = '✓ 登录成功！VIP 已激活';
+                        qrcodeStatus.style.color = '#28c864';
+                        showToast(d.message || '扫码登录成功', false);
+                        refreshStatus();
+                        setTimeout(() => { closeModal(); }, 1500);
+                    } else if (d.code === 802) {
+                        qrcodeStatus.textContent = '✓ 已扫码，请在手机上确认登录';
+                        qrcodeStatus.style.color = '#28c864';
+                    } else if (d.code === 801) {
+                        // 继续等待
+                    } else if (d.code === 800) {
+                        stopQrcodePoll();
+                        qrcodeStatus.textContent = '二维码已过期，请刷新';
+                        qrcodeStatus.style.color = '#f24750';
+                    }
+                } catch(e) { /* 忽略单次轮询错误 */ }
+            }, 1500);
+        }
+
+        qrcodeRefresh?.addEventListener('click', generateQrcode);
+
+        // 打开弹窗时如果是扫码 tab，自动生成二维码
+        const originalOpenModal = openModal;
+        openModal = function() {
+            modal.style.display = 'flex';
+            refreshStatus();
+            // 默认显示扫码 tab
+            switchTab('qrcode');
+            if (!config.vip_music_u) generateQrcode();
+        };
+        btn?.removeEventListener('click', originalOpenModal);
+        btn?.addEventListener('click', openModal);
+
+        // 页面加载时检查 VIP 状态，显示 badge
+        fetch('/api/vip/status').then(r => r.json()).then(d => {
+            if (d.logged_in) badge.style.display = 'inline-block';
+        }).catch(() => {});
+    })();
 })();
 </script>
 </body>

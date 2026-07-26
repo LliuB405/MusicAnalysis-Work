@@ -271,7 +271,7 @@
         });
         audio.addEventListener('error', () => {
             const mediaErrorCode = audio.error?.code || 0;
-            // MEDIA_ERR_ABORTED 通常由切歌/取消旧请求触发，不应当误跳下一首。
+            // MEDIA_ERR_ABORTED 通常由切歌/取消旧请求触发，不应当误判为失败。
             if (mediaErrorCode === 1 || !state.title) return;
             const failedSrc = audio.currentSrc || audio.src || '';
             if (failedSrc && failedSrc === lastStreamErrorSrc) return;
@@ -279,24 +279,14 @@
             streamFailedSongs.add(unavailableKey(state));
             console.warn('[GlobalPlayer] 音频加载失败');
             state.isPlaying = false;
+            state.streamError = true;  // 标记当前歌处于错误状态，方便外层重试
             updateDiscPlayBtn();
             stopPositionTimer();
             dispatchState();
             window.dispatchEvent(new CustomEvent('globalplayer-stream-error', {
-                detail: { title: state.title, artist: state.artist, code: mediaErrorCode }
+                detail: { title: state.title, artist: state.artist, code: mediaErrorCode, songId: state.songId }
             }));
-
-            if (streamRecoveryInFlight || state.playlist.length < 2 || state.currentIndex < 0) return;
-            streamRecoveryInFlight = true;
-            // 脱离 media error 回调栈后再切歌；失败集合会让 next 跳过本轮已坏的流，
-            // 即便整张榜单都失败也只尝试一轮，不会无限循环。
-            setTimeout(async () => {
-                try {
-                    await GlobalPlayer.next({ fromStreamError: true });
-                } finally {
-                    streamRecoveryInFlight = false;
-                }
-            }, 0);
+            // 不自动跳下一首：用户希望停在当前歌，可以手动点播放按钮重试
         });
         return audio;
     }
@@ -820,6 +810,7 @@
                     chart: song.chart || state.chart,
                     mp3Url: result.mp3_url,
                     songId: result.song_id || '',
+                    fee: song.fee,
                     playlist: state.playlist,
                     currentIndex: idx
                 }, { navigationId: requestId, fromStreamError: options.fromStreamError });
@@ -841,6 +832,7 @@
     }
 
     // ═══════════════════════════════════════
+    // ═══════════════════════════════════════
     //  Public API
     // ═══════════════════════════════════════
     window.GlobalPlayer = {
@@ -857,6 +849,7 @@
             const requestId = invalidatePlaybackRequest();
             const a = ensureAudio();
             const isNewSong = state.title !== song.title || state.artist !== song.artist;
+            const isRetryAfterError = !!state.streamError;
             if (isNewSong && !a.paused) a.pause();
 
             state.title = song.title || '';
@@ -864,13 +857,19 @@
             state.chart = song.chart || '';
             state.mp3Url = song.mp3Url || '';
             state.songId = song.songId || '';
+            state.fee = song.fee;
             if (song.playlist) state.playlist = song.playlist;
             if (song.currentIndex !== undefined) state.currentIndex = song.currentIndex;
             state.position = 0;
             state.isPlaying = true;
+            state.streamError = false;  // 清除错误标记
 
-            if ((isNewSong || !a.src) && song.mp3Url) {
-                const proxyUrl = '/api/song/stream?url=' + encodeURIComponent(song.mp3Url) + '&song_id=' + (song.songId || '');
+            if ((isNewSong || !a.src || isRetryAfterError) && song.mp3Url) {
+                // 重试时强制清掉旧的失效 src，避免浏览器复用错误资源
+                if (isRetryAfterError) {
+                    try { a.removeAttribute('src'); a.load(); } catch (e) {}
+                }
+                const proxyUrl = '/api/song/stream?url=' + encodeURIComponent(song.mp3Url) + '&song_id=' + (song.songId || '') + '&title=' + encodeURIComponent(state.title || '') + '&artist=' + encodeURIComponent(state.artist || '') + '&fee=' + (state.fee || '');
                 const controller = new AbortController();
                 playbackFetchController = controller;
                 try {
@@ -928,7 +927,7 @@
             state.isPlaying = true;
             const a = ensureAudio();
             if (!a.src && state.mp3Url) {
-                const proxyUrl = '/api/song/stream?url=' + encodeURIComponent(state.mp3Url) + '&song_id=' + (state.songId || '');
+                const proxyUrl = '/api/song/stream?url=' + encodeURIComponent(state.mp3Url) + '&song_id=' + (state.songId || '') + '&title=' + encodeURIComponent(state.title || '') + '&artist=' + encodeURIComponent(state.artist || '') + '&fee=' + (state.fee || '');
                 // 尝试从缓存恢复
                 getCachedBlob(proxyUrl).then(blob => {
                     if (requestId !== playbackRequestId) return;

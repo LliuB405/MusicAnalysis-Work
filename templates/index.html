@@ -1216,7 +1216,8 @@ body:not(.player-collapsed) { padding-bottom: 92px; }
   border-radius: 8px;
   background: #121212;
   gap: 18px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: height .35s cubic-bezier(.16,1,.3,1);
 }
 .brand { padding: 0 10px 4px; }
@@ -1275,8 +1276,8 @@ body:not(.player-collapsed) { padding-bottom: 92px; }
 .topbar.is-scrolled { background:rgba(18,18,18,.94); box-shadow:0 12px 28px rgba(0,0,0,.25); backdrop-filter:blur(18px); }
 .spotify-history { display:flex; gap:8px; align-items:center; }
 .history-btn { width:34px; height:34px; border:0; border-radius:50%; background:rgba(0,0,0,.62); color:#fff; cursor:pointer; font-size:20px; line-height:1; }
-.history-btn:hover:not(:disabled) { transform:scale(1.06); background:#000; }
-.history-btn:disabled { opacity:.45; cursor:not-allowed; }
+.history-btn:hover { transform:scale(1.06); background:#000; }
+.history-btn.dim { opacity:.5; }
 .page-title { margin-right:auto; font-size:25px; font-weight:800; letter-spacing:-.04em; }
 .page-title .live-pill { color:#d7f8e2; background:rgba(0,0,0,.34); border:0; }
 .topbar-actions { gap:8px; }
@@ -1493,19 +1494,19 @@ body.player-collapsed .player-fab { opacity:1; pointer-events:auto; transform:sc
       </div>
 
       <nav class="nav">
-        <button class="nav-item active" data-section="dashboard">
+        <button class="nav-item active" data-section="dashboard" type="button">
           <span class="icon">⌂</span><span>仪表盘</span>
         </button>
-        <button class="nav-item" data-section="charts">
+        <button class="nav-item" data-section="charts" type="button">
           <span class="icon">◉</span><span>可视化</span>
         </button>
-        <button class="nav-item" data-section="songs">
+        <button class="nav-item" data-section="songs" type="button">
           <span class="icon">♪</span><span>歌曲列表</span>
         </button>
-        <button class="nav-item" data-section="player">
+        <button class="nav-item" data-section="player" type="button">
           <span class="icon">▶</span><span>在线听歌</span>
         </button>
-        <button class="nav-item" data-section="favorites">
+        <button class="nav-item" data-section="favorites" type="button">
           <span class="icon">♥</span><span>收藏歌单</span>
         </button>
       </nav>
@@ -1543,7 +1544,6 @@ body.player-collapsed .player-fab { opacity:1; pointer-events:auto; transform:sc
         </div>
         <h1 class="page-title">
           数据洞察
-          <span class="live-pill" id="data-source-pill">实时 · 网易云音乐</span>
         </h1>
         <div class="topbar-actions">
           <button class="btn btn-command" id="btn-command" title="快速定位（Ctrl/⌘ K）">
@@ -1808,8 +1808,8 @@ body.player-collapsed .player-fab { opacity:1; pointer-events:auto; transform:sc
   </div>
 
 <!-- 跨页面全局后台播放器 — 切到主页也能继续听歌 -->
+<script src="/static/theme-manager.js"></script>
 <script src="/static/player-core.js"></script>
-<script src="/static/spotify-official-player.js"></script>
 
 <script>
 /* ============================================================
@@ -2270,6 +2270,31 @@ async function loadScrape() {
     state.loading.scrape = false;
     if (icon) icon.style.animation = '';
   }
+}
+
+/** 快速加载：优先使用缓存数据（秒开），再后台静默刷新 */
+async function loadCachedFirst() {
+  try {
+    const r = await fetch('/api/data');
+    const j = await r.json();
+    if (j.success && j.data && j.data.length > 0) {
+      state.songs = j.data;
+      state.lastUpdate = new Date();
+      state.scrapeMethod = '缓存数据';
+      // 并发加载分析 + 词云（词云后端有 PNG 缓存，数据没变就秒返回）
+      await Promise.all([loadAnalysis(), loadCharts()]);
+      buildChartSelector();
+      loadRankChanges();
+      loadCrossChart();
+      loadSchedulerStatus();
+      renderAll();
+      toast(`已加载 ${j.data.length} 首歌曲`, 'success', 2000);
+      // 不再自动后台爬取：调度器每 10 分钟自动刷新 _scraped_data + 清图表缓存
+      // 用户需要最新数据时点刷新按钮即可
+      return true;
+    }
+  } catch (e) { console.warn('缓存加载失败，回退到爬取:', e); }
+  return false;
 }
 
 async function loadAnalysis() {
@@ -2918,8 +2943,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.documentElement.removeAttribute('data-theme');
   localStorage.removeItem('theme');
 
-  // 自动加载
-  setTimeout(loadScrape, 400);
+  // 优先加载缓存数据（秒开），再后台刷新
+  loadCachedFirst().then(ok => {
+    if (!ok) {
+      // 缓存没有数据时才直接爬取
+      setTimeout(loadScrape, 400);
+    }
+  });
 
   // 调度器状态每 30 秒刷新
   setInterval(loadSchedulerStatus, 30000);
@@ -3043,31 +3073,33 @@ document.addEventListener('visibilitychange', () => {
   q('#fav-modal-close')?.addEventListener('click', closeFavModal);
   q('#fav-modal')?.addEventListener('click', (e) => { if (e.target.id === 'fav-modal') closeFavModal(); });
 
+  // 暴露 history 按钮到 window，让内联 onclick 能调用
+  window.historyBack = () => {
+    if (sectionIndex > 0) goToSection(sectionHistory[--sectionIndex], false);
+  };
+  window.historyForward = () => {
+    if (sectionIndex < sectionHistory.length - 1) goToSection(sectionHistory[++sectionIndex], false);
+  };
+  // 暴露侧边栏导航：让内联 onclick 兜底
+  window.goToNavSection = (section, btnEl) => {
+    if (section === 'favorites') { try { openFavModal(); } catch(e) { console.error(e); } return; }
+    if (section === 'player') { window.location.href = '/player'; return; }
+    goToSection(section);
+  };
+
   function updateHistoryButtons() {
+    // 按钮始终可点：section 栈无历史时点击会 fallback 到浏览器 history.back/forward
+    // 只更新视觉提示，不禁用按钮
     const back = q('#history-back');
     const forward = q('#history-forward');
-    if (back) back.disabled = sectionIndex <= 0;
-    if (forward) forward.disabled = sectionIndex >= sectionHistory.length - 1;
+    if (back) back.classList.toggle('dim', sectionIndex <= 0);
+    if (forward) forward.classList.toggle('dim', sectionIndex >= sectionHistory.length - 1);
   }
 
   async function playDashboardSong(song, index) {
     if (!song) return;
     const playButton = q('#sp-play');
     if (playButton) playButton.textContent = '…';
-
-    if (window.SpotifyOfficial?.isConnected?.()) {
-      try {
-        GlobalPlayer?.pause?.();
-        await SpotifyOfficial.initialize();
-        await SpotifyOfficial.searchAndPlay(song.title, song.artist);
-        document.body.classList.remove('player-collapsed');
-        toast('Spotify 正在播放：' + song.title, 'success');
-      } catch (error) {
-        toast('Spotify 播放失败：' + error.message, 'error');
-        if (playButton) playButton.textContent = '▶';
-      }
-      return;
-    }
 
     if (!window.GlobalPlayer) {
       toast('本地播放器尚未就绪', 'error');
@@ -3113,12 +3145,8 @@ document.addEventListener('visibilitychange', () => {
     audio.addEventListener('durationchange', paintProgress);
   }
 
-  let officialPlayerActive = false;
-  let officialPlayerDetail = null;
-
   function paintPlayer(detail) {
     if (!detail) return;
-    if (officialPlayerActive && window.SpotifyOfficial?.isConnected?.()) return;
     if (q('#sp-title')) q('#sp-title').textContent = detail.title || '从榜单选择一首歌';
     if (q('#sp-artist')) q('#sp-artist').textContent = detail.artist || 'Pulse Music Analytics';
     const coverSrc = coverByChart[detail.chart] || '/static/covers/afterglow.png';
@@ -3133,39 +3161,6 @@ document.addEventListener('visibilitychange', () => {
     q('#sp-shuffle')?.classList.toggle('active', detail.repeatMode === 'shuffle');
     q('#sp-repeat')?.classList.toggle('active', detail.repeatMode === 'one');
     bindAudio(detail.audioElement);
-  }
-
-  function paintSpotifyPlayer(detail) {
-    if (!detail) return;
-    officialPlayerDetail = detail;
-    if (!detail.connected) {
-      officialPlayerActive = false;
-      const localState = GlobalPlayer?.getState?.();
-      if (localState) paintPlayer(localState);
-      return;
-    }
-    if (!detail.title) return;
-
-    officialPlayerActive = true;
-    if (q('#sp-title')) q('#sp-title').textContent = detail.title;
-    if (q('#sp-artist')) q('#sp-artist').textContent = detail.artist || 'Spotify';
-    if (detail.cover) {
-      if (q('#sp-cover')) q('#sp-cover').src = detail.cover;
-      if (q('#fab-cover')) q('#fab-cover').src = detail.cover;
-    }
-    if (q('#sp-play')) {
-      q('#sp-play').textContent = detail.isPlaying ? 'Ⅱ' : '▶';
-      q('#sp-play').setAttribute('aria-label', detail.isPlaying ? '暂停 Spotify' : '播放 Spotify');
-    }
-    const durationSeconds = Number(detail.duration || 0) / 1000;
-    const positionSeconds = Number(detail.position || 0) / 1000;
-    if (q('#sp-progress')) q('#sp-progress').value = durationSeconds > 0 ? String(positionSeconds / durationSeconds * 100) : '0';
-    if (q('#sp-current')) q('#sp-current').textContent = formatClock(positionSeconds);
-    if (q('#sp-duration')) q('#sp-duration').textContent = formatClock(durationSeconds);
-    q('#sp-shuffle')?.classList.toggle('active', !!detail.shuffle);
-    q('#sp-repeat')?.classList.toggle('active', detail.repeat === 'track');
-    q('#player-fab')?.classList.toggle('playing', !!detail.isPlaying);
-    if (detail.isPlaying) document.body.classList.remove('player-collapsed');
   }
 
   function addCardPlayButtons() {
@@ -3191,11 +3186,14 @@ document.addEventListener('visibilitychange', () => {
 
     q('#history-back')?.addEventListener('click', () => {
       if (sectionIndex > 0) goToSection(sectionHistory[--sectionIndex], false);
+      else window.history.back();
     });
     q('#history-forward')?.addEventListener('click', () => {
       if (sectionIndex < sectionHistory.length - 1) goToSection(sectionHistory[++sectionIndex], false);
+      else window.history.forward();
     });
     qa('[data-library-target]').forEach(item => item.addEventListener('click', () => goToSection(item.dataset.libraryTarget)));
+    qa('.nav-item').forEach(item => item.addEventListener('click', () => goToSection(item.dataset.section)));
     qa('.library-chip').forEach(chip => chip.addEventListener('click', () => {
       qa('.library-chip').forEach(x => x.classList.toggle('active', x === chip));
       const index = qa('.library-chip').indexOf(chip);
@@ -3218,7 +3216,36 @@ document.addEventListener('visibilitychange', () => {
     q('#sp-play')?.addEventListener('click', () => {
       const playerState = GlobalPlayer?.getState?.();
       if (!playerState?.title) return goToSection('songs');
-      playerState.isPlaying ? GlobalPlayer.pause() : GlobalPlayer.resume();
+      if (playerState.isPlaying) {
+        GlobalPlayer.pause();
+      } else if (playerState.streamError) {
+        // 上一首流加载失败 → 重新解析当前歌再播
+        const idx = Math.max(0, playerState.currentIndex || 0);
+        const song = (playerState.playlist || [])[idx];
+        if (song) {
+          playDashboardSong(song, idx);
+        } else {
+          // 没有 playlist 上下文，直接用 state 信息重新解析
+          fetch('/api/song/play_url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: playerState.title, artist: playerState.artist, song_id: playerState.songId })
+          }).then(r => r.json()).then(result => {
+            if (!result.success) { toast('重试失败：' + (result.error || '未知错误'), 'error'); return; }
+            return GlobalPlayer.play({
+              title: playerState.title,
+              artist: playerState.artist,
+              chart: playerState.chart || '',
+              mp3Url: result.mp3_url,
+              songId: result.song_id || playerState.songId,
+              playlist: playerState.playlist || [],
+              currentIndex: idx
+            });
+          }).catch(err => toast('重试失败：' + err.message, 'error'));
+        }
+      } else {
+        GlobalPlayer.resume();
+      }
     });
     q('#sp-prev')?.addEventListener('click', () => GlobalPlayer?.prev());
     q('#sp-next')?.addEventListener('click', () => GlobalPlayer?.next());
@@ -3238,16 +3265,14 @@ document.addEventListener('visibilitychange', () => {
     });
     q('#sp-like')?.addEventListener('click', (event) => {
       const localState = GlobalPlayer?.getState?.();
-      const playing = officialPlayerActive && officialPlayerDetail?.title ? officialPlayerDetail : localState;
-      if (!playing?.title) { toast('当前没有正在播放的歌曲', 'error'); return; }
-      toggleFavLocal(playing.title, playing.artist, playing.chart || '', event.currentTarget);
+      if (!localState?.title) { toast('当前没有正在播放的歌曲', 'error'); return; }
+      toggleFavLocal(localState.title, localState.artist, localState.chart || '', event.currentTarget);
     });
     // 恢复当前歌曲的收藏状态（与听歌页共用 pulse_favorites）
     function refreshLikeBtn() {
       const localState = GlobalPlayer?.getState?.();
-      const playing = officialPlayerActive && officialPlayerDetail?.title ? officialPlayerDetail : localState;
-      if (!playing?.title) return;
-      const isFaved = isFavLocal(playing.title, playing.artist);
+      if (!localState?.title) return;
+      const isFaved = isFavLocal(localState.title, localState.artist);
       const btn = q('#sp-like');
       if (!btn) return;
       if (isFaved) { btn.classList.add('active'); btn.textContent = '♥'; }
@@ -3323,7 +3348,6 @@ document.addEventListener('visibilitychange', () => {
   });
 
   window.addEventListener('globalplayer-state', event => paintPlayer(event.detail));
-  window.addEventListener('spotify-official-state', event => paintSpotifyPlayer(event.detail));
 })();
 </script>
 </body>

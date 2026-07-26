@@ -16,6 +16,39 @@ $CloudflaredDir = Join-Path $ProjectDir "scripts\bin"
 $Cloudflared = Join-Path $CloudflaredDir "cloudflared.exe"
 $PublicUrlFile = Join-Path $ProjectDir "public_url.txt"
 
+function Test-ProjectPython {
+    param([Parameter(Mandatory = $true)][string]$Candidate)
+
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = $Candidate
+    $startInfo.Arguments = '-c "import flask, requests, bs4, matplotlib, pandas, wordcloud"'
+    $startInfo.UseShellExecute = $false
+    $startInfo.CreateNoWindow = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+
+    $process = [System.Diagnostics.Process]::new()
+    $process.StartInfo = $startInfo
+    try {
+        if (-not $process.Start()) { return $false }
+        # Drain both streams asynchronously so a broken candidate cannot block
+        # the launcher by filling an output pipe.
+        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+        $stderrTask = $process.StandardError.ReadToEndAsync()
+        if (-not $process.WaitForExit(12000)) {
+            try { $process.Kill() } catch { }
+            return $false
+        }
+        $null = $stdoutTask.Result
+        $null = $stderrTask.Result
+        return $process.ExitCode -eq 0
+    } catch {
+        return $false
+    } finally {
+        $process.Dispose()
+    }
+}
+
 function Find-ProjectPython {
     $candidates = [System.Collections.Generic.List[string]]::new()
     if ($env:MUSIC_ANALYSIS_PYTHON) { $candidates.Add($env:MUSIC_ANALYSIS_PYTHON) }
@@ -27,8 +60,10 @@ function Find-ProjectPython {
 
     foreach ($candidate in $candidates | Select-Object -Unique) {
         if (-not $candidate -or -not (Test-Path -LiteralPath $candidate -PathType Leaf)) { continue }
-        & $candidate -c "import flask, requests, bs4, matplotlib, pandas, wordcloud" 2>$null
-        if ($LASTEXITCODE -eq 0) { return (Resolve-Path -LiteralPath $candidate).Path }
+        if (Test-ProjectPython -Candidate $candidate) {
+            return (Resolve-Path -LiteralPath $candidate).Path
+        }
+        Write-Host "[SKIP] Python is missing required packages: $candidate" -ForegroundColor DarkYellow
     }
     throw "No usable Python was found. Run: python -m pip install -r requirements.txt"
 }
@@ -85,6 +120,13 @@ try {
     }
     exit 0
 } catch {
-    Write-Host "[ERROR] $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "[ERROR] $($_.ToString())" -ForegroundColor Red
+    if ($_.ScriptStackTrace) {
+        Write-Host "[STACK]" -ForegroundColor Yellow
+        Write-Host $_.ScriptStackTrace -ForegroundColor Yellow
+    }
+    if ($_.Exception.InnerException) {
+        Write-Host "[INNER] $($_.Exception.InnerException.Message)" -ForegroundColor Yellow
+    }
     exit 1
 }

@@ -648,7 +648,8 @@ class MusicScraper:
 
             # 高码率不可用时自动降级到低码率；这是官方接口允许的质量降级，
             # 不会把 VIP/付费歌曲变成免费歌曲。
-            for requested_bitrate in (320000, 192000, 128000, 96000):
+            # 320kbps 的 CDN authSecret 校验最严格，代理转发必 403，直接从 192kbps 开始。
+            for requested_bitrate in (192000, 128000, 96000):
                 response = session.post(
                     self.config.song_url_endpoint,
                     data={"ids": json.dumps(candidate_ids), "br": requested_bitrate},
