@@ -1,252 +1,379 @@
-## Git 命令使用指南
+# Git 命令使用教程
 
-### 一、基础配置
+## 一、Git 基础概念
 
-#### 1. 设置用户信息
+### 1.1 什么是 Git
+Git 是一个分布式版本控制系统，用于跟踪文件的变化并协调多人协作开发。
+
+### 1.2 核心概念
+- **仓库 (Repository)**: 存储项目代码和版本历史的地方
+- **工作区 (Working Directory)**: 本地电脑上的项目文件夹
+- **暂存区 (Staging Area)**: 临时存放即将提交的改动
+- **分支 (Branch)**: 独立的开发线，用于并行开发不同功能
+- **提交 (Commit)**: 将暂存区的改动保存到本地仓库
+- **远程仓库 (Remote)**: 托管在网络上的仓库（如 GitHub、Gitee、GitLab）
+
+### 1.3 常用分支命名规范
+- `main` / `master`: 主分支，存放稳定代码
+- `feature/xxx`: 功能开发分支
+- `bugfix/xxx`: Bug 修复分支
+- `hotfix/xxx`: 紧急修复分支
+- `release/xxx`: 发布准备分支
+
+---
+
+## 二、首次配置
+
+### 2.1 设置用户信息
 ```bash
-git config --global user.name "Your Name"
+git config --global user.name "Your Full Name"
 git config --global user.email "your.email@example.com"
 ```
 
-#### 2. 查看配置信息
+### 2.2 验证配置
 ```bash
 git config --list
 git config user.name
 git config user.email
 ```
 
-### 二、仓库操作
-
-#### 1. 初始化仓库
+### 2.3 配置推荐
 ```bash
-git init
+git config --global color.ui auto    # 启用颜色输出
+git config --global core.editor "code --wait"  # 设置 VS Code 为默认编辑器
 ```
 
-#### 2. 克隆远程仓库
-```bash
-git clone <repository-url>
-git clone <repository-url> <local-folder-name>
-```
+---
 
-#### 3. 查看远程仓库
+## 三、仓库操作流程
+
+### 3.1 场景一：从远程仓库克隆（首次获取项目）
+
+**完整流程：**
+
 ```bash
+# 1. 克隆远程仓库到本地
+git clone https://github.com/username/repository.git
+
+# 2. 进入项目目录
+cd repository
+
+# 3. 查看远程仓库信息
 git remote -v
 ```
 
-#### 4. 添加远程仓库
+### 3.2 场景二：将本地项目推送到远程仓库（新项目）
+
+**完整流程：**
+
 ```bash
-git remote add origin <repository-url>
+# 1. 进入本地项目目录
+cd my-project
+
+# 2. 初始化本地仓库
+git init
+
+# 3. 添加远程仓库地址（网页仓库地址）
+git remote add origin https://github.com/username/repository.git
+
+# 4. 添加所有文件到暂存区
+git add .
+
+# 5. 提交到本地仓库
+git commit -m "Initial commit"
+
+# 6. 推送到远程仓库 main 分支
+git push -u origin main
 ```
 
-#### 5. 移除远程仓库
-```bash
-git remote remove origin
-```
+---
 
-### 三、工作流程
+## 四、日常开发流程（核心）
 
-#### 1. 查看文件状态
+### 4.1 标准工作流程（推荐）
+
 ```bash
+# ============ 第一步：更新本地代码 ============
+# 切换到主分支
+git checkout main
+
+# 拉取远程最新代码
+git pull origin main
+
+# ============ 第二步：创建开发分支 ============
+# 创建并切换到功能分支
+git checkout -b feature/login-page
+
+# ============ 第三步：开发代码 ============
+# 编辑代码文件...
+
+# ============ 第四步：提交到本地仓库 ============
+# 查看改动状态
 git status
-git status -s  # 简洁输出
+
+# 添加改动到暂存区
+git add .
+
+# 提交到本地仓库
+git commit -m "feat: add login page with form validation"
+
+# ============ 第五步：推送到远程仓库 ============
+# 推送分支到远程（首次推送）
+git push -u origin feature/login-page
+
+# 后续推送（已设置上游后）
+git push
 ```
 
-#### 2. 添加文件到暂存区
-```bash
-git add <file-name>
-git add .      # 添加所有改动
-git add -A     # 添加所有改动（包括删除）
-```
-
-#### 3. 提交改动
-```bash
-git commit -m "commit message"
-git commit -am "commit message"  # 跳过 add 直接提交已跟踪文件
-git commit --amend              # 修改最后一次提交
-```
-
-#### 4. 推送到远程仓库
-```bash
-git push origin <branch-name>
-git push -u origin <branch-name>  # 首次推送，设置上游
-```
-
-#### 5. 拉取远程更新
-```bash
-git pull origin <branch-name>
-git pull  # 默认拉取当前分支
-```
-
-### 四、分支操作
-
-#### 1. 查看分支
-```bash
-git branch          # 查看本地分支
-git branch -a       # 查看所有分支（包括远程）
-git branch -v       # 查看分支及最后提交
-```
-
-#### 2. 创建分支
-```bash
-git branch <branch-name>
-git checkout -b <branch-name>   # 创建并切换
-git switch -c <branch-name>     # 创建并切换（Git 2.23+）
-```
-
-#### 3. 切换分支
-```bash
-git checkout <branch-name>
-git switch <branch-name>        # Git 2.23+
-```
-
-#### 4. 合并分支
-```bash
-git checkout <target-branch>
-git merge <source-branch>
-```
-
-#### 5. 删除分支
-```bash
-git branch -d <branch-name>     # 删除本地分支
-git branch -D <branch-name>     # 强制删除未合并分支
-git push origin --delete <branch-name>  # 删除远程分支
-```
-
-#### 6. 推送新分支到远程
-```bash
-git push origin <branch-name>
-```
-
-### 五、撤销操作
-
-#### 1. 撤销工作区修改
-```bash
-git checkout -- <file-name>
-git restore <file-name>         # Git 2.23+
-```
-
-#### 2. 撤销暂存区修改
-```bash
-git reset HEAD <file-name>
-git restore --staged <file-name>  # Git 2.23+
-```
-
-#### 3. 回退提交
-```bash
-git log              # 查看提交历史
-git log --oneline    # 简洁历史
-git log --graph      # 图形化历史
-
-git reset --hard <commit-hash>   # 彻底回退
-git reset --soft <commit-hash>   # 保留工作区
-git revert <commit-hash>         # 创建新提交撤销
-```
-
-### 六、日志查看
+### 4.2 main 分支操作流程
 
 ```bash
-git log                          # 完整日志
-git log --oneline                # 单行显示
-git log -n 5                     # 显示最近5条
-git log --graph                  # 图形分支
-git log --all                    # 所有分支日志
-git log --oneline --graph --all  # 完整图形日志
+# 更新本地 main 分支
+git checkout main
+git pull origin main
+
+# 在 main 分支直接提交（仅用于紧急修复）
+git add .
+git commit -m "fix: critical bug in payment module"
+git push origin main
 ```
 
-### 七、标签操作
+### 4.3 分支合并流程
 
-#### 1. 创建标签
 ```bash
-git tag <tag-name>                # 轻量标签
-git tag -a <tag-name> -m "message"  # 附注标签
-git tag <tag-name> <commit-hash>    # 指定提交打标签
+# 1. 先更新主分支
+git checkout main
+git pull origin main
+
+# 2. 切换到开发分支
+git checkout feature/login-page
+
+# 3. 将 main 分支合并到当前分支（解决冲突）
+git merge main
+
+# 4. 切换回主分支
+git checkout main
+
+# 5. 合并开发分支到主分支
+git merge feature/login-page
+
+# 6. 推送到远程 main 分支
+git push origin main
+
+# 7. 删除本地开发分支（可选）
+git branch -d feature/login-page
+
+# 8. 删除远程开发分支（可选）
+git push origin --delete feature/login-page
 ```
 
-#### 2. 查看标签
+---
+
+## 五、核心命令详解
+
+### 5.1 仓库管理
 ```bash
-git tag
-git tag -l "v1.*"
+git init                    # 初始化本地仓库
+git clone <url>             # 克隆远程仓库
+git remote -v               # 查看远程仓库列表
+git remote add origin <url> # 添加远程仓库
+git remote remove origin    # 移除远程仓库
 ```
 
-#### 3. 推送标签
+### 5.2 工作区操作
 ```bash
-git push origin <tag-name>
-git push origin --tags            # 推送所有标签
+git status                  # 查看文件状态
+git diff                    # 查看未暂存的改动
+git diff --cached           # 查看已暂存的改动
 ```
 
-#### 4. 删除标签
+### 5.3 暂存与提交
 ```bash
-git tag -d <tag-name>
-git push origin :refs/tags/<tag-name>
+git add <file>              # 添加单个文件
+git add .                   # 添加所有改动（不包括删除）
+git add -A                  # 添加所有改动（包括删除）
+git commit -m "message"     # 提交到本地仓库
+git commit -am "message"    # 跳过 add，直接提交已跟踪文件
 ```
 
-### 八、冲突解决
-
-当合并或拉取发生冲突时：
-1. 查看冲突文件：`git status`
-2. 手动编辑冲突文件，解决标记
-3. 添加解决后的文件：`git add <file-name>`
-4. 完成合并：`git commit`
-
-冲突标记说明：
+### 5.4 分支操作
+```bash
+git branch                  # 查看本地分支
+git branch -a               # 查看所有分支（含远程）
+git branch -v               # 查看分支及最后提交
+git checkout <branch>       # 切换分支
+git checkout -b <branch>    # 创建并切换分支
+git merge <branch>          # 合并指定分支到当前分支
+git branch -d <branch>      # 删除本地分支
+git branch -D <branch>      # 强制删除未合并分支
 ```
+
+### 5.5 远程操作
+```bash
+git pull origin <branch>    # 拉取远程分支更新
+git push origin <branch>    # 推送到远程分支
+git push -u origin <branch> # 首次推送并设置上游
+git fetch origin            # 拉取远程更新（不合并）
+```
+
+---
+
+## 六、撤销与回退操作
+
+### 6.1 撤销工作区修改
+```bash
+git checkout -- <file>      # 撤销单个文件的未暂存改动
+git restore <file>          # Git 2.23+ 推荐方式
+```
+
+### 6.2 撤销暂存区修改
+```bash
+git reset HEAD <file>       # 将文件从暂存区撤回
+git restore --staged <file> # Git 2.23+ 推荐方式
+```
+
+### 6.3 回退提交
+```bash
+git log                     # 查看提交历史
+git log --oneline           # 简洁格式查看
+git log --graph             # 图形化查看分支
+
+git reset --soft <commit>   # 回退但保留工作区和暂存区
+git reset --mixed <commit>  # 回退保留工作区（默认）
+git reset --hard <commit>   # 彻底回退，丢弃所有改动
+git revert <commit>         # 创建新提交撤销指定提交
+```
+
+---
+
+## 七、冲突解决
+
+### 7.1 冲突产生场景
+- 合并分支时
+- 拉取远程代码时
+- 多人修改同一文件的同一部分
+
+### 7.2 冲突解决步骤
+
+```bash
+# 1. 查看冲突文件
+git status
+
+# 2. 打开冲突文件，手动解决标记
 <<<<<<< HEAD
 当前分支的内容
 =======
-要合并分支的内容
+要合并的内容
 >>>>>>> branch-name
+
+# 3. 解决后添加文件
+git add <file>
+
+# 4. 完成合并提交
+git commit
 ```
 
-### 九、常用配置推荐
+---
 
-#### 1. 配置别名
+## 八、团队协作最佳实践
+
+### 8.1 提交规范（Conventional Commits）
+```bash
+git commit -m "feat: add user registration"
+git commit -m "fix: resolve login error"
+git commit -m "docs: update API documentation"
+git commit -m "refactor: optimize database query"
+git commit -m "test: add unit tests for payment"
+```
+
+### 8.2 分支管理策略（Git Flow）
+1. `main`: 主分支，稳定版本
+2. `develop`: 开发分支，整合功能
+3. `feature/*`: 功能开发分支
+4. `release/*`: 发布准备分支
+5. `hotfix/*`: 紧急修复分支
+
+### 8.3 日常协作流程
+1. 每天开始前拉取最新代码
+2. 开发新功能使用独立分支
+3. 定期推送分支到远程备份
+4. 完成后创建 Pull Request
+5. 代码审查通过后合并
+
+---
+
+## 九、常见问题与解决方案
+
+### 9.1 推送失败
+```bash
+# 原因：本地代码落后于远程
+# 解决方案：先拉取合并
+git pull origin main
+# 解决冲突后再推送
+git push origin main
+```
+
+### 9.2 忘记添加文件到暂存区
+```bash
+# 解决方案：修改最后一次提交
+git add missed-file.txt
+git commit --amend
+# 如果已推送，需要强制推送（谨慎使用）
+git push --force origin main
+```
+
+### 9.3 误删分支
+```bash
+# 查看最近操作记录
+git reflog
+# 恢复分支
+git checkout -b <branch-name> <commit-hash>
+```
+
+### 9.4 配置 SSH 免密登录（推荐）
+```bash
+# 生成 SSH 密钥
+ssh-keygen -t ed25519 -C "your.email@example.com"
+
+# 查看公钥
+cat ~/.ssh/id_ed25519.pub
+
+# 将公钥添加到 GitHub/Gitee 账户设置中
+```
+
+---
+
+## 十、命令速查表
+
+| 场景 | 命令 |
+|------|------|
+| 克隆仓库 | `git clone <url>` |
+| 创建分支 | `git checkout -b <branch>` |
+| 提交代码 | `git add . && git commit -m "msg"` |
+| 推送到远程 | `git push origin <branch>` |
+| 拉取更新 | `git pull origin <branch>` |
+| 查看状态 | `git status` |
+| 查看日志 | `git log --oneline` |
+| 合并分支 | `git merge <branch>` |
+| 解决冲突 | 编辑文件 → `git add` → `git commit` |
+
+---
+
+## 附录：配置别名
+
 ```bash
 git config --global alias.co checkout
 git config --global alias.br branch
 git config --global alias.ci commit
 git config --global alias.st status
+git config --global alias.pl pull
+git config --global alias.ps push
 git config --global alias.logg "log --oneline --graph --all"
 ```
 
-#### 2. 配置颜色输出
+使用别名后：
 ```bash
-git config --global color.ui auto
+git st    # 相当于 git status
+git co main  # 相当于 git checkout main
+git logg   # 相当于 git log --oneline --graph --all
 ```
-
-#### 3. 配置默认编辑器
-```bash
-git config --global core.editor "code --wait"  # VS Code
-git config --global core.editor "vim"          # Vim
-```
-
-### 十、团队协作流程
-
-#### 标准工作流：
-1. `git pull origin main` - 更新本地主分支
-2. `git checkout -b feature/xxx` - 创建特性分支
-3. 开发代码
-4. `git add .` - 添加改动
-5. `git commit -m "feat: add xxx"` - 提交
-6. `git push origin feature/xxx` - 推送到远程
-7. 创建 Pull Request / Merge Request
-8. 代码审查通过后合并到主分支
-
-#### 提交规范（推荐）：
-- `feat:` 新功能
-- `fix:` 修复bug
-- `docs:` 文档更新
-- `style:` 代码格式
-- `refactor:` 代码重构
-- `test:` 测试更新
-- `chore:` 构建/工具更新
-
----
-
-### 快捷键参考
-| 命令 | 说明 |
-|------|------|
-| `git st` | 查看状态 |
-| `git co <branch>` | 切换分支 |
-| `git br` | 查看分支 |
-| `git ci -m "msg"` | 提交 |
-| `git logg` | 图形化日志 |
