@@ -1,23 +1,58 @@
-# 网易云音乐热歌榜数据分析 - 依赖清单
-# Python >= 3.8
-
-# === 运行时依赖 ===
-flask>=2.0.0
-requests>=2.28.0
-beautifulsoup4>=4.11.0
-matplotlib>=3.5.0
-wordcloud>=1.8.0
-pandas>=1.4.0
-openpyxl>=3.0.0    # Excel 导出
-reportlab>=4.0.0   # PDF 报表
-
-# 定时刷新由 src/music_analytics/scheduler.py 的轻量后台线程实现，
-# 不依赖 APScheduler。
-
-# === 开发依赖 ===
-pytest>=7.0.0
-pytest-cov>=4.0.0
-black>=22.0.0            # 代码格式化
-mypy>=0.950              # 类型检查
-ruff>=0.1.0              # 替代 flake8 + isort 的快速 linter
-pre-commit>=3.0.0        # Git 钩子管理
+﻿ast_serialize==0.6.0
+beautifulsoup4==4.15.0
+black==26.5.1
+blinker==1.9.0
+certifi==2026.7.22
+cfgv==3.5.0
+charset-normalizer==3.4.9
+click==8.4.2
+colorama==0.4.6
+contourpy==1.3.3
+coverage==7.15.2
+cycler==0.12.1
+distlib==0.4.3
+et_xmlfile==2.0.0
+filelock==3.32.2
+Flask==3.1.3
+fonttools==4.63.0
+identify==2.6.19
+idna==3.18
+iniconfig==2.3.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+kiwisolver==1.5.0
+librt==0.13.0
+MarkupSafe==3.0.3
+matplotlib==3.11.1
+-e git+https://github.com/LliuB405/MusicAnalysis-Work.git@f8085579629237f4b1a2713059122572c9c5cbe6#egg=music_analytics
+mypy==2.3.0
+mypy_extensions==1.1.0
+nodeenv==1.10.0
+numpy==2.4.6
+openpyxl==3.1.5
+packaging==26.0
+pandas==3.0.5
+pathspec==1.1.1
+pillow==12.3.0
+platformdirs==4.11.0
+pluggy==1.6.0
+pre_commit==4.6.1
+Pygments==2.20.0
+pyparsing==3.3.2
+pytest==9.1.1
+pytest-cov==7.1.0
+python-dateutil==2.9.0.post0
+python-discovery==1.5.0
+pytokens==0.4.1
+PyYAML==6.0.3
+reportlab==5.0.0
+requests==2.34.2
+ruff==0.16.0
+six==1.17.0
+soupsieve==2.9.1
+typing_extensions==4.16.0
+tzdata==2026.3
+urllib3==2.7.0
+virtualenv==21.7.0
+Werkzeug==3.1.8
+wordcloud==1.9.6

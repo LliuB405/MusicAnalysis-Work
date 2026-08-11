@@ -1,0 +1,16 @@
+flask>=2.0.0
+requests>=2.28.0
+beautifulsoup4>=4.11.0
+matplotlib>=3.5.0
+wordcloud>=1.8.0
+pandas>=1.4.0
+openpyxl>=3.0.0
+reportlab>=4.0.0
+
+[dev]
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=22.0.0
+mypy>=0.950
+ruff>=0.1.0
+pre-commit>=3.0.0

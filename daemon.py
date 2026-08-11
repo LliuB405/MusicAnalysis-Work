@@ -31,7 +31,7 @@ PID_FILE = PROJECT_DIR / "flask.pid"
 
 
 def _is_listening(port: int = 5000) -> bool:
-    """检查端口是否在监听（用 socket 跨平台，不用 netstat）"""
+    """检查端口是否在监听（用 socket 跨平台，不用 netstat)"""
     import socket
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -42,7 +42,7 @@ def _is_listening(port: int = 5000) -> bool:
 
 
 def _is_pid_alive(pid: int) -> bool:
-    """检查进程是否存活（用 ctypes，不依赖 tasklist）"""
+    """检查进程是否存活（用 ctypes,不依赖 tasklist)"""
     import ctypes
     kernel32 = ctypes.windll.kernel32
     PROCESS_QUERY_LIMITED_INFORMATION = 0x1000

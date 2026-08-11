@@ -1015,9 +1015,9 @@ def api_vip_qrcode_check():
             csrf = ""
             for cookie in session.cookies:
                 if cookie.name == "MUSIC_U":
-                    music_u = cookie.value
+                    music_u = cookie.value or ""
                 elif cookie.name == "__csrf":
-                    csrf = cookie.value
+                    csrf = cookie.value or ""
 
             if not music_u:
                 return jsonify({
@@ -1364,8 +1364,11 @@ def api_songs_playability():
         for song in songs[:250]:
             if not isinstance(song, dict):
                 continue
+            raw_song_id = song.get("song_id") or song.get("id")
+            if raw_song_id is None:
+                continue
             try:
-                song_id = int(song.get("song_id") or song.get("id"))
+                song_id = int(raw_song_id)
             except (TypeError, ValueError):
                 continue
             if song_id <= 0 or song_id in seen:
